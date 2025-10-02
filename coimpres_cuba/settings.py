@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'products.apps.ProductsConfig',
+    'productos.apps.ProductosConfig',
     'django.contrib.humanize',
 ]
 
@@ -56,7 +56,7 @@ ROOT_URLCONF = 'coimpres_cuba.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'coimpres_cuba' / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
