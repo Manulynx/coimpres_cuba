@@ -7,6 +7,10 @@
     <title>{% block title %}Coimpres SRL{% endblock %}</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <!-- Animate.css for animations -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
     {% block extra_css %}{% endblock %}
@@ -34,26 +38,39 @@
     </header>
 
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav class="navbar navbar-expand-lg sticky-top navbar-light bg-light shadow-sm">
         <div class="container">
+            <a class="navbar-brand d-lg-none" href="/">
+                <img src="{% static 'img/logo.png' %}" alt="Coimpres SRL" height="30" onerror="this.onerror=null; this.src=''; this.alt='Coimpres SRL';">
+            </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav">
+                <ul class="navbar-nav mx-auto">
                     <li class="nav-item">
-                        <a class="nav-link {% if request.path == '/' %}active{% endif %}" href="/">{{ i18n.home }}</a>
+                        <a class="nav-link {% if request.path == '/' %}active fw-bold{% endif %}" href="/">
+                            <i class="bi bi-house-door"></i> {{ i18n.home|default:"Inicio" }}
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle {% if '/products/' in request.path %}active fw-bold{% endif %}" href="#" id="productDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-box-seam"></i> {{ i18n.products|default:"Productos" }}
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="productDropdown">
+                            <li><a class="dropdown-item" href="/products/">{{ i18n.all_products|default:"Todos los productos" }}</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="/products/?category=comida">{{ i18n.food|default:"Comida" }}</a></li>
+                            <li><a class="dropdown-item" href="/products/?category=construccion">{{ i18n.construction|default:"Construcción" }}</a></li>
+                        </ul>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {% if request.path == '/products/' %}active{% endif %}" href="/products/">{{ i18n.products }}</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {% if request.path == '/about/' %}active{% endif %}" href="/about/">{{ i18n.about }}</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {% if request.path == '/contact/' %}active{% endif %}" href="/contact/">{{ i18n.contact }}</a>
+                        <a class="nav-link {% if request.path == '/contact/' %}active fw-bold{% endif %}" href="/contact/">
+                            <i class="bi bi-envelope"></i> {{ i18n.contact|default:"Contacto" }}
+                        </a>
                     </li>
                 </ul>
+                
             </div>
         </div>
     </nav>
@@ -66,12 +83,43 @@
     <!-- Footer -->
     <footer class="bg-dark text-white py-4 mt-5">
         <div class="container">
-            <div class="row">
-                <div class="col-md-6">
-                    <p>&copy; 2025 Coimpres SRL. {{ i18n.rights }}</p>
+            <div class="row py-3">
+                <div class="col-lg-4 col-md-6 mb-4 mb-md-0">
+                    <h5 class="text-uppercase mb-3">Coimpres SRL</h5>
+                    <p class="mb-3">{{ i18n.footer_description|default:"Importador oficial de productos italianos de alta calidad en Cuba, ofreciendo lo mejor de Italia para tu hogar y negocio." }}</p>
+                    <div class="d-flex social-icons">
+                        <a href="#" class="me-3 text-white"><i class="bi bi-facebook fs-5"></i></a>
+                        <a href="#" class="me-3 text-white"><i class="bi bi-instagram fs-5"></i></a>
+                        <a href="#" class="text-white"><i class="bi bi-whatsapp fs-5"></i></a>
+                    </div>
                 </div>
-                <div class="col-md-6 text-end">
-                    <p>{{ i18n.contact_info }}</p>
+
+                <div class="col-lg-4 col-md-6 mb-4 mb-md-0">
+                    <h5 class="text-uppercase mb-3">{{ i18n.quick_links|default:"Enlaces Rápidos" }}</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="/" class="text-white text-decoration-none"><i class="bi bi-chevron-right"></i> {{ i18n.home|default:"Inicio" }}</a></li>
+                        <li class="mb-2"><a href="/products/" class="text-white text-decoration-none"><i class="bi bi-chevron-right"></i> {{ i18n.products|default:"Productos" }}</a></li>
+                        <li><a href="/contact/" class="text-white text-decoration-none"><i class="bi bi-chevron-right"></i> {{ i18n.contact|default:"Contacto" }}</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-4 col-md-6">
+                    <h5 class="text-uppercase mb-3">{{ i18n.contact|default:"Contacto" }}</h5>
+                    <p class="mb-2"><i class="bi bi-geo-alt-fill me-2"></i> {{ i18n.address|default:"La Habana, Cuba" }}</p>
+                    <p class="mb-2"><i class="bi bi-telephone-fill me-2"></i> +53 5555-5555</p>
+                    <p class="mb-2"><i class="bi bi-envelope-fill me-2"></i> info@importadoraitaliana.com</p>
+                </div>
+            </div>
+
+            <div class="row pt-3 border-top border-secondary">
+                <div class="col-md-6">
+                    <p class="mb-0">&copy; 2025 Coimpres SRL. {{ i18n.rights|default:"Todos los derechos reservados" }}</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p class="mb-0">
+                        <img src="{% static 'img/italy-flag.png' %}" alt="Bandera de Italia" height="20" class="me-1" onerror="this.style.display='none';">
+                        <span class="align-middle">{{ i18n.made_with_love|default:"Hecho con" }} <i class="bi bi-heart-fill text-danger"></i> {{ i18n.in_italy|default:"en Italia" }}</span>
+                    </p>
                 </div>
             </div>
         </div>

@@ -1,7 +1,15 @@
+/* Colors with Italian flag inspiration */
+:root {
+    --italian-green: #008C45;
+    --italian-white: #F4F5F0;
+    --italian-red: #CD212A;
+}
+
 /* General Styles */
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     color: #333;
+    background-color: #f8f9fa;
 }
 
 /* Header Styles */
@@ -36,6 +44,45 @@ header {
 .card-img-top {
     height: 200px;
     object-fit: cover;
+}
+
+/* Navbar hover effects */
+.navbar-nav .nav-link {
+    position: relative;
+    padding: 0.5rem 1rem;
+    margin: 0 0.2rem;
+}
+
+.navbar-nav .nav-link:after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    background-color: var(--italian-green);
+    transition: width 0.3s ease;
+}
+
+.navbar-nav .nav-link:hover:after,
+.navbar-nav .nav-link.active:after {
+    width: 100%;
+}
+
+/* WhatsApp button */
+.btn-whatsapp {
+    background-color: #25D366;
+    color: white;
+    border-radius: 30px;
+    padding: 0.5rem 1.5rem;
+    font-weight: 600;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.btn-whatsapp:hover {
+    background-color: #1faa53;
+    color: white;
+    transform: scale(1.05);
 }
 
 /* Footer Styling */
@@ -74,3 +121,71 @@ footer {
 #featured-products .card:nth-child(1) { animation-delay: 0.1s; }
 #featured-products .card:nth-child(2) { animation-delay: 0.3s; }
 #featured-products .card:nth-child(3) { animation-delay: 0.5s; }
+
+/* Category Cards */
+.category-card {
+    overflow: hidden;
+    transition: transform 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.category-card:hover {
+    transform: translateY(-8px);
+}
+
+.category-card img {
+    transition: transform 0.5s ease;
+}
+
+.category-card:hover img {
+    transform: scale(1.05);
+}
+
+/* Product Card improvements */
+.product-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.product-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+}
+
+/* Values section */
+.value-icon {
+    transition: transform 0.3s ease;
+}
+
+.value-icon:hover {
+    transform: scale(1.15);
+}
+
+/* Hover effects for links and buttons */
+.btn-primary {
+    background-color: var(--italian-green);
+    border-color: var(--italian-green);
+}
+
+/* Product detail tabs */
+.nav-tabs .nav-link.active {
+    border-bottom: 2px solid var(--italian-green);
+    color: var(--italian-green);
+    font-weight: 600;
+}
+
+/* Category badges */
+.category-badge {
+    background-color: var(--italian-green);
+    color: white;
+    border-radius: 30px;
+    padding: 0.3rem 0.8rem;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+}
+
+/* Breadcrumbs */
+.breadcrumb-item a {
+    color: var(--italian-green);
+}

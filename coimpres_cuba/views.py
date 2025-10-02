@@ -100,19 +100,10 @@ def home_view(request):
     i18n_selected = i18n.get(lang, i18n['es'])
     
     # Preparar productos destacados
-   #product_list = []
-    #for p in featured_products:
-     #   product_list.append({
-      #      'id': p.id,
-       #     'name': p.name,
-        #    'description': p.short_description or p.description,
-         #   'image': p.image,
-        #})
-    
     context = {
         'lang': lang,
         'i18n': i18n_selected,
-        #'featured_products': product_list,
+        'featured_products': featured_products,
         'hero_image': hero_image,
     }
     return render(request, 'coimpres_cuba/home.html', context)
