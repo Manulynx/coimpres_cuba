@@ -1,6 +1,6 @@
 /* Colors with Italian flag inspiration */
 :root {
-    --italian-green: #008C45;
+    --italian-green: #3498db; /* Cambiado a un azul agradable */
     --italian-white: #F4F5F0;
     --italian-red: #CD212A;
 }
@@ -19,12 +19,12 @@ header {
 
 /* Custom Section Styling */
 .hero-section {
-    background: linear-gradient(135deg, #006400 0%, #228B22 100%);
+    background: linear-gradient(135deg, #2980b9 0%, #3498db 100%);
     padding: 4rem 0;
 }
 
 .section-title {
-    color: #006400;
+    color: #2980b9;
     font-weight: 700;
     margin-bottom: 1rem;
 }
