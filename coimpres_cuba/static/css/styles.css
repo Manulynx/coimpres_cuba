@@ -4,12 +4,12 @@
 /* Nueva paleta de colores */
 :root {
     --color-primary: #2C2A28; /* Color principal para texto y encabezados */
-    --color-accent: #786A41; /* Color de acento, botones secundarios */
+    --color-accent: #9fa322; /* Color de acento, botones secundarios */
     --color-background: #F9F6F1; /* Color de fondo claro */
     --color-white: #FFFFFF; /* Blanco puro para contraste */
     
     /* Mantenemos estas variables por compatibilidad, pero usando los nuevos colores */
-    --italian-green: #786A41; /* Reemplazado por el color de acento */
+    --italian-green: #9fa322; /* Reemplazado por el color de acento */
     --italian-white: #F9F6F1; /* Reemplazado por el color de fondo */
     --italian-red: #2C2A28; /* Reemplazado por el color primario para mantener la compatibilidad */
 }
@@ -92,7 +92,7 @@ header {
 }
 
 .btn-whatsapp:hover {
-    background-color: #675a36; /* Versión más oscura del color de acento */
+    background-color: #9fa322; /* Versión más oscura del color de acento */
     color: var(--color-white);
     transform: scale(1.05);
 }
@@ -185,8 +185,8 @@ footer {
 .btn-primary:hover, 
 .btn-primary:focus, 
 .btn-primary:active {
-    background-color: #675a36 !important; /* Versión más oscura del color de acento */
-    border-color: #675a36 !important;
+    background-color: #9fa322 !important; /* Versión más oscura del color de acento */
+    border-color: #9fa322 !important;
     color: var(--color-white) !important;
 }
 
@@ -197,7 +197,7 @@ a {
 }
 
 a:hover, a:focus {
-    color: #675a36; /* Versión más oscura del color de acento */
+    color: #9fa322; /* Versión más oscura del color de acento */
     text-decoration: underline;
 }
 
