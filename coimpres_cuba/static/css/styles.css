@@ -1,15 +1,24 @@
-/* Colors with Italian flag inspiration */
+/* Import Lato font from Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap');
+
+/* Nueva paleta de colores */
 :root {
-    --italian-green: #3498db; /* Cambiado a un azul agradable */
-    --italian-white: #F4F5F0;
-    --italian-red: #CD212A;
+    --color-primary: #2C2A28; /* Color principal para texto y encabezados */
+    --color-accent: #786A41; /* Color de acento, botones secundarios */
+    --color-background: #F9F6F1; /* Color de fondo claro */
+    --color-white: #FFFFFF; /* Blanco puro para contraste */
+    
+    /* Mantenemos estas variables por compatibilidad, pero usando los nuevos colores */
+    --italian-green: #786A41; /* Reemplazado por el color de acento */
+    --italian-white: #F9F6F1; /* Reemplazado por el color de fondo */
+    --italian-red: #2C2A28; /* Reemplazado por el color primario para mantener la compatibilidad */
 }
 
 /* General Styles */
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    color: #333;
-    background-color: #f8f9fa;
+    font-family: 'Lato', sans-serif;
+    color: var(--color-primary);
+    background-color: var(--color-background);
 }
 
 /* Header Styles */
@@ -19,12 +28,13 @@ header {
 
 /* Custom Section Styling */
 .hero-section {
-    background: linear-gradient(135deg, #2980b9 0%, #3498db 100%);
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%);
     padding: 4rem 0;
+    color: var(--color-white);
 }
 
 .section-title {
-    color: #2980b9;
+    color: var(--color-accent);
     font-weight: 700;
     margin-bottom: 1rem;
 }
@@ -60,7 +70,7 @@ header {
     height: 2px;
     bottom: 0;
     left: 0;
-    background-color: var(--italian-green);
+    background-color: var(--color-accent);
     transition: width 0.3s ease;
 }
 
@@ -162,21 +172,22 @@ footer {
 
 /* Hover effects for links and buttons */
 .btn-primary {
-    background-color: var(--italian-green);
-    border-color: var(--italian-green);
+    background-color: var(--color-accent);
+    border-color: var(--color-accent);
+    color: var(--color-white);
 }
 
 /* Product detail tabs */
 .nav-tabs .nav-link.active {
-    border-bottom: 2px solid var(--italian-green);
-    color: var(--italian-green);
+    border-bottom: 2px solid var(--color-accent);
+    color: var(--color-accent);
     font-weight: 600;
 }
 
 /* Category badges */
 .category-badge {
-    background-color: var(--italian-green);
-    color: white;
+    background-color: var(--color-accent);
+    color: var(--color-white);
     border-radius: 30px;
     padding: 0.3rem 0.8rem;
     font-size: 0.8rem;
@@ -187,5 +198,45 @@ footer {
 
 /* Breadcrumbs */
 .breadcrumb-item a {
-    color: var(--italian-green);
+    color: var(--color-accent);
+}
+
+/* Typography - Lato font weights */
+.font-light {
+    font-weight: 300;
+}
+
+.font-regular {
+    font-weight: 400;
+}
+
+.font-bold {
+    font-weight: 700;
+}
+
+.font-black {
+    font-weight: 900;
+}
+
+/* Clases adicionales para la nueva paleta de colores */
+.text-primary {
+    color: var(--color-primary) !important;
+}
+
+.text-accent {
+    color: var(--color-accent) !important;
+}
+
+.bg-primary-custom {
+    background-color: var(--color-primary);
+    color: var(--color-white);
+}
+
+.bg-accent {
+    background-color: var(--color-accent);
+    color: var(--color-white);
+}
+
+.bg-light-custom {
+    background-color: var(--color-background);
 }
