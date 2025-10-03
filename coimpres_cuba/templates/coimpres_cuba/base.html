@@ -17,16 +17,11 @@
 </head>
 <body>
     <!-- Header -->
-    <header class="bg-dark text-white py-2">
+    <header class="bg-dark text-white py-3">
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-md-4">
-                    <a href="/" class="text-decoration-none">
-                        <div class="d-flex align-items-center">
-                            <img src="{% static 'img/logo.jpeg' %}" alt="Coimpre SRL" class="logo-header me-2">
-                            <h1 class="m-0 fs-4 text-white">Coimpre SRL</h1>
-                        </div>
-                    </a>
+                    <h1 class="m-0 fs-3">Coimpre SRL</h1>
                 </div>
                 <div class="col-md-8">
                     <!-- Language Switcher -->
@@ -90,10 +85,7 @@
         <div class="container">
             <div class="row py-3">
                 <div class="col-lg-4 col-md-6 mb-4 mb-md-0">
-                    <div class="d-flex align-items-center mb-3">
-                        <img src="{% static 'img/logo.jpeg' %}" alt="Coimpre SRL" class="logo-footer me-2">
-                        <h5 class="text-uppercase mb-0">Coimpre SRL</h5>
-                    </div>
+                    <h5 class="text-uppercase mb-3">Coimpre SRL</h5>
                     <p class="mb-3">{{ i18n.footer_description|default:"Importador oficial de productos italianos de alta calidad en Cuba, ofreciendo lo mejor de Italia para tu hogar y negocio." }}</p>
                     <div class="d-flex social-icons">
                         <a href="#" class="me-3 text-white"><i class="bi bi-facebook fs-5"></i></a>
@@ -135,8 +127,6 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Image Optimization JS -->
-    <script src="{% static 'js/image-optimizer.js' %}"></script>
     <!-- Custom JS -->
     {% block extra_js %}{% endblock %}
 </body>
