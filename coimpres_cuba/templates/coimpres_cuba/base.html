@@ -21,7 +21,7 @@
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-md-4">
-                    <h1 class="m-0 fs-3">Coimpre SRL</h1>
+                    <h1 class="m-0 fs-3">La Habana, Cuba</h1>
                 </div>
                 <div class="col-md-8">
                     <!-- Language Switcher -->
@@ -38,42 +38,43 @@
     </header>
 
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg sticky-top navbar-light bg-light shadow-sm">
-        <div class="container">
-            <a class="navbar-brand d-lg-none" href="/">
-                <img src="{% static 'img/logo.png' %}" alt="Coimpre SRL" height="30" onerror="this.onerror=null; this.src=''; this.alt='Coimpre SRL';">
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav mx-auto">
-                    <li class="nav-item">
-                        <a class="nav-link {% if request.path == '/' %}active fw-bold{% endif %}" href="/">
-                            <i class="bi bi-house-door"></i> {{ i18n.home|default:"Inicio" }}
-                        </a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle {% if '/products/' in request.path %}active fw-bold{% endif %}" href="#" id="productDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi bi-box-seam"></i> {{ i18n.products|default:"Productos" }}
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="productDropdown">
-                            <li><a class="dropdown-item" href="/products/">{{ i18n.all_products|default:"Todos los productos" }}</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="/products/?category=comida">{{ i18n.food|default:"Comida" }}</a></li>
-                            <li><a class="dropdown-item" href="/products/?category=construccion">{{ i18n.construction|default:"Construcción" }}</a></li>
-                        </ul>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {% if request.path == '/contact/' %}active fw-bold{% endif %}" href="/contact/">
-                            <i class="bi bi-envelope"></i> {{ i18n.contact|default:"Contacto" }}
-                        </a>
-                    </li>
-                </ul>
-                
-            </div>
-        </div>
-    </nav>
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+  <div class="container">
+    <a class="navbar-brand d-flex align-items-center" href="{% url 'home' %}">
+      <img src="{% static 'img/logo.png' %}" alt="Coimpres Cuba Logo" class="logo-img me-2" />
+      
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav mx-auto">
+        <li class="nav-item">
+          <a class="nav-link {% if request.path == '/' %}active fw-bold{% endif %}" href="/">
+            <i class="bi bi-house-door"></i> {{ i18n.home|default:"Inicio" }}
+          </a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle {% if '/products/' in request.path %}active fw-bold{% endif %}" href="#" id="productDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="bi bi-box-seam"></i> {{ i18n.products|default:"Productos" }}
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="productDropdown">
+            <li><a class="dropdown-item" href="/products/">{{ i18n.all_products|default:"Todos los productos" }}</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="/products/?category=comida">{{ i18n.food|default:"Comida" }}</a></li>
+            <li><a class="dropdown-item" href="/products/?category=construccion">{{ i18n.construction|default:"Construcción" }}</a></li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {% if request.path == '/contact/' %}active fw-bold{% endif %}" href="/contact/">
+            <i class="bi bi-envelope"></i> {{ i18n.contact|default:"Contacto" }}
+          </a>
+        </li>
+      </ul>
+      
+    </div>
+  </div>
+</nav>
 
     <!-- Main Content -->
     <main>
@@ -85,7 +86,7 @@
         <div class="container">
             <div class="row py-3">
                 <div class="col-lg-4 col-md-6 mb-4 mb-md-0">
-                    <h5 class="text-uppercase mb-3">Coimpre SRL</h5>
+                    <h5 class="text-uppercase mb-3">Coimpre SRL, La Habana, Cuba</h5>
                     <p class="mb-3">{{ i18n.footer_description|default:"Importador oficial de productos italianos de alta calidad en Cuba, ofreciendo lo mejor de Italia para tu hogar y negocio." }}</p>
                     <div class="d-flex social-icons">
                         <a href="#" class="me-3 text-white"><i class="bi bi-facebook fs-5"></i></a>

@@ -109,6 +109,26 @@ footer {
     font-size: 0.75rem;
 }
 
+/* Logo Image Styling */
+.logo-img {
+    height: 60px;
+    width: auto;
+    max-width: 180px;
+    object-fit: contain;
+    transition: transform 0.2s;
+}
+
+.logo-img:hover {
+    transform: scale(1.05);
+}
+
+@media (max-width: 768px) {
+    .logo-img {
+        height: 36px;
+        max-width: 1200px;
+    }
+}
+
 /* Responsive Adjustments */
 @media (max-width: 768px) {
     .hero-section {
