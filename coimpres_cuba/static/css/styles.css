@@ -111,11 +111,12 @@ footer {
 
 /* Logo Image Styling */
 .logo-img {
-    height: 60px;
+    height: 90px;
     width: auto;
     max-width: 180px;
     object-fit: contain;
     transition: transform 0.2s;
+    content: url('../img/logo_3.png'); /* Usar logo_3.png como fuente de imagen */
 }
 
 .logo-img:hover {
@@ -124,7 +125,7 @@ footer {
 
 @media (max-width: 768px) {
     .logo-img {
-        height: 36px;
+        height: 80px;
         max-width: 1200px;
     }
 }
