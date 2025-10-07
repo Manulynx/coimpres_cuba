@@ -1,0 +1,150 @@
+{% extends "coimpres_cuba/base.html" %}
+{% load static %}
+
+{% block title %}Contacto | Coimpres Cuba{% endblock %}
+
+{% block content %}
+<div class="contact-hero py-5 bg-primary text-white">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h1 class="display-4 fw-bold mb-3">{{ i18n.contact_us|default:"Contáctenos" }}</h1>
+                <p class="lead mb-0">{{ i18n.contact_subtitle|default:"Estamos aquí para ayudarte con tus necesidades de importación de productos italianos" }}</p>
+            </div>
+            <div class="col-lg-6 text-end d-none d-lg-block">
+                <i class="bi bi-envelope-paper display-1 opacity-50"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container py-5">
+    <div class="row g-4">
+        <!-- Información de Contacto -->
+        <div class="col-lg-4">
+            <div class="contact-info bg-white p-4 rounded-3 shadow-sm h-100">
+                <h3 class="h4 mb-4">{{ i18n.contact_info|default:"Información de Contacto" }}</h3>
+                
+                <div class="mb-4">
+                    <h4 class="h6 text-primary"><i class="bi bi-geo-alt-fill me-2"></i>{{ i18n.address|default:"Dirección" }}</h4>
+                    <p class="mb-0 ms-4">La Habana, Cuba</p>
+                </div>
+
+                <div class="mb-4">
+                    <h4 class="h6 text-primary"><i class="bi bi-telephone-fill me-2"></i>{{ i18n.phone|default:"Teléfono" }}</h4>
+                    <p class="mb-0 ms-4">+53 5555-5555</p>
+                </div>
+
+                <div class="mb-4">
+                    <h4 class="h6 text-primary"><i class="bi bi-envelope-fill me-2"></i>{{ i18n.email|default:"Correo" }}</h4>
+                    <p class="mb-0 ms-4">info@importadoraitaliana.com</p>
+                </div>
+
+                <div class="mb-4">
+                    <h4 class="h6 text-primary"><i class="bi bi-clock-fill me-2"></i>{{ i18n.hours|default:"Horario" }}</h4>
+                    <p class="mb-0 ms-4">
+                        {{ i18n.weekdays|default:"Lunes a Viernes" }}: 9:00 AM - 6:00 PM<br>
+                        {{ i18n.weekends|default:"Sábados" }}: 9:00 AM - 1:00 PM
+                    </p>
+                </div>
+
+                <div class="social-links mt-4">
+                    <h4 class="h6 text-primary mb-3"><i class="bi bi-share-fill me-2"></i>{{ i18n.social_media|default:"Redes Sociales" }}</h4>
+                    <div class="d-flex gap-3 ms-4">
+                        <a href="#" class="text-primary fs-4"><i class="bi bi-facebook"></i></a>
+                        <a href="#" class="text-primary fs-4"><i class="bi bi-instagram"></i></a>
+                        <a href="#" class="text-primary fs-4"><i class="bi bi-whatsapp"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Formulario de Contacto -->
+        <div class="col-lg-8">
+            <div class="contact-form bg-white p-4 rounded-3 shadow-sm">
+                <h3 class="h4 mb-4">{{ i18n.send_message|default:"Envíenos un Mensaje" }}</h3>
+                
+                <form method="post" class="needs-validation" novalidate>
+                    {% csrf_token %}
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="name" class="form-label">{{ i18n.name|default:"Nombre" }} *</label>
+                            <input type="text" class="form-control" id="name" name="name" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="email" class="form-label">{{ i18n.email|default:"Correo" }} *</label>
+                            <input type="email" class="form-control" id="email" name="email" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="phone" class="form-label">{{ i18n.phone|default:"Teléfono" }}</label>
+                            <input type="tel" class="form-control" id="phone" name="phone">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="subject" class="form-label">{{ i18n.subject|default:"Asunto" }} *</label>
+                            <input type="text" class="form-control" id="subject" name="subject" required>
+                        </div>
+                        <div class="col-12">
+                            <label for="message" class="form-label">{{ i18n.message|default:"Mensaje" }} *</label>
+                            <textarea class="form-control" id="message" name="message" rows="5" required></textarea>
+                        </div>
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-primary px-4">
+                                <i class="bi bi-send me-2"></i>{{ i18n.send|default:"Enviar Mensaje" }}
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mapa o Imagen de Ubicación -->
+    <div class="row mt-5">
+        <div class="col-12">
+            <div class="map-container rounded-3 shadow-sm overflow-hidden">
+                <!-- Aquí puedes integrar un mapa de Google Maps o una imagen estática -->
+                <img src="{% static 'img/map-placeholder.jpg' %}" alt="Ubicación" class="w-100" style="height: 400px; object-fit: cover;">
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .contact-hero {
+        background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%);
+    }
+    .contact-info, .contact-form {
+        transition: transform 0.3s ease;
+    }
+    .contact-info:hover, .contact-form:hover {
+        transform: translateY(-5px);
+    }
+    .social-links a {
+        transition: transform 0.3s ease;
+    }
+    .social-links a:hover {
+        transform: translateY(-3px);
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Validación del formulario
+(function () {
+    'use strict'
+    var forms = document.querySelectorAll('.needs-validation')
+    Array.prototype.slice.call(forms).forEach(function (form) {
+        form.addEventListener('submit', function (event) {
+            if (!form.checkValidity()) {
+                event.preventDefault()
+                event.stopPropagation()
+            }
+            form.classList.add('was-validated')
+        }, false)
+    })
+})()
+</script>
+{% endblock %}

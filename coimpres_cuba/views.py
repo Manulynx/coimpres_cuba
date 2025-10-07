@@ -1,6 +1,10 @@
 # coimpres_cuba/views.py
 from django.shortcuts import render
 from productos.models import Product
+from django.views.generic import TemplateView
+from django.views.generic.edit import FormView
+from django.urls import reverse_lazy
+from django.contrib import messages
 
 def home_view(request):
     """Vista para la página de inicio"""
@@ -152,3 +156,11 @@ def home_view(request):
         'hero_image': hero_image,
     }
     return render(request, 'coimpres_cuba/home.html', context)
+
+class ContactView(TemplateView):
+    template_name = 'coimpres_cuba/contact.html'
+
+    def post(self, request, *args, **kwargs):
+        # Aquí puedes implementar el envío de correo
+        messages.success(request, 'Mensaje enviado correctamente')
+        return self.get(request, *args, **kwargs)
