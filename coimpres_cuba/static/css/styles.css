@@ -125,7 +125,7 @@ footer {
 
 @media (max-width: 768px) {
     .logo-img {
-        height: 100px;
+        height: 90px;
         max-width: 1200px;
     }
 }
