@@ -5,7 +5,19 @@ from productos.models import Product
 def home_view(request):
     """Vista para la página de inicio"""
     lang = request.GET.get('lang', 'es')
-    featured_products = Product.objects.filter(is_active=True)[:3]  # Get first 3 active products
+    
+    # Obtener productos para carrusel automático (hasta 12 productos)
+    featured_products_query = Product.objects.filter(is_active=True, destacado=True).select_related('category', 'subcategory', 'proveedor', 'estatus')[:12]
+    
+    # Si no hay suficientes productos destacados, completar con productos activos
+    if featured_products_query.count() < 12:
+        additional_products = Product.objects.filter(is_active=True).exclude(id__in=featured_products_query).select_related('category', 'subcategory', 'proveedor', 'estatus')[:12-featured_products_query.count()]
+        featured_products_list = list(featured_products_query) + list(additional_products)
+    else:
+        featured_products_list = list(featured_products_query)
+    
+    # Para carrusel automático no necesitamos chunks, enviamos todos los productos
+    
     hero_image = "/static/img/hero-image.jpg"  # Default hero image path
     
     # Definiciones de texto en diferentes idiomas
@@ -136,7 +148,7 @@ def home_view(request):
     context = {
         'lang': lang,
         'i18n': i18n_selected,
-        'featured_products': featured_products,
+        'featured_products': featured_products_list,
         'hero_image': hero_image,
     }
     return render(request, 'coimpres_cuba/home.html', context)

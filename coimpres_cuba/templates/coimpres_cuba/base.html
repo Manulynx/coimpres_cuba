@@ -49,19 +49,24 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav mx-auto">
         <li class="nav-item">
+          <a class="nav-link {% if '/productos/admin/' in request.path %}active fw-bold{% endif %}" href="{% url 'productos:admin_panel' %}">
+            <i class="bi bi-gear-fill"></i> Admin
+          </a>
+        </li>
+        <li class="nav-item">
           <a class="nav-link {% if request.path == '/' %}active fw-bold{% endif %}" href="/">
             <i class="bi bi-house-door"></i> {{ i18n.home|default:"Inicio" }}
           </a>
         </li>
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle {% if '/products/' in request.path %}active fw-bold{% endif %}" href="#" id="productDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          <a class="nav-link dropdown-toggle {% if '/productos/' in request.path %}active fw-bold{% endif %}" href="#" id="productDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             <i class="bi bi-box-seam"></i> {{ i18n.products|default:"Productos" }}
           </a>
           <ul class="dropdown-menu" aria-labelledby="productDropdown">
-            <li><a class="dropdown-item" href="/products/">{{ i18n.all_products|default:"Todos los productos" }}</a></li>
+            <li><a class="dropdown-item" href="{% url 'productos:product_list' %}">{{ i18n.all_products|default:"Todos los productos" }}</a></li>
             <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="/products/?category=comida">{{ i18n.food|default:"Comida" }}</a></li>
-            <li><a class="dropdown-item" href="/products/?category=construccion">{{ i18n.construction|default:"Construcción" }}</a></li>
+            <li><a class="dropdown-item" href="{% url 'productos:product_list' %}?category=comida">{{ i18n.food|default:"Comida" }}</a></li>
+            <li><a class="dropdown-item" href="{% url 'productos:product_list' %}?category=construccion">{{ i18n.construction|default:"Construcción" }}</a></li>
           </ul>
         </li>
         <li class="nav-item">
@@ -98,7 +103,7 @@
                     <h5 class="text-uppercase mb-3">{{ i18n.quick_links|default:"Enlaces Rápidos" }}</h5>
                     <ul class="list-unstyled">
                         <li class="mb-2"><a href="/" class="text-white text-decoration-none"><i class="bi bi-chevron-right"></i> {{ i18n.home|default:"Inicio" }}</a></li>
-                        <li class="mb-2"><a href="/products/" class="text-white text-decoration-none"><i class="bi bi-chevron-right"></i> {{ i18n.products|default:"Productos" }}</a></li>
+                        <li class="mb-2"><a href="{% url 'productos:product_list' %}" class="text-white text-decoration-none"><i class="bi bi-chevron-right"></i> {{ i18n.products|default:"Productos" }}</a></li>
                         <li><a href="/contact/" class="text-white text-decoration-none"><i class="bi bi-chevron-right"></i> {{ i18n.contact|default:"Contacto" }}</a></li>
                     </ul>
                 </div>

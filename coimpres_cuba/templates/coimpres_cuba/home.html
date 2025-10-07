@@ -1,4 +1,5 @@
 {% extends 'coimpres_cuba/base.html' %}
+{% load static %}
 
 {% block content %}
 <!-- Hero Section: Impactful visual introduction -->
@@ -116,56 +117,79 @@
             </div>
         </div>
         
-        <div class="row g-4">
-            {% for product in featured_products %}
-            <div class="col-md-4 mb-4">
-                <div class="card h-100 border-0 shadow-sm product-card">
-                    <div class="position-relative">
-                        {% if product.image %}
-                        <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}" style="height: 200px; object-fit: cover;">
-                        {% else %}
-                        <img src="/static/img/no-image.jpg" class="card-img-top" alt="Sin imagen" style="height: 200px; object-fit: cover;">
-                        {% endif %}
-                        
-                        {% if product.status_procedencia %}
-                        <span class="position-absolute top-0 end-0 badge {% if product.status_procedencia.name == 'En stock' %}bg-accent{% elif product.status_procedencia.name == 'Por pedido' %}bg-primary-custom text-white{% else %}bg-accent{% endif %} m-2">
-                            {{ product.status_procedencia.name }}
-                        </span>
-                        {% endif %}
-                    </div>
-                    
-                    <div class="card-body d-flex flex-column">
-                        <div class="d-flex justify-content-between align-items-center mb-2">
-                            <span class="category-badge small">{{ product.category }}</span>
-                            {% if product.subcategory %}
-                            <span class="badge bg-primary-custom small">{{ product.subcategory.name }}</span>
-                            {% endif %}
-                        </div>
-                        
-                        <h5 class="card-title">{{ product.name }}</h5>
-                        <p class="card-text text-muted flex-grow-1">{{ product.short_description|truncatechars:80 }}</p>
-                        
-                        <div class="d-flex justify-content-between align-items-center mt-3">
-                            {% if product.price %}
-                            <span class="fw-bold fs-5">${{ product.price }}</span>
-                            {% else %}
-                            <span class="text-muted">Consultar precio</span>
-                            {% endif %}
+        <!-- Carrusel automático de productos -->
+        <div id="autoProductCarousel" class="position-relative">
+            <div class="carousel-wrapper">
+                <div class="carousel-track" id="carouselTrack">
+                    {% for product in featured_products %}
+                    <div class="product-slide">
+                        <div class="card h-100 border-0 shadow-sm product-card">
+                            <div class="position-relative">
+                                {% if product.image %}
+                                <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}" style="height: 200px; object-fit: cover;">
+                                {% else %}
+                                <img src="/static/img/no-image.jpg" class="card-img-top" alt="Sin imagen" style="height: 200px; object-fit: cover;">
+                                {% endif %}
+                                
+                                <!-- Badges de estado -->
+                                <div class="position-absolute top-0 start-0 p-2">
+                                    {% if product.destacado %}
+                                        <span class="badge bg-warning text-dark me-1">DESTACADO</span>
+                                    {% endif %}
+                                    {% if product.en_oferta %}
+                                        <span class="badge bg-danger">EN OFERTA</span>
+                                    {% endif %}
+                                </div>
+                                
+                                {% if product.estatus %}
+                                <span class="position-absolute top-0 end-0 badge bg-accent m-2">
+                                    {{ product.estatus.name }}
+                                </span>
+                                {% endif %}
+                            </div>
                             
-                            <a href="{% url 'productos:product_detail' product.slug %}" class="btn btn-outline-primary">
-                                <i class="bi bi-eye me-1"></i>{{ i18n.view_details|default:"Ver detalle" }}
-                            </a>
+                            <div class="card-body d-flex flex-column">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span class="category-badge small">{{ product.category }}</span>
+                                    {% if product.subcategory %}
+                                    <span class="badge bg-primary-custom small">{{ product.subcategory.name }}</span>
+                                    {% endif %}
+                                </div>
+                                
+                                <h5 class="card-title">{{ product.name }}</h5>
+                                <p class="card-text text-muted flex-grow-1">{{ product.short_description|truncatechars:80 }}</p>
+                                
+                                <div class="d-flex justify-content-between align-items-center mt-3">
+                                    {% if product.price %}
+                                    <span class="fw-bold fs-5 text-success">${{ product.price }}</span>
+                                    {% else %}
+                                    <span class="text-muted">Consultar precio</span>
+                                    {% endif %}
+                                    
+                                    <a href="{% url 'productos:product_detail' product.slug %}" class="btn btn-outline-primary">
+                                        <i class="bi bi-eye me-1"></i>{{ i18n.view_details|default:"Ver detalle" }}
+                                    </a>
+                                </div>
+                            </div>
                         </div>
                     </div>
+                    {% endfor %}
                 </div>
             </div>
-            {% endfor %}
+            
+            <!-- Controles del carrusel -->
+            <button class="carousel-control carousel-control-prev" id="prevBtn" onclick="moveCarousel(-1)">
+                <i class="bi bi-chevron-left fs-3"></i>
+            </button>
+            <button class="carousel-control carousel-control-next" id="nextBtn" onclick="moveCarousel(1)">
+                <i class="bi bi-chevron-right fs-3"></i>
+            </button>
         </div>
         
-        <div class="row mt-4">
+        <div class="row mt-5">
             <div class="col-12 text-center">
-                <a href="/products/" class="btn btn-primary btn-lg">
-                    <i class="bi bi-grid me-2"></i>{{ i18n.all_products }}
+                <a href="{% url 'productos:product_list' %}" class="btn btn-primary btn-lg">
+                    <i class="bi bi-grid me-2"></i>{{ i18n.all_products|default:"Ver todos los productos" }}
                 </a>
             </div>
         </div>
@@ -174,4 +198,12 @@
 
 <!-- Contact CTA: Clear call to action -->
 
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/carousel.css' %}">
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/carousel.js' %}"></script>
 {% endblock %}

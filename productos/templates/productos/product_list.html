@@ -7,8 +7,12 @@
 <div class="container my-5">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1>Catálogo de Productos</h1>
-        <form action="{% url 'productos:product_list' %}" method="get" class="d-flex">
+        <form action="." method="get" class="d-flex">
             <input type="text" name="q" class="form-control me-2" placeholder="Buscar productos..." value="{{ request.GET.q|default:'' }}">
+            {% if request.GET.category %}<input type="hidden" name="category" value="{{ request.GET.category }}">{% endif %}
+            {% if request.GET.subcategory %}<input type="hidden" name="subcategory" value="{{ request.GET.subcategory }}">{% endif %}
+            {% if request.GET.proveedor %}<input type="hidden" name="proveedor" value="{{ request.GET.proveedor }}">{% endif %}
+            {% if request.GET.estatus %}<input type="hidden" name="estatus" value="{{ request.GET.estatus }}">{% endif %}
             <button type="submit" class="btn btn-primary">Buscar</button>
         </form>
     </div>
@@ -16,17 +20,18 @@
     <div class="row">
         <!-- Sidebar con filtros -->
         <div class="col-md-3 mb-4">
-            <div class="card">
+            <!-- Filtro por Categoría -->
+            <div class="card mb-3">
                 <div class="card-header bg-primary text-white">
                     <h5 class="mb-0">Filtrar por Categoría</h5>
                 </div>
                 <div class="card-body">
                     <div class="list-group">
-                        <a href="{% url 'productos:product_list' %}" class="list-group-item list-group-item-action {% if not selected_category %}active{% endif %}">
+                        <a href="." class="list-group-item list-group-item-action {% if not selected_category %}active{% endif %}">
                             Todas las categorías
                         </a>
                         {% for category in categories %}
-                        <a href="{% url 'productos:product_list' %}?category={{ category.slug }}" 
+                        <a href="?category={{ category.slug }}" 
                            class="list-group-item list-group-item-action {% if selected_category.slug == category.slug %}active{% endif %}">
                             {{ category }}
                         </a>
@@ -41,8 +46,8 @@
                 <div class="card-body">
                     <div class="list-group">
                         {% for subcategory in subcategories %}
-                        <a href="{% url 'productos:product_list' %}?category={{ selected_category.slug }}&subcategory={{ subcategory.slug }}" 
-                           class="list-group-item list-group-item-action">
+                        <a href="?category={{ selected_category.slug }}&subcategory={{ subcategory.slug }}" 
+                           class="list-group-item list-group-item-action {% if request.GET.subcategory == subcategory.slug %}active{% endif %}">
                             {{ subcategory.name }}
                         </a>
                         {% endfor %}
@@ -50,30 +55,166 @@
                 </div>
                 {% endif %}
             </div>
+            
+            <!-- Filtro por Proveedor -->
+            <div class="card mb-3">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">Filtrar por Proveedor</h5>
+                </div>
+                <div class="card-body">
+                    <div class="list-group">
+                        <a href="?{% if request.GET.category %}category={{ request.GET.category }}&{% endif %}{% if request.GET.subcategory %}subcategory={{ request.GET.subcategory }}&{% endif %}{% if request.GET.estatus %}estatus={{ request.GET.estatus }}&{% endif %}{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}" 
+                           class="list-group-item list-group-item-action {% if not request.GET.proveedor %}active{% endif %}">
+                            Todos los proveedores
+                        </a>
+                        {% for proveedor in proveedores %}
+                        <a href="?proveedor={{ proveedor.slug }}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}{% if request.GET.subcategory %}&subcategory={{ request.GET.subcategory }}{% endif %}{% if request.GET.estatus %}&estatus={{ request.GET.estatus }}{% endif %}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}" 
+                           class="list-group-item list-group-item-action {% if request.GET.proveedor == proveedor.slug %}active{% endif %}">
+                            {% if proveedor.logo %}
+                                <img src="{{ proveedor.logo.url }}" alt="{{ proveedor.name }}" width="20" height="20" class="me-2" style="border-radius: 3px;">
+                            {% endif %}
+                            {{ proveedor.name }}
+                            <span class="badge bg-primary ms-auto">{{ proveedor.count_productos }}</span>
+                        </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Filtro por Estatus -->
+            <div class="card mb-3">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="mb-0">Filtrar por Estatus</h5>
+                </div>
+                <div class="card-body">
+                    <div class="list-group">
+                        <a href="?{% if request.GET.category %}category={{ request.GET.category }}&{% endif %}{% if request.GET.subcategory %}subcategory={{ request.GET.subcategory }}&{% endif %}{% if request.GET.proveedor %}proveedor={{ request.GET.proveedor }}&{% endif %}{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}" 
+                           class="list-group-item list-group-item-action {% if not request.GET.estatus %}active{% endif %}">
+                            Todos los estatus
+                        </a>
+                        {% for estatus in estatus_list %}
+                        <a href="?estatus={{ estatus.slug }}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}{% if request.GET.subcategory %}&subcategory={{ request.GET.subcategory }}{% endif %}{% if request.GET.proveedor %}&proveedor={{ request.GET.proveedor }}{% endif %}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}" 
+                           class="list-group-item list-group-item-action {% if request.GET.estatus == estatus.slug %}active{% endif %}">
+                            {{ estatus.name }}
+                            <span class="badge bg-warning ms-auto">{{ estatus.count_productos }}</span>
+                        </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Botón para limpiar filtros -->
+            {% if request.GET.category or request.GET.subcategory or request.GET.proveedor or request.GET.estatus or request.GET.q %}
+            <div class="card">
+                <div class="card-body text-center">
+                    <a href="." class="btn btn-outline-danger">
+                        <i class="bi bi-x-circle"></i> Limpiar Filtros
+                    </a>
+                </div>
+            </div>
+            {% endif %}
         </div>
         
         <!-- Lista de productos -->
         <div class="col-md-9">
+            <!-- Filtros activos -->
+            {% if request.GET.category or request.GET.subcategory or request.GET.proveedor or request.GET.estatus or request.GET.q %}
+            <div class="alert alert-info mb-3">
+                <h6 class="mb-2">Filtros aplicados:</h6>
+                <div class="d-flex flex-wrap gap-2">
+                    {% if request.GET.q %}
+                        <span class="badge bg-primary">Búsqueda: "{{ request.GET.q }}"</span>
+                    {% endif %}
+                    {% if selected_category %}
+                        <span class="badge bg-primary">Categoría: {{ selected_category.name }}</span>
+                    {% endif %}
+                    {% if request.GET.subcategory %}
+                        <span class="badge bg-primary">Subcategoría: {{ request.GET.subcategory }}</span>
+                    {% endif %}
+                    {% if request.GET.proveedor %}
+                        <span class="badge bg-success">Proveedor: {{ request.GET.proveedor }}</span>
+                    {% endif %}
+                    {% if request.GET.estatus %}
+                        <span class="badge bg-warning text-dark">Estatus: {{ request.GET.estatus }}</span>
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+            
+            <!-- Contador de resultados -->
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <p class="mb-0 text-muted">
+                    {% if object_list %}
+                        Mostrando {{ object_list|length }} de {{ paginator.count }} productos
+                    {% else %}
+                        No se encontraron productos
+                    {% endif %}
+                </p>
+            </div>
+            
             <div class="row">
                 {% if object_list %}
                     {% for product in object_list %}
                         <div class="col-lg-4 col-md-6 mb-4">
-                            <div class="card h-100">
-                                {% if product.image %}
-                                    <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
-                                {% else %}
-                                    <img src="{% static 'img/no-image.jpg' %}" class="card-img-top" alt="Sin imagen">
+                            <div class="card h-100 position-relative">
+                                <!-- Badges de estado en la esquina superior -->
+                                {% if product.get_status_badges %}
+                                    <div class="position-absolute top-0 start-0 p-2" style="z-index: 10;">
+                                        {% for badge in product.get_status_badges %}
+                                            <span class="badge {{ badge.class }} me-1 mb-1">{{ badge.text }}</span>
+                                        {% endfor %}
+                                    </div>
                                 {% endif %}
-                                <div class="card-body">
+                                
+                                {% if product.image %}
+                                    <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}" style="height: 200px; object-fit: cover;">
+                                {% else %}
+                                    <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                                        <i class="bi bi-image text-muted" style="font-size: 3rem;"></i>
+                                    </div>
+                                {% endif %}
+                                <div class="card-body d-flex flex-column">
                                     <h5 class="card-title">{{ product.name }}</h5>
+                                    
+                                    <!-- Información del proveedor -->
                                     {% if product.proveedor %}
-                                        <h6 class="card-subtitle mb-2 text-muted">{{ product.proveedor.name }}</h6>
+                                        <div class="d-flex align-items-center mb-2">
+                                            {% if product.proveedor.logo %}
+                                                <img src="{{ product.proveedor.logo.url }}" alt="{{ product.proveedor.name }}" width="20" height="20" class="me-2" style="border-radius: 3px;">
+                                            {% endif %}
+                                            <small class="text-muted">{{ product.proveedor.name }}</small>
+                                        </div>
                                     {% endif %}
-                                    <p class="card-text">{{ product.short_description|truncatechars:100 }}</p>
-                                    {% if product.price %}
-                                        <p class="card-text fw-bold">Precio: ${{ product.price }}</p>
+                                    
+                                    <!-- Categoría y subcategoría -->
+                                    <div class="mb-2">
+                                        {% if product.category %}
+                                            <span class="badge bg-primary me-1">{{ product.category.name }}</span>
+                                        {% endif %}
+                                        {% if product.subcategory %}
+                                            <span class="badge bg-secondary">{{ product.subcategory.name }}</span>
+                                        {% endif %}
+                                    </div>
+                                    
+                                    <!-- Estatus de procedencia -->
+                                    {% if product.estatus %}
+                                        <div class="mb-2">
+                                            <span class="badge bg-warning text-dark">{{ product.estatus.name }}</span>
+                                        </div>
                                     {% endif %}
-                                    <a href="{% url 'productos:product_detail' product.slug %}" class="btn btn-primary">Ver detalle</a>
+                                    
+                                    <p class="card-text flex-grow-1">{{ product.short_description|truncatechars:100 }}</p>
+                                    
+                                    <!-- Precio y detalles -->
+                                    <div class="mt-auto">
+                                        {% if product.price %}
+                                            <p class="card-text fw-bold text-success mb-2">${{ product.price }}</p>
+                                        {% endif %}
+                                        {% if product.sku %}
+                                            <small class="text-muted d-block mb-2">SKU: {{ product.sku }}</small>
+                                        {% endif %}
+                                        <a href="{% url 'productos:product_detail' product.slug %}" class="btn btn-primary w-100">Ver detalle</a>
+                                    </div>
                                 </div>
                             </div>
                         </div>

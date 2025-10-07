@@ -1,0 +1,500 @@
+{% extends 'coimpres_cuba/base.html' %}
+{% load static %}
+
+{% block title %}Panel de Administración - Productos{% endblock %}
+
+{% block extra_css %}
+<style>
+    .admin-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+    
+    .admin-header {
+        text-align: center;
+        margin-bottom: 30px;
+        padding: 20px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border-radius: 10px;
+    }
+    
+    .admin-tabs {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 30px;
+        border-bottom: 1px solid #ddd;
+    }
+    
+    .tab-button {
+        background: none;
+        border: none;
+        padding: 15px 25px;
+        margin: 0 5px;
+        cursor: pointer;
+        border-bottom: 3px solid transparent;
+        font-weight: 500;
+        color: #666;
+        transition: all 0.3s ease;
+    }
+    
+    .tab-button.active {
+        color: #667eea;
+        border-bottom-color: #667eea;
+    }
+    
+    .tab-button:hover {
+        color: #667eea;
+        background-color: #f8f9fa;
+    }
+    
+    .tab-content {
+        display: none;
+        background: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+    }
+    
+    .tab-content.active {
+        display: block;
+    }
+    
+    .form-grid {
+        display: grid;
+        gap: 20px;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    }
+    
+    .form-group {
+        margin-bottom: 20px;
+    }
+    
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: #333;
+    }
+    
+    .form-control {
+        width: 100%;
+        padding: 12px 15px;
+        border: 2px solid #e1e5e9;
+        border-radius: 8px;
+        font-size: 14px;
+        transition: border-color 0.3s ease;
+    }
+    
+    .form-control:focus {
+        outline: none;
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+    
+    .btn {
+        padding: 12px 25px;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-block;
+        text-align: center;
+    }
+    
+    .btn-primary {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+    }
+    
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    }
+    
+    .btn-success {
+        background: linear-gradient(135deg, #56ab2f 0%, #a8e6cf 100%);
+        color: white;
+    }
+    
+    .btn-success:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(86, 171, 47, 0.3);
+    }
+    
+    .alert {
+        padding: 15px;
+        margin-bottom: 20px;
+        border-radius: 8px;
+        border-left: 4px solid;
+    }
+    
+    .alert-success {
+        background-color: #d4edda;
+        border-color: #28a745;
+        color: #155724;
+    }
+    
+    .alert-error {
+        background-color: #f8d7da;
+        border-color: #dc3545;
+        color: #721c24;
+    }
+    
+    .file-input-wrapper {
+        position: relative;
+        display: inline-block;
+        cursor: pointer;
+        width: 100%;
+    }
+    
+    .file-input {
+        opacity: 0;
+        position: absolute;
+        z-index: -1;
+    }
+    
+    .file-input-label {
+        display: block;
+        padding: 12px 15px;
+        border: 2px dashed #e1e5e9;
+        border-radius: 8px;
+        text-align: center;
+        background: #f8f9fa;
+        transition: all 0.3s ease;
+    }
+    
+    .file-input-label:hover {
+        border-color: #667eea;
+        background: #f0f2ff;
+    }
+    
+    .section-title {
+        font-size: 24px;
+        font-weight: 700;
+        color: #333;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="admin-container">
+    <div class="admin-header">
+        <h1>Panel de Administración</h1>
+        <p>Gestiona proveedores, categorías, subcategorías, productos y estatus</p>
+    </div>
+    
+    <!-- Tabs de navegación -->
+    <div class="admin-tabs">
+        <button class="tab-button active" onclick="showTab('proveedores')">Proveedores</button>
+        <button class="tab-button" onclick="showTab('categorias')">Categorías</button>
+        <button class="tab-button" onclick="showTab('subcategorias')">Subcategorías</button>
+        <button class="tab-button" onclick="showTab('estatus')">Estatus</button>
+        <button class="tab-button" onclick="showTab('productos')">Productos</button>
+    </div>
+    
+    <!-- Mensajes de éxito/error -->
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+    
+    <!-- Tab: Proveedores -->
+    <div id="proveedores" class="tab-content active">
+        <h2 class="section-title">Gestión de Proveedores</h2>
+        <form method="post" enctype="multipart/form-data" action="{% url 'productos:add_proveedor' %}">
+            {% csrf_token %}
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="proveedor_name">Nombre del Proveedor *</label>
+                    <input type="text" id="proveedor_name" name="name" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="proveedor_id_unico">ID Único *</label>
+                    <input type="text" id="proveedor_id_unico" name="id_unico" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="proveedor_logo">Logo del Proveedor</label>
+                    <div class="file-input-wrapper">
+                        <input type="file" id="proveedor_logo" name="logo" class="file-input" accept="image/*">
+                        <label for="proveedor_logo" class="file-input-label">
+                            📷 Seleccionar Logo
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="proveedor_catalogo">Catálogo (PDF)</label>
+                    <div class="file-input-wrapper">
+                        <input type="file" id="proveedor_catalogo" name="catalogo" class="file-input" accept=".pdf">
+                        <label for="proveedor_catalogo" class="file-input-label">
+                            📄 Seleccionar Catálogo PDF
+                        </label>
+                    </div>
+                </div>
+            </div>
+            
+            <button type="submit" class="btn btn-primary">➕ Agregar Proveedor</button>
+        </form>
+    </div>
+    
+    <!-- Tab: Categorías -->
+    <div id="categorias" class="tab-content">
+        <h2 class="section-title">Gestión de Categorías</h2>
+        <form method="post" action="{% url 'productos:add_category' %}">
+            {% csrf_token %}
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="category_name">Nombre de la Categoría *</label>
+                    <input type="text" id="category_name" name="name" class="form-control" required>
+                </div>
+            </div>
+            
+            <button type="submit" class="btn btn-primary">➕ Agregar Categoría</button>
+        </form>
+    </div>
+    
+    <!-- Tab: Subcategorías -->
+    <div id="subcategorias" class="tab-content">
+        <h2 class="section-title">Gestión de Subcategorías</h2>
+        <form method="post" action="{% url 'productos:add_subcategory' %}">
+            {% csrf_token %}
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="subcategory_name">Nombre de la Subcategoría *</label>
+                    <input type="text" id="subcategory_name" name="name" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="subcategory_category">Categoría *</label>
+                    <select id="subcategory_category" name="category" class="form-control" required>
+                        <option value="">Seleccionar categoría...</option>
+                        {% for category in categories %}
+                            <option value="{{ category.id }}">{{ category.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            
+            <button type="submit" class="btn btn-primary">➕ Agregar Subcategoría</button>
+        </form>
+    </div>
+    
+    <!-- Tab: Estatus -->
+    <div id="estatus" class="tab-content">
+        <h2 class="section-title">Gestión de Estatus de Procedencia</h2>
+        <form method="post" action="{% url 'productos:add_estatus' %}">
+            {% csrf_token %}
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="estatus_name">Nombre del Estatus *</label>
+                    <input type="text" id="estatus_name" name="name" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="estatus_description">Descripción</label>
+                    <textarea id="estatus_description" name="description" class="form-control" rows="3" placeholder="Descripción opcional del estatus..."></textarea>
+                </div>
+            </div>
+            
+            <button type="submit" class="btn btn-primary">➕ Agregar Estatus</button>
+        </form>
+    </div>
+    
+    <!-- Tab: Productos -->
+    <div id="productos" class="tab-content">
+        <h2 class="section-title">Gestión de Productos</h2>
+        <form method="post" enctype="multipart/form-data" action="{% url 'productos:add_product' %}">
+            {% csrf_token %}
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="product_name">Nombre del Producto *</label>
+                    <input type="text" id="product_name" name="name" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="product_sku">Código SKU</label>
+                    <input type="text" id="product_sku" name="sku" class="form-control">
+                </div>
+                
+                <div class="form-group">
+                    <label for="product_proveedor">Proveedor</label>
+                    <select id="product_proveedor" name="proveedor" class="form-control">
+                        <option value="">Seleccionar proveedor...</option>
+                        {% for proveedor in proveedores %}
+                            <option value="{{ proveedor.id }}">{{ proveedor.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="product_category">Categoría *</label>
+                    <select id="product_category" name="category" class="form-control" required>
+                        <option value="">Seleccionar categoría...</option>
+                        {% for category in categories %}
+                            <option value="{{ category.id }}">{{ category.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="product_subcategory">Subcategoría</label>
+                    <select id="product_subcategory" name="subcategory" class="form-control">
+                        <option value="">Seleccionar subcategoría...</option>
+                        {% for subcategory in subcategories %}
+                            <option value="{{ subcategory.id }}" data-category="{{ subcategory.category.id }}">{{ subcategory.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="product_estatus">Estatus de Procedencia</label>
+                    <select id="product_estatus" name="estatus" class="form-control">
+                        <option value="">Seleccionar estatus...</option>
+                        {% for estatus in estatus_list %}
+                            <option value="{{ estatus.id }}">{{ estatus.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="product_price">Precio</label>
+                    <input type="number" id="product_price" name="price" class="form-control" step="0.01" min="0">
+                </div>
+                
+                <div class="form-group">
+                    <label for="product_peso">Peso (kg)</label>
+                    <input type="number" id="product_peso" name="peso" class="form-control" step="0.01" min="0">
+                </div>
+                
+                <div class="form-group">
+                    <label for="product_origen">País de Origen</label>
+                    <input type="text" id="product_origen" name="origen" class="form-control">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="product_short_description">Descripción Corta</label>
+                <input type="text" id="product_short_description" name="short_description" class="form-control" maxlength="500">
+            </div>
+            
+            <div class="form-group">
+                <label for="product_description">Descripción Completa</label>
+                <textarea id="product_description" name="description" class="form-control" rows="4" placeholder="Descripción detallada del producto..."></textarea>
+            </div>
+            
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="product_image">Imagen del Producto</label>
+                    <div class="file-input-wrapper">
+                        <input type="file" id="product_image" name="image" class="file-input" accept="image/*">
+                        <label for="product_image" class="file-input-label">
+                            🖼️ Seleccionar Imagen
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="product_video">Video del Producto</label>
+                    <div class="file-input-wrapper">
+                        <input type="file" id="product_video" name="video" class="file-input" accept="video/*">
+                        <label for="product_video" class="file-input-label">
+                            🎥 Seleccionar Video
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="product_ficha_tecnica">Ficha Técnica (PDF)</label>
+                    <div class="file-input-wrapper">
+                        <input type="file" id="product_ficha_tecnica" name="ficha_tecnica" class="file-input" accept=".pdf">
+                        <label for="product_ficha_tecnica" class="file-input-label">
+                            📋 Seleccionar Ficha Técnica
+                        </label>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>
+                    <input type="checkbox" id="product_is_active" name="is_active" checked> 
+                    Producto Activo
+                </label>
+            </div>
+            
+            <button type="submit" class="btn btn-success">🛍️ Agregar Producto</button>
+        </form>
+    </div>
+</div>
+
+</div>
+
+<script>
+function showTab(tabName) {
+    // Ocultar todas las pestañas
+    const tabs = document.querySelectorAll('.tab-content');
+    tabs.forEach(tab => tab.classList.remove('active'));
+    
+    // Desactivar todos los botones
+    const buttons = document.querySelectorAll('.tab-button');
+    buttons.forEach(button => button.classList.remove('active'));
+    
+    // Mostrar la pestaña seleccionada
+    document.getElementById(tabName).classList.add('active');
+    
+    // Activar el botón correspondiente
+    event.target.classList.add('active');
+}
+
+// Actualizar el nombre del archivo seleccionado
+document.querySelectorAll('.file-input').forEach(input => {
+    input.addEventListener('change', function() {
+        const label = this.nextElementSibling;
+        const fileName = this.files[0]?.name || label.getAttribute('data-original-text') || label.textContent;
+        if (this.files[0]) {
+            label.textContent = `📁 ${fileName}`;
+        }
+    });
+});
+
+// Guardar el texto original de las etiquetas
+document.querySelectorAll('.file-input-label').forEach(label => {
+    label.setAttribute('data-original-text', label.textContent);
+});
+
+// Filtrar subcategorías por categoría seleccionada
+document.getElementById('product_category').addEventListener('change', function() {
+    const categoryId = this.value;
+    const subcategorySelect = document.getElementById('product_subcategory');
+    const allOptions = subcategorySelect.querySelectorAll('option');
+    
+    // Mostrar todas las opciones primero
+    allOptions.forEach(option => {
+        if (option.value === '') {
+            option.style.display = 'block';
+        } else {
+            const optionCategoryId = option.getAttribute('data-category');
+            if (!categoryId || optionCategoryId === categoryId) {
+                option.style.display = 'block';
+            } else {
+                option.style.display = 'none';
+            }
+        }
+    });
+    
+    // Resetear selección
+    subcategorySelect.value = '';
+});
+</script>
+{% endblock %}
