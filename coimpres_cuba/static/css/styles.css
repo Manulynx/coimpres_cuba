@@ -208,6 +208,67 @@ footer {
     object-fit: cover;
 }
 
+/* Grid de productos móvil - 2 columnas */
+@media (max-width: 991.98px) {
+    .row-cols-md-3 > .col,
+    .row-cols-md-4 > .col {
+        flex: 0 0 auto;
+        width: 50%;
+    }
+    
+    /* Ajustes para cards más compactas en móvil */
+    .product-card-item .card-title {
+        font-size: 0.95rem;
+        margin-bottom: 0.4rem;
+    }
+    
+    .product-card-item .card-body {
+        padding: 0.75rem;
+    }
+    
+    .product-card-item .card-text {
+        font-size: 0.8rem;
+        margin-bottom: 0.5rem;
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
+        display: -webkit-box;
+        display: box;
+        -webkit-box-orient: vertical;
+        box-orient: vertical;
+        overflow: hidden;
+    }
+    
+    .product-card-item .btn {
+        padding-top: 0.3rem;
+        padding-bottom: 0.3rem;
+        font-size: 0.75rem;
+    }
+    
+    .product-card-item .badge {
+        font-size: 0.65rem;
+        padding: 0.2rem 0.5rem;
+    }
+}
+
+/* Ajuste específico para dispositivos pequeños */
+@media (max-width: 575.98px) {
+    /* Forzar 2 columnas incluso en muy pequeños */
+    .row-cols-2 > .col {
+        flex: 0 0 auto;
+        width: 50% !important;
+    }
+    
+    /* Imagen más pequeña */
+    .product-card-item .card-img-top {
+        height: 130px !important;
+    }
+    
+    /* Reducción adicional para pantallas muy pequeñas */
+    .product-card-item .card-title {
+        font-size: 0.85rem;
+    }
+}
+
 /* Values section */
 .value-icon {
     transition: transform 0.3s ease;

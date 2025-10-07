@@ -45,11 +45,11 @@
           </p>
       </div>
 
-      <!-- Grid de productos sin pérdida de espacio -->
-      <div class="row g-4 row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4">
+      <!-- Grid de productos sin pérdida de espacio - 2 columnas en móvil -->
+      <div class="row g-2 g-md-3 row-cols-2 row-cols-md-3 row-cols-xl-4">
         {% if object_list %}
           {% for product in object_list %}
-          <div class="col">
+          <div class="col product-card-col">
             <div class="card h-100 position-relative product-card-item">
               {% if product.get_status_badges %}
               <div class="position-absolute top-0 start-0 p-2" style="z-index:10;">
