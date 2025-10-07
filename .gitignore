@@ -1,0 +1,67 @@
+# === Python Bytecode / Cache ===
+__pycache__/
+*/__pycache__/
+*.py[cod]
+*$py.class
+
+# === Virtual Environments ===
+.env
+.venv
+venv/
+ENV/
+env/
+
+# === Distribution / Packaging ===
+build/
+dist/
+*.egg-info/
+.eggs/
+*.egg
+
+# === Django Specific ===
+# SQLite database (manténla fuera si no quieres compartir datos locales)
+db.sqlite3
+# Si quieres incluir la base, elimina la línea anterior.
+
+# Django collected static files (generadas por collectstatic)
+/staticfiles/
+/static_root/
+
+# Media subida por usuarios (descomenta si NO quieres subirla)
+# media/
+
+# === Logs ===
+*.log
+log/
+logs/
+
+# === IDE / Editor ===
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# === Sistema operativo ===
+.DS_Store
+Thumbs.db
+
+# === Entorno / Variables ===
+*.env
+.env.*
+.env.local
+
+# === Coverage / Testing ===
+htmlcov/
+.coverage
+.coverage.*
+.cache
+.pytest_cache/
+nosetests.xml
+coverage.xml
+*.cover
+
+# === Otros ===
+*.bak
+*.swp
+*.tmp
+~$*

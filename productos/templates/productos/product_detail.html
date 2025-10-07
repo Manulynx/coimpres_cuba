@@ -144,34 +144,167 @@
         </div>
     </div>
     
-    <!-- Productos relacionados -->
+    <!-- Productos relacionados en carrusel -->
     {% if related_products %}
-    <div class="row mt-5">
-        <div class="col-12">
-            <h3>Productos relacionados</h3>
-            <hr>
-        </div>
-        
-        {% for related_product in related_products %}
-        <div class="col-md-4 mb-4">
-            <div class="card h-100">
-                {% if related_product.image %}
-                    <img src="{{ related_product.image.url }}" class="card-img-top" alt="{{ related_product.name }}">
-                {% else %}
-                    <img src="{% static 'img/no-image.jpg' %}" class="card-img-top" alt="Sin imagen">
-                {% endif %}
-                <div class="card-body">
-                    <h5 class="card-title">{{ related_product.name }}</h5>
-                    <p class="card-text">{{ related_product.short_description|truncatechars:100 }}</p>
-                    {% if related_product.price %}
-                    <p class="card-text fw-bold">Precio: ${{ related_product.price }}</p>
-                    {% endif %}
-                    <a href="{% url 'productos:product_detail' related_product.slug %}" class="btn btn-primary">Ver detalle</a>
-                </div>
+    <div class="related-products-section mt-5">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h3 class="mb-0">Productos relacionados</h3>
+            <div class="d-none d-md-flex gap-2">
+                <button class="btn btn-outline-secondary btn-sm related-prev" aria-label="Anterior">
+                    <i class="bi bi-chevron-left"></i>
+                </button>
+                <button class="btn btn-outline-secondary btn-sm related-next" aria-label="Siguiente">
+                    <i class="bi bi-chevron-right"></i>
+                </button>
             </div>
         </div>
-        {% endfor %}
+        <div class="related-carousel-wrapper position-relative">
+            <div class="related-carousel-track" data-items="{{ related_products|length }}">
+                {% for related_product in related_products %}
+                <div class="related-item">
+                    <div class="related-card h-100">
+                        <div class="related-image-wrapper">
+                            {% if related_product.image %}
+                                <img src="{{ related_product.image.url }}" alt="{{ related_product.name }}" loading="lazy">
+                            {% else %}
+                                <img src="{% static 'img/no-image.jpg' %}" alt="Sin imagen" loading="lazy">
+                            {% endif %}
+                            <div class="related-overlay">
+                                <a href="{% url 'productos:product_detail' related_product.slug %}" class="btn btn-sm btn-light fw-semibold shadow-sm">Ver detalle</a>
+                            </div>
+                        </div>
+                        <div class="p-3">
+                            <h6 class="mb-1 text-truncate" title="{{ related_product.name }}">{{ related_product.name }}</h6>
+                            <p class="small text-muted mb-2 text-truncate" title="{{ related_product.short_description }}">{{ related_product.short_description|default:""|truncatechars:70 }}</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                {% if related_product.price %}
+                                <span class="price-tag">${{ related_product.price }}</span>
+                                {% else %}
+                                <span class="small text-muted">Consultar</span>
+                                {% endif %}
+                                <a href="{% url 'productos:product_detail' related_product.slug %}" class="stretched-link d-inline-block ms-2 text-accent small">→</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <!-- Controles móviles -->
+            <button class="btn btn-outline-secondary btn-sm related-prev mobile-control" aria-label="Anterior">
+                <i class="bi bi-chevron-left"></i>
+            </button>
+            <button class="btn btn-outline-secondary btn-sm related-next mobile-control" aria-label="Siguiente">
+                <i class="bi bi-chevron-right"></i>
+            </button>
+            <div class="fade-edge left"></div>
+            <div class="fade-edge right"></div>
+        </div>
     </div>
     {% endif %}
 </div>
+{% endblock %}
+
+{% block extra_js %}
+{{ block.super }}
+<script>
+// Carrusel simple para productos relacionados
+document.addEventListener('DOMContentLoaded', function() {
+  const track = document.querySelector('.related-carousel-track');
+  if(!track) return;
+  const prevButtons = document.querySelectorAll('.related-prev');
+  const nextButtons = document.querySelectorAll('.related-next');
+  const itemWidth = () => track.querySelector('.related-item')?.getBoundingClientRect().width || 260;
+  const scrollAmount = () => itemWidth() * (window.innerWidth < 576 ? 1 : 2.5);
+
+  function scroll(dir) {
+    track.scrollBy({ left: dir * scrollAmount(), behavior: 'smooth'});
+  }
+  prevButtons.forEach(btn => btn.addEventListener('click', () => scroll(-1)));
+  nextButtons.forEach(btn => btn.addEventListener('click', () => scroll(1)));
+
+  // Drag / swipe
+  let isDown = false, startX, scrollLeft;
+  track.addEventListener('mousedown', (e) => { isDown = true; track.classList.add('grabbing'); startX = e.pageX - track.offsetLeft; scrollLeft = track.scrollLeft; });
+  track.addEventListener('mouseleave', () => { isDown = false; track.classList.remove('grabbing'); });
+  track.addEventListener('mouseup', () => { isDown = false; track.classList.remove('grabbing'); });
+  track.addEventListener('mousemove', (e) => { if(!isDown) return; e.preventDefault(); const x = e.pageX - track.offsetLeft; const walk = (x - startX) * 1.2; track.scrollLeft = scrollLeft - walk; });
+
+  // Touch
+  let touchStartX = 0, touchScrollLeft = 0;
+  track.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; touchScrollLeft = track.scrollLeft; }, {passive:true});
+  track.addEventListener('touchmove', (e) => { const dx = e.touches[0].clientX - touchStartX; track.scrollLeft = touchScrollLeft - dx; }, {passive:true});
+
+    // ===== Autoplay (rotación automática) =====
+    let autoplayDelay = 4000; // ms
+    let autoplayTimer = null;
+    let userPausedUntil = 0;
+
+    function atEnd() {
+        return track.scrollLeft + track.clientWidth >= track.scrollWidth - 5; // margen de tolerancia
+    }
+
+    function doAutoplayStep() {
+        // Si el usuario pausó recientemente, respetar pausa
+        if(Date.now() < userPausedUntil) return;
+        if(atEnd()) {
+            track.scrollTo({ left: 0, behavior: 'smooth' });
+        } else {
+            track.scrollBy({ left: scrollAmount(), behavior: 'smooth' });
+        }
+    }
+
+    function startAutoplay() {
+        stopAutoplay();
+        autoplayTimer = setInterval(doAutoplayStep, autoplayDelay);
+    }
+    function stopAutoplay() { if(autoplayTimer) { clearInterval(autoplayTimer); autoplayTimer = null; } }
+
+    // Pausar cuando el usuario interactúa (hover, focus, drag, botones)
+    function pauseAfterUserAction(extra = 8000) { // pausa extendida
+        userPausedUntil = Date.now() + extra;
+        // Reiniciar inmediatamente el temporizador para que respete nueva pausa
+        startAutoplay();
+    }
+
+    // Eventos de interacción
+    ['mouseenter','focusin','touchstart'].forEach(evt => {
+        track.addEventListener(evt, () => { stopAutoplay(); });
+    });
+    ['mouseleave','focusout','touchend'].forEach(evt => {
+        track.addEventListener(evt, () => { pauseAfterUserAction(); });
+    });
+    prevButtons.forEach(btn => btn.addEventListener('click', () => pauseAfterUserAction()));
+    nextButtons.forEach(btn => btn.addEventListener('click', () => pauseAfterUserAction()));
+    track.addEventListener('mousedown', () => pauseAfterUserAction());
+    track.addEventListener('mouseup', () => pauseAfterUserAction());
+
+    // Iniciar autoplay
+    startAutoplay();
+});
+</script>
+<style>
+/* Carrusel de productos relacionados */
+.related-products-section { position: relative; }
+.related-carousel-wrapper { position: relative; }
+.related-carousel-track { display: flex; gap: 1rem; overflow-x: auto; scrollbar-width: none; -ms-overflow-style: none; scroll-behavior: smooth; padding: .25rem .25rem 1rem .25rem; }
+.related-carousel-track::-webkit-scrollbar { display: none; }
+.related-item { flex: 0 0 clamp(220px, 28%, 260px); }
+@media (max-width: 992px){ .related-item { flex: 0 0 45%; } }
+@media (max-width: 576px){ .related-item { flex: 0 0 75%; } }
+.related-card { background: var(--color-white); border: 1px solid rgba(0,0,0,.05); border-radius: .75rem; box-shadow: 0 4px 10px rgba(44,42,40,.06); position: relative; overflow: hidden; transition: transform .35s ease, box-shadow .35s ease; }
+.related-card:hover { transform: translateY(-6px); box-shadow: 0 10px 24px -4px rgba(44,42,40,.18); }
+.related-image-wrapper { position: relative; aspect-ratio: 4/3; background: #f3f3f0; overflow: hidden; }
+.related-image-wrapper img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s ease; }
+.related-card:hover img { transform: scale(1.08); }
+.related-overlay { position: absolute; inset: 0; display: flex; align-items: flex-end; justify-content: center; background: linear-gradient(to top, rgba(0,0,0,.55), rgba(0,0,0,.0)); opacity: 0; transition: opacity .4s ease; padding: .75rem; }
+.related-card:hover .related-overlay { opacity: 1; }
+.price-tag { font-weight: 600; color: var(--color-primary); font-size: .9rem; }
+.related-prev, .related-next { width: 38px; height: 38px; display: inline-flex; align-items: center; justify-content: center; }
+.mobile-control { position: absolute; top: 40%; transform: translateY(-50%); z-index: 5; display: none; }
+@media (max-width: 768px){ .mobile-control { display: inline-flex; } .related-prev.mobile-control { left: .25rem; } .related-next.mobile-control { right: .25rem; } }
+.fade-edge { position: absolute; top:0; bottom:0; width:60px; pointer-events:none; z-index:4; }
+.fade-edge.left { left:0; background: linear-gradient(to right, var(--color-background), rgba(249,246,241,0)); }
+.fade-edge.right { right:0; background: linear-gradient(to left, var(--color-background), rgba(249,246,241,0)); }
+.related-carousel-track.grabbing { cursor: grabbing; }
+</style>
 {% endblock %}
