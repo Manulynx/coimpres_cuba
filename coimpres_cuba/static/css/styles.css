@@ -187,6 +187,27 @@ footer {
     box-shadow: 0 10px 20px rgba(44, 42, 40, 0.12) !important; /* Color primario con opacidad */
 }
 
+/* Optimización de grid de productos */
+.product-card-item .card {
+    display: flex;
+    flex-direction: column;
+}
+
+.product-card-item .card-body {
+    display: flex;
+    flex-direction: column;
+}
+
+.product-card-item .card-body .mt-auto {
+    margin-top: auto;
+}
+
+/* Ajuste menor de imágenes para uniformidad */
+.product-card-item .card-img-top {
+    aspect-ratio: 4/3;
+    object-fit: cover;
+}
+
 /* Values section */
 .value-icon {
     transition: transform 0.3s ease;
@@ -399,13 +420,6 @@ a:hover, a:focus {
 
 /* Móvil: colapsable */
 @media (max-width: 991.98px) {
-    .filter-panel-body {
-        display: none;
-    }
-    .filter-panel-body.open {
-        display: block;
-    }
-    .filter-panel {
-        margin-bottom: 1.5rem;
-    }
+  .filter-panel-body { display:none; }
+  .filter-panel-body.open { display:block; }
 }
