@@ -1,27 +1,30 @@
-// Toggle de panel de filtros (extraído de product_list.html)
-// Soporta múltiples botones con clase .btn-toggle-filters
-(function(){
-  document.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('.btn-toggle-filters').forEach(btn => {
-      const targetSel = btn.getAttribute('data-target');
-      if (!targetSel) return;
-      const target = document.querySelector(targetSel);
-      if (!target) return;
+// Gestión del panel de filtros usando Bootstrap Collapse
+document.addEventListener('DOMContentLoaded', () => {
+    const filterBody = document.getElementById('filterBody');
+    if (!filterBody) return;
 
-      // Estado inicial
-      const span = btn.querySelector('span');
-      const sync = () => {
-        const open = target.classList.contains('open');
-        btn.setAttribute('aria-expanded', open ? 'true' : 'false');
-        if (span) span.textContent = open ? 'Ocultar' : 'Mostrar';
-      };
-      sync();
+    const toggleBtn = document.querySelector('.btn-toggle-filters');
+    if (!toggleBtn) return;
 
-      btn.addEventListener('click', e => {
-        e.preventDefault();
-        target.classList.toggle('open');
-        sync();
-      });
+    const span = toggleBtn.querySelector('span');
+    if (!span) return;
+
+    // Actualizar el texto del botón cuando el collapse cambia
+    filterBody.addEventListener('show.bs.collapse', () => {
+        span.textContent = 'Ocultar';
+        toggleBtn.setAttribute('aria-expanded', 'true');
     });
-  });
-})();
+
+    filterBody.addEventListener('hide.bs.collapse', () => {
+        span.textContent = 'Mostrar';
+        toggleBtn.setAttribute('aria-expanded', 'false');
+    });
+
+    // Si hay un filtro activo, mostrar el panel automáticamente en móvil
+    const hasActiveFilters = document.querySelector('.alert-info');
+    if (hasActiveFilters && window.innerWidth < 992) {
+        const bsCollapse = new bootstrap.Collapse(filterBody, {
+            show: true
+        });
+    }
+});

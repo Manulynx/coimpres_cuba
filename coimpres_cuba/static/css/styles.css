@@ -406,10 +406,12 @@ a:hover, a:focus {
 
 .filter-panel-body {
     padding: 1rem 1rem 1.2rem;
-    display: block;
 }
 
-/* En móvil se colapsa vía JS */
+/* Animación suave para el collapse */
+.filter-panel-body.collapse {
+    transition: all 0.35s ease-in-out;
+}
 
 .filters-form .filter-group {
     margin-bottom: 0.9rem;
@@ -481,6 +483,13 @@ a:hover, a:focus {
 
 /* Móvil: colapsable */
 @media (max-width: 991.98px) {
-  .filter-panel-body { display:none; }
-  .filter-panel-body.open { display:block; }
+    .filter-panel-body:not(.show) {
+        display: none;
+    }
+    
+    .filter-panel-body.collapsing {
+        height: 0;
+        overflow: hidden;
+        transition: height 0.35s ease;
+    }
 }

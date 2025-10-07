@@ -4,13 +4,14 @@
     <h6 class="m-0 text-uppercase fw-bold">Filtros</h6>
     <button type="button"
             class="btn btn-sm btn-toggle-filters d-lg-none"
-            data-target="#filterBody"
+            data-bs-toggle="collapse"
+            data-bs-target="#filterBody"
             aria-controls="filterBody"
             aria-expanded="false">
       <span>Mostrar</span>
     </button>
   </div>
-  <div id="filterBody" class="filter-panel-body">
+  <div id="filterBody" class="collapse d-lg-block filter-panel-body">
     <form method="get" class="filters-form">
 
       <!-- Búsqueda -->
