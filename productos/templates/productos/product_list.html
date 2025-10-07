@@ -4,8 +4,13 @@
 {% block title %}Productos | Coimpres Cuba{% endblock %}
 
 {% block content %}
-<div class="container my-5">
-    <div class="d-flex justify-content-between align-items-center mb-4">
+<div class="container py-5">
+  <div class="row">
+    <aside class="col-lg-3">
+      {% include 'productos/partials/filters.html' %}
+    </aside>
+    <div class="col-lg-9">
+      <div class="d-flex justify-content-between align-items-center mb-4">
         <h1>Catálogo de Productos</h1>
         <form action="." method="get" class="d-flex">
             <input type="text" name="q" class="form-control me-2" placeholder="Buscar productos..." value="{{ request.GET.q|default:'' }}">
@@ -18,103 +23,6 @@
     </div>
     
     <div class="row">
-        <!-- Sidebar con filtros -->
-        <div class="col-md-3 mb-4">
-            <!-- Filtro por Categoría -->
-            <div class="card mb-3">
-                <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0">Filtrar por Categoría</h5>
-                </div>
-                <div class="card-body">
-                    <div class="list-group">
-                        <a href="." class="list-group-item list-group-item-action {% if not selected_category %}active{% endif %}">
-                            Todas las categorías
-                        </a>
-                        {% for category in categories %}
-                        <a href="?category={{ category.slug }}" 
-                           class="list-group-item list-group-item-action {% if selected_category.slug == category.slug %}active{% endif %}">
-                            {{ category }}
-                        </a>
-                        {% endfor %}
-                    </div>
-                </div>
-                
-                {% if selected_category and subcategories %}
-                <div class="card-header bg-light">
-                    <h5 class="mb-0">Subcategorías</h5>
-                </div>
-                <div class="card-body">
-                    <div class="list-group">
-                        {% for subcategory in subcategories %}
-                        <a href="?category={{ selected_category.slug }}&subcategory={{ subcategory.slug }}" 
-                           class="list-group-item list-group-item-action {% if request.GET.subcategory == subcategory.slug %}active{% endif %}">
-                            {{ subcategory.name }}
-                        </a>
-                        {% endfor %}
-                    </div>
-                </div>
-                {% endif %}
-            </div>
-            
-            <!-- Filtro por Proveedor -->
-            <div class="card mb-3">
-                <div class="card-header bg-success text-white">
-                    <h5 class="mb-0">Filtrar por Proveedor</h5>
-                </div>
-                <div class="card-body">
-                    <div class="list-group">
-                        <a href="?{% if request.GET.category %}category={{ request.GET.category }}&{% endif %}{% if request.GET.subcategory %}subcategory={{ request.GET.subcategory }}&{% endif %}{% if request.GET.estatus %}estatus={{ request.GET.estatus }}&{% endif %}{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}" 
-                           class="list-group-item list-group-item-action {% if not request.GET.proveedor %}active{% endif %}">
-                            Todos los proveedores
-                        </a>
-                        {% for proveedor in proveedores %}
-                        <a href="?proveedor={{ proveedor.slug }}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}{% if request.GET.subcategory %}&subcategory={{ request.GET.subcategory }}{% endif %}{% if request.GET.estatus %}&estatus={{ request.GET.estatus }}{% endif %}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}" 
-                           class="list-group-item list-group-item-action {% if request.GET.proveedor == proveedor.slug %}active{% endif %}">
-                            {% if proveedor.logo %}
-                                <img src="{{ proveedor.logo.url }}" alt="{{ proveedor.name }}" width="20" height="20" class="me-2" style="border-radius: 3px;">
-                            {% endif %}
-                            {{ proveedor.name }}
-                            <span class="badge bg-primary ms-auto">{{ proveedor.count_productos }}</span>
-                        </a>
-                        {% endfor %}
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Filtro por Estatus -->
-            <div class="card mb-3">
-                <div class="card-header bg-warning text-dark">
-                    <h5 class="mb-0">Filtrar por Estatus</h5>
-                </div>
-                <div class="card-body">
-                    <div class="list-group">
-                        <a href="?{% if request.GET.category %}category={{ request.GET.category }}&{% endif %}{% if request.GET.subcategory %}subcategory={{ request.GET.subcategory }}&{% endif %}{% if request.GET.proveedor %}proveedor={{ request.GET.proveedor }}&{% endif %}{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}" 
-                           class="list-group-item list-group-item-action {% if not request.GET.estatus %}active{% endif %}">
-                            Todos los estatus
-                        </a>
-                        {% for estatus in estatus_list %}
-                        <a href="?estatus={{ estatus.slug }}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}{% if request.GET.subcategory %}&subcategory={{ request.GET.subcategory }}{% endif %}{% if request.GET.proveedor %}&proveedor={{ request.GET.proveedor }}{% endif %}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}" 
-                           class="list-group-item list-group-item-action {% if request.GET.estatus == estatus.slug %}active{% endif %}">
-                            {{ estatus.name }}
-                            <span class="badge bg-warning ms-auto">{{ estatus.count_productos }}</span>
-                        </a>
-                        {% endfor %}
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Botón para limpiar filtros -->
-            {% if request.GET.category or request.GET.subcategory or request.GET.proveedor or request.GET.estatus or request.GET.q %}
-            <div class="card">
-                <div class="card-body text-center">
-                    <a href="." class="btn btn-outline-danger">
-                        <i class="bi bi-x-circle"></i> Limpiar Filtros
-                    </a>
-                </div>
-            </div>
-            {% endif %}
-        </div>
-        
         <!-- Lista de productos -->
         <div class="col-md-9">
             <!-- Filtros activos -->
@@ -266,4 +174,8 @@
     </nav>
     {% endif %}
 </div>
+{% block extra_js %}
+{{ block.super }}
+<script src="{% static 'js/filters-panel.js' %}"></script>
+{% endblock %}
 {% endblock %}

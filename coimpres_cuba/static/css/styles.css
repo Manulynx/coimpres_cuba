@@ -285,3 +285,127 @@ a:hover, a:focus {
 .bg-light-custom {
     background-color: var(--color-background);
 }
+
+/* Filter Panel */
+.filter-panel {
+    background: var(--color-white);
+    border: 1px solid rgba(44,42,40,0.08);
+    border-radius: 14px;
+    padding: 0;
+    overflow: hidden;
+    box-shadow: 0 4px 16px rgba(44,42,40,0.06);
+}
+
+.filter-panel-header {
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%);
+    color: var(--color-white);
+    padding: 0.85rem 1rem;
+}
+
+.filter-panel-header h6 {
+    letter-spacing: .05em;
+    font-size: .75rem;
+}
+
+.btn-toggle-filters {
+    background: rgba(255,255,255,0.15);
+    color: var(--color-white);
+    border: none;
+    font-size: .7rem;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+    padding: .25rem .6rem;
+    border-radius: 20px;
+}
+
+.btn-toggle-filters:hover {
+    background: rgba(255,255,255,0.28);
+}
+
+.filter-panel-body {
+    padding: 1rem 1rem 1.2rem;
+    display: block;
+}
+
+/* En móvil se colapsa vía JS */
+
+.filters-form .filter-group {
+    margin-bottom: 0.9rem;
+    padding-bottom: 0.7rem;
+    border-bottom: 1px dashed rgba(44,42,40,0.12);
+}
+
+.filters-form .filter-group:last-of-type {
+    border-bottom: none;
+    margin-bottom: 0.3rem;
+    padding-bottom: 0;
+}
+
+.filters-form label {
+    font-size: .65rem;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    opacity: .9;
+    margin-bottom: .25rem;
+}
+
+.filters-form .form-control,
+.filters-form .form-select {
+    border-radius: 10px;
+    border: 1px solid rgba(44,42,40,0.18);
+    font-size: .8rem;
+    background-color: var(--color-background);
+    transition: border-color .2s, background-color .2s;
+}
+
+.filters-form .form-control:focus,
+.filters-form .form-select:focus {
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 2px rgba(159,163,34,0.25);
+    background-color: var(--color-white);
+}
+
+.filters-form .form-control:hover,
+.filters-form .form-select:hover {
+    border-color: var(--color-accent);
+}
+
+.filters-form .btn-outline-secondary {
+    --bs-btn-color: var(--color-primary);
+    --bs-btn-border-color: rgba(44,42,40,0.25);
+    --bs-btn-hover-bg: var(--color-accent);
+    --bs-btn-hover-border-color: var(--color-accent);
+    --bs-btn-hover-color: var(--color-white);
+    font-size: .7rem;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+}
+
+.filters-form .btn-primary {
+    font-size: .7rem;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+    border-radius: 30px;
+    padding: .45rem 1rem;
+}
+
+/* Scroll interno si crecen los filtros */
+@media (min-height: 700px) and (min-width: 992px) {
+    .filter-panel {
+        position: sticky;
+        top: 90px;
+    }
+}
+
+/* Móvil: colapsable */
+@media (max-width: 991.98px) {
+    .filter-panel-body {
+        display: none;
+    }
+    .filter-panel-body.open {
+        display: block;
+    }
+    .filter-panel {
+        margin-bottom: 1.5rem;
+    }
+}

@@ -1,0 +1,78 @@
+{% load static %}
+<div class="filter-panel mb-4">
+  <div class="filter-panel-header d-flex justify-content-between align-items-center">
+    <h6 class="m-0 text-uppercase fw-bold">Filtros</h6>
+    <button type="button" class="btn btn-sm btn-toggle-filters d-lg-none" data-target="#filterBody">
+      <span>Mostrar</span>
+    </button>
+  </div>
+  <div id="filterBody" class="filter-panel-body">
+    <form method="get" class="filters-form">
+
+      <!-- Búsqueda -->
+      <div class="filter-group">
+        <label class="form-label fw-semibold small text-accent">Buscar</label>
+        <input type="text" name="q" value="{{ request.GET.q }}" class="form-control form-control-sm" placeholder="Nombre o descripción">
+      </div>
+
+      <!-- Categoría -->
+      {% if categories %}
+      <div class="filter-group">
+        <label class="form-label fw-semibold small text-accent">Categoría</label>
+        <select name="category" class="form-select form-select-sm">
+          <option value="">Todas</option>
+          {% for cat in categories %}
+            <option value="{{ cat.slug }}" {% if request.GET.category == cat.slug %}selected{% endif %}>{{ cat.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      {% endif %}
+
+      <!-- Subcategoría (solo si hay selección de categoría o hay subcategorías globales) -->
+      {% if subcategories %}
+      <div class="filter-group">
+        <label class="form-label fw-semibold small text-accent">Subcategoría</label>
+        <select name="subcategory" class="form-select form-select-sm">
+          <option value="">Todas</option>
+          {% for sub in subcategories %}
+            <option value="{{ sub.slug }}" {% if request.GET.subcategory == sub.slug %}selected{% endif %}>{{ sub.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      {% endif %}
+
+      <!-- Proveedor -->
+      {% if proveedores %}
+      <div class="filter-group">
+        <label class="form-label fw-semibold small text-accent">Proveedor</label>
+        <select name="proveedor" class="form-select form-select-sm">
+          <option value="">Todos</option>
+          {% for prov in proveedores %}
+            <option value="{{ prov.slug }}" {% if request.GET.proveedor == prov.slug %}selected{% endif %}>{{ prov.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      {% endif %}
+
+      <!-- Estado procedencia -->
+      {% if status_list %}
+      <div class="filter-group">
+        <label class="form-label fw-semibold small text-accent">Estado</label>
+        <select name="status" class="form-select form-select-sm">
+          <option value="">Todos</option>
+          {% for st in status_list %}
+            <option value="{{ st.id }}" {% if request.GET.status == st.id|stringformat:'s' %}selected{% endif %}>
+              {{ st.name }}
+            </option>
+          {% endfor %}
+        </select>
+      </div>
+      {% endif %}
+
+      <div class="d-flex gap-2 mt-3">
+        <button type="submit" class="btn btn-primary btn-sm px-3">Aplicar</button>
+        <a href="." class="btn btn-outline-secondary btn-sm">Limpiar</a>
+      </div>
+    </form>
+  </div>
+</div>
