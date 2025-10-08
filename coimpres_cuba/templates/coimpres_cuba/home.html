@@ -43,30 +43,7 @@
             </div>
             
             <!-- Right media column - simplified -->
-            <div class="col-lg-6">
-                <div class="hero-image-container">
-                    <!-- Clean image presentation -->
-                    <div class="hero-image-wrapper rounded-4 overflow-hidden shadow">
-                        {% if hero_image %}
-                            <img src="{{ hero_image }}" alt="{{ i18n.hero_title }}" class="img-fluid w-100">
-                        {% else %}
-                            <!-- Gradient background as placeholder -->
-                            <div class="placeholder-bg d-flex align-items-center justify-content-center p-4" style="height: 350px; background: linear-gradient(45deg, rgba(0,146,70,0.2), rgba(206,43,55,0.2));">
-                                <div class="text-center">
-                                    <img src="{% static 'img/Logo_1.png' %}" alt="Coimpres" class="mb-3" style="max-width: 120px;">
-                                    <div class="italian-flag-accent mx-auto mb-3" style="width: 60px; height: 10px;"></div>
-                                    <h4 class="text-white font-weight-bold">Importaciones Italianas de Calidad</h4>
-                                </div>
-                            </div>
-                        {% endif %}
-                        
-                        <!-- Logo overlay - simplified -->
-                        <div class="logo-overlay">
-                            <img src="{% static 'img/Logo_1.png' %}" alt="Coimpres" class="overlay-logo">
-                        </div>
-                    </div>
-                </div>
-            </div>
+            
         </div>
     </div>
     
