@@ -103,7 +103,7 @@
         <div class="col-12">
             <div class="map-container rounded-3 shadow-sm overflow-hidden">
                 <!-- Aquí puedes integrar un mapa de Google Maps o una imagen estática -->
-                <img src="{% static 'img/map-placeholder.jpg' %}" alt="Ubicación" class="w-100" style="height: 400px; object-fit: cover;">
+                <img src="{% static 'img/map-placeholder.jpg' %}" alt="Ubicación" class="w-100">
             </div>
         </div>
     </div>
@@ -111,23 +111,7 @@
 {% endblock %}
 
 {% block extra_css %}
-<style>
-    .contact-hero {
-        background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%);
-    }
-    .contact-info, .contact-form {
-        transition: transform 0.3s ease;
-    }
-    .contact-info:hover, .contact-form:hover {
-        transform: translateY(-5px);
-    }
-    .social-links a {
-        transition: transform 0.3s ease;
-    }
-    .social-links a:hover {
-        transform: translateY(-3px);
-    }
-</style>
+<link rel="stylesheet" href="{% static 'css/contact.css' %}">
 {% endblock %}
 
 {% block extra_js %}

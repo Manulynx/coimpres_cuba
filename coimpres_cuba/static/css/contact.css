@@ -1,0 +1,25 @@
+/* Contact Page Styles */
+.contact-hero {
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%);
+}
+
+.contact-info, .contact-form {
+    transition: transform 0.3s ease;
+}
+
+.contact-info:hover, .contact-form:hover {
+    transform: translateY(-5px);
+}
+
+.social-links a {
+    transition: transform 0.3s ease;
+}
+
+.social-links a:hover {
+    transform: translateY(-3px);
+}
+
+.map-container img {
+    height: 400px;
+    object-fit: cover;
+}

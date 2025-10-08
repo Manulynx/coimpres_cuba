@@ -1,0 +1,33 @@
+/* Common Section Styles */
+
+/* Section titles and dividers */
+.section-divider {
+    border-color: var(--color-accent);
+    opacity: 1;
+    border-width: 2px;
+}
+
+.section-subtitle {
+    color: var(--color-primary);
+}
+
+/* Value icons */
+.value-icon {
+    width: 50px;
+    height: 50px;
+}
+
+/* Product cards */
+.product-card-img {
+    height: 200px;
+    object-fit: cover;
+}
+
+/* Components for About section */
+.values-container .value-icon {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

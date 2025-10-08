@@ -2,24 +2,76 @@
 {% load static %}
 
 {% block content %}
-<!-- Hero Section: Impactful visual introduction -->
-<section class="hero-section py-5 text-white">
-    <div class="container">
+<!-- Hero Section: Simplified Italian imports showcase -->
+<section class="hero-section hero-simplified position-relative overflow-hidden">
+    <!-- Simple colored stripe at the top (Italian flag colors) -->
+    <div class="italian-stripe"></div>
+    
+    <!-- Main hero content -->
+    <div class="container py-5">
         <div class="row align-items-center">
-            <div class="col-lg-6 mb-4 mb-lg-0 animate__animated animate__fadeInLeft">
-                <h1 class="display-4 fw-bold">{{ i18n.hero_title }}</h1>
-                <p class="lead my-4">{{ i18n.hero_subtitle }}</p>
-                <a href="/products/" class="btn btn-light btn-lg shadow">
-                    <i class="bi bi-box-seam me-2"></i>{{ i18n.view_products }}
-                </a>
+            <!-- Left content column -->
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                <div class="hero-content-wrapper">
+                    <!-- Italian flag accent and tagline -->
+                    <div class="mb-3 d-flex align-items-center">
+                        <div class="italian-flag-accent me-2"></div>
+                        <span class="hero-tagline">Importación Italiana</span>
+                    </div>
+                    
+                    <h1 class="hero-title font-black mb-3">{{ i18n.hero_title|default:"Productos Italianos de Calidad en Cuba" }}</h1>
+                    
+                    <p class="hero-subtitle font-regular mb-4">{{ i18n.hero_subtitle|default:"Traemos la mejor calidad italiana directamente a La Habana. Amplio catálogo de productos de las mejores marcas italianas." }}</p>
+                    
+                    <!-- CTA buttons - simplified -->
+                    <div class="d-flex flex-wrap gap-3 mb-3">
+                        <a href="/productos/" class="btn hero-btn-primary">
+                            <i class="bi bi-box-seam me-2"></i>{{ i18n.view_products|default:"Ver Productos" }}
+                        </a>
+                        <a href="/contact/" class="btn hero-btn-secondary">
+                            <i class="bi bi-chat-dots me-2"></i>{{ i18n.contact_us|default:"Contáctanos" }}
+                        </a>
+                    </div>
+                    
+                    <!-- Simplified trust indicators -->
+                    <div class="hero-trust-indicators mt-3">
+                        <span class="trust-item"><i class="bi bi-check-circle"></i> Auténticos</span>
+                        <span class="trust-item"><i class="bi bi-truck"></i> Entrega en La Habana</span>
+                        <span class="trust-item"><i class="bi bi-shield-check"></i> Calidad Garantizada</span>
+                    </div>
+                </div>
             </div>
-            <div class="col-lg-6 animate__animated animate__fadeInRight">
-                <div class="rounded shadow overflow-hidden">
-                    <img src="{{ hero_image }}" alt="{{ i18n.hero_title }}" class="img-fluid w-100">
+            
+            <!-- Right media column - simplified -->
+            <div class="col-lg-6">
+                <div class="hero-image-container">
+                    <!-- Clean image presentation -->
+                    <div class="hero-image-wrapper rounded-4 overflow-hidden shadow">
+                        {% if hero_image %}
+                            <img src="{{ hero_image }}" alt="{{ i18n.hero_title }}" class="img-fluid w-100">
+                        {% else %}
+                            <!-- Gradient background as placeholder -->
+                            <div class="placeholder-bg d-flex align-items-center justify-content-center p-4" style="height: 350px; background: linear-gradient(45deg, rgba(0,146,70,0.2), rgba(206,43,55,0.2));">
+                                <div class="text-center">
+                                    <img src="{% static 'img/Logo_1.png' %}" alt="Coimpres" class="mb-3" style="max-width: 120px;">
+                                    <div class="italian-flag-accent mx-auto mb-3" style="width: 60px; height: 10px;"></div>
+                                    <h4 class="text-white font-weight-bold">Importaciones Italianas de Calidad</h4>
+                                </div>
+                            </div>
+                        {% endif %}
+                        
+                        <!-- Logo overlay - simplified -->
+                        <div class="logo-overlay">
+                            <img src="{% static 'img/Logo_1.png' %}" alt="Coimpres" class="overlay-logo">
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+    
+    <!-- Simplified divider -->
+    <div class="hero-divider"></div>
 </section>
 
 
@@ -30,7 +82,7 @@
         <div class="row justify-content-center mb-4">
             <div class="col-lg-8 text-center">
                 <h2 class="section-title">{{ i18n.about_us }}</h2>
-                <hr class="w-25 mx-auto mb-4" style="border-color: var(--color-accent); opacity: 1; border-width: 2px;">
+                <hr class="section-divider w-25 mx-auto mb-4">
             </div>
         </div>
         
@@ -60,7 +112,7 @@
                         
                         <div class="values-container">
                             <div class="d-flex align-items-center mb-3">
-                                <div class="value-icon me-3 rounded-circle bg-accent text-white d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                                <div class="value-icon me-3 rounded-circle bg-accent text-white d-flex align-items-center justify-content-center">
                                     <i class="bi bi-award"></i>
                                 </div>
                                 <div>
@@ -70,7 +122,7 @@
                             </div>
                             
                             <div class="d-flex align-items-center mb-3">
-                                <div class="value-icon me-3 rounded-circle bg-accent text-white d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                                <div class="value-icon me-3 rounded-circle bg-accent text-white d-flex align-items-center justify-content-center">
                                     <i class="bi bi-check-circle"></i>
                                 </div>
                                 <div>
@@ -80,7 +132,7 @@
                             </div>
                             
                             <div class="d-flex align-items-center mb-3">
-                                <div class="value-icon me-3 rounded-circle bg-accent text-white d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                                <div class="value-icon me-3 rounded-circle bg-accent text-white d-flex align-items-center justify-content-center">
                                     <i class="bi bi-clock-history"></i>
                                 </div>
                                 <div>
@@ -90,7 +142,7 @@
                             </div>
                             
                             <div class="d-flex align-items-center">
-                                <div class="value-icon me-3 rounded-circle bg-accent text-white d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                                <div class="value-icon me-3 rounded-circle bg-accent text-white d-flex align-items-center justify-content-center">
                                     <i class="bi bi-heart"></i>
                                 </div>
                                 <div>
@@ -112,8 +164,8 @@
         <div class="row justify-content-center mb-4">
             <div class="col-lg-8 text-center">
                 <h2 class="section-title">{{ i18n.featured_products }}</h2>
-                <hr class="w-25 mx-auto mb-3" style="border-color: var(--color-accent); opacity: 1; border-width: 2px;">
-                <p class="lead mb-5" style="color: var(--color-primary);">{{ i18n.featured_subtitle }}</p>
+                <hr class="section-divider w-25 mx-auto mb-3">
+                <p class="lead mb-5 section-subtitle">{{ i18n.featured_subtitle }}</p>
             </div>
         </div>
         
@@ -126,9 +178,9 @@
                         <div class="card h-100 border-0 shadow-sm product-card">
                             <div class="position-relative">
                                 {% if product.image %}
-                                <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}" style="height: 200px; object-fit: cover;">
+                                <img src="{{ product.image.url }}" class="card-img-top product-card-img" alt="{{ product.name }}">
                                 {% else %}
-                                <img src="/static/img/no-image.jpg" class="card-img-top" alt="Sin imagen" style="height: 200px; object-fit: cover;">
+                                <img src="/static/img/no-image.jpg" class="card-img-top product-card-img" alt="Sin imagen">
                                 {% endif %}
                                 
                                 <!-- Badges de estado -->
@@ -202,6 +254,7 @@
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/carousel.css' %}">
+<link rel="stylesheet" href="{% static 'css/hero.css' %}">
 {% endblock %}
 
 {% block extra_js %}
