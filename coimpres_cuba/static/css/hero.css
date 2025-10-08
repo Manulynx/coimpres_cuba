@@ -1,20 +1,17 @@
 /* Simplified Hero Section Styles */
 .hero-simplified {
-    background: linear-gradient(145deg, var(--color-primary) 0%, #333 100%);
+    background: var(--color-primary);
     padding: 0;
     position: relative;
     color: var(--color-white);
     overflow: hidden;
 }
 
-/* Italian stripe at the top */
+/* Accent stripe at the top */
 .italian-stripe {
     height: 4px;
     width: 100%;
-    background: linear-gradient(to right, 
-        #009246 0%, #009246 33.3%,
-        #ffffff 33.3%, #ffffff 66.6%,
-        #ce2b37 66.6%, #ce2b37 100%);
+    background: var(--color-accent);
     position: absolute;
     top: 0;
     left: 0;
@@ -46,15 +43,12 @@
     font-weight: 600;
 }
 
-/* Italian flag accent */
+/* Accent bar */
 .italian-flag-accent {
     width: 20px;
-    height: 12px;
-    background: linear-gradient(90deg, 
-        #009246 0%, #009246 33.3%,
-        #ffffff 33.3%, #ffffff 66.6%,
-        #ce2b37 66.6%, #ce2b37 100%);
-    border-radius: 1px;
+    height: 4px;
+    background: var(--color-accent);
+    border-radius: 2px;
 }
 
 /* Hero buttons - simplified */
@@ -134,7 +128,7 @@
 
 /* Fallback when no hero image exists */
 .hero-image-wrapper:empty::after {
-    content: '🇮🇹 Coimpres Cuba';
+    content: 'Coimpres Cuba';
     font-size: 1.5rem;
     color: rgba(255,255,255,0.5);
     font-style: italic;
@@ -164,9 +158,8 @@
     left: 0;
     width: 100%;
     height: 20px;
-    background: linear-gradient(to bottom, 
-        rgba(255,255,255,0) 0%,
-        var(--color-background) 100%);
+    background: var(--color-background);
+    opacity: 0.8;
 }
 
 /* Responsive adjustments */

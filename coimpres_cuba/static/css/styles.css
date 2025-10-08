@@ -29,7 +29,7 @@ header {
 
 /* Custom Section Styling */
 .hero-section {
-    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%);
+    background: var(--color-primary);
     padding: 4rem 0;
     color: var(--color-white);
 }
@@ -379,7 +379,7 @@ a:hover, a:focus {
 }
 
 .filter-panel-header {
-    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%);
+    background: var(--color-primary);
     color: var(--color-white);
     padding: 0.85rem 1rem;
 }

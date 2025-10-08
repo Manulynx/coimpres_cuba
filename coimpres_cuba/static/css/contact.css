@@ -1,6 +1,6 @@
 /* Contact Page Styles */
 .contact-hero {
-    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%);
+    background: var(--color-primary);
 }
 
 .contact-info, .contact-form {
