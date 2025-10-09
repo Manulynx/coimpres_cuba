@@ -6,6 +6,18 @@
 <section class="hero-section hero-simplified position-relative overflow-hidden">
     <!-- Simple accent stripe at the top -->
     <div class="italian-stripe"></div>
+
+    <!-- Background collage built from featured product images -->
+    <div class="hero-collage" aria-hidden="true">
+        {% for product in featured_products|slice:":8" %}
+            {% if product.image %}
+                <img src="{{ product.image.url }}" alt="" class="collage-item">
+            {% endif %}
+        {% endfor %}
+    </div>
+
+    <!-- Dark overlay to ensure text readability over collage -->
+    <div class="hero-overlay" aria-hidden="true"></div>
     
     <!-- Main hero content -->
     <div class="container py-5">
@@ -14,10 +26,7 @@
             <div class="col-lg-6 mb-4 mb-lg-0">
                 <div class="hero-content-wrapper">
                     <!-- Accent bar and tagline -->
-                    <div class="mb-3 d-flex align-items-center">
-                        <div class="italian-flag-accent me-2"></div>
-                        <span class="hero-tagline">Importación Italiana</span>
-                    </div>
+                    
                     
                     <h1 class="hero-title font-black mb-3">{{ i18n.hero_title|default:"Productos Italianos de Calidad en Cuba" }}</h1>
                     
