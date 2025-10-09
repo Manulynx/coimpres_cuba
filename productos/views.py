@@ -3,7 +3,7 @@ from django.views.generic import ListView, DetailView
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.urls import reverse
-from .models import Product, Category, Subcategory, Proveedor, Estatus
+from .models import Product, Category, Subcategory, Proveedor, Estatus, ProductImage, ProductVideo
 
 class ProductListView(ListView):
     model = Product
@@ -79,13 +79,38 @@ class ProductListView(ListView):
 class ProductDetailView(DetailView):
     model = Product
     template_name = 'productos/product_detail.html'
-    queryset = Product.objects.filter(is_active=True).select_related('proveedor')
+    queryset = Product.objects.filter(is_active=True).select_related('proveedor', 'category', 'subcategory', 'estatus').prefetch_related('images', 'videos')
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         
-        # Obtener productos relacionados (de la misma categoría)
+        # Obtener el producto actual
         product = self.get_object()
+        
+        # Galería de imágenes
+        gallery_images = product.get_all_images()
+        context['gallery_images'] = gallery_images
+        
+        # Imagen principal: priorizar imagen principal del producto, luego imagen marcada como main
+        if product.image:
+            context['main_image'] = product.image
+        else:
+            main_image_obj = gallery_images.filter(is_main=True).first()
+            if main_image_obj:
+                context['main_image'] = main_image_obj.image
+            elif gallery_images.exists():
+                context['main_image'] = gallery_images.first().image
+            else:
+                context['main_image'] = None
+        
+        context['has_multiple_images'] = gallery_images.count() > 0 or bool(product.image)
+        
+        # Galería de videos
+        gallery_videos = product.get_all_videos()
+        context['gallery_videos'] = gallery_videos
+        context['has_multiple_videos'] = gallery_videos.count() > 0
+        
+        # Obtener productos relacionados (de la misma categoría)
         if product.category:
             related_products = Product.objects.filter(
                 category=product.category,
@@ -226,14 +251,44 @@ def add_product(request):
             if request.FILES.get('image'):
                 product.image = request.FILES['image']
             
-            if request.FILES.get('video'):
-                product.video = request.FILES['video']
-            
             if request.FILES.get('ficha_tecnica'):
                 product.ficha_tecnica = request.FILES['ficha_tecnica']
             
             product.save()
-            messages.success(request, f'Producto "{product.name}" agregado exitosamente.')
+            
+            # Procesar galería de imágenes múltiples
+            gallery_images = request.FILES.getlist('gallery_images[]')
+            gallery_alt_texts = request.POST.getlist('gallery_alt_texts[]')
+            gallery_orders = request.POST.getlist('gallery_orders[]')
+            gallery_is_main = request.POST.getlist('gallery_is_main[]')
+            
+            for i, image in enumerate(gallery_images):
+                if image:
+                    ProductImage.objects.create(
+                        product=product,
+                        image=image,
+                        alt_text=gallery_alt_texts[i] if i < len(gallery_alt_texts) else '',
+                        order=int(gallery_orders[i]) if i < len(gallery_orders) and gallery_orders[i] else i + 1,
+                        is_main=str(i + 1) in gallery_is_main
+                    )
+            
+            # Procesar galería de videos múltiples
+            gallery_videos = request.FILES.getlist('gallery_videos[]')
+            video_titles = request.POST.getlist('video_titles[]')
+            video_descriptions = request.POST.getlist('video_descriptions[]')
+            video_orders = request.POST.getlist('video_orders[]')
+            
+            for i, video in enumerate(gallery_videos):
+                if video:
+                    ProductVideo.objects.create(
+                        product=product,
+                        video=video,
+                        title=video_titles[i] if i < len(video_titles) else '',
+                        description=video_descriptions[i] if i < len(video_descriptions) else '',
+                        order=int(video_orders[i]) if i < len(video_orders) and video_orders[i] else i + 1
+                    )
+            
+            messages.success(request, f'Producto "{product.name}" agregado exitosamente con {len(gallery_images)} imágenes y {len(gallery_videos)} videos.')
             
         except Exception as e:
             messages.error(request, f'Error al agregar el producto: {str(e)}')

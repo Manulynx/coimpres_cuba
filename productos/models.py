@@ -176,7 +176,82 @@ class Product(models.Model):
         """Retorna productos que están destacados Y en oferta"""
         return cls.objects.filter(is_active=True, destacado=True, en_oferta=True)
     
+    def get_main_image(self):
+        """Retorna la imagen principal del producto o la primera imagen disponible"""
+        main_image = self.images.filter(is_main=True).first()
+        if main_image:
+            return main_image.image
+        first_image = self.images.first()
+        if first_image:
+            return first_image.image
+        return self.image  # Fallback a la imagen original del modelo
+    
+    def get_all_images(self):
+        """Retorna todas las imágenes del producto ordenadas"""
+        return self.images.all()
+    
+    def get_main_video(self):
+        """Retorna el primer video del producto disponible"""
+        first_video = self.videos.first()
+        if first_video:
+            return first_video.video
+        return self.video  # Fallback al video original del modelo
+    
+    def get_all_videos(self):
+        """Retorna todos los videos del producto ordenados"""
+        return self.videos.all()
+    
+    def has_multiple_images(self):
+        """Retorna True si el producto tiene múltiples imágenes"""
+        return self.images.count() > 1
+    
+    def has_multiple_videos(self):
+        """Retorna True si el producto tiene múltiples videos"""
+        return self.videos.count() > 1
+    
     class Meta:
         verbose_name = "Producto"
         verbose_name_plural = "Productos"
         ordering = ['-destacado', '-en_oferta', '-created_at']  # Destacados y ofertas primero
+
+
+class ProductImage(models.Model):
+    """Modelo para múltiples imágenes por producto - Galería de imágenes"""
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='images', verbose_name="Producto")
+    image = models.ImageField(upload_to='products/gallery/', verbose_name="Imagen")
+    alt_text = models.CharField(max_length=255, blank=True, verbose_name="Texto alternativo")
+    order = models.PositiveIntegerField(default=0, verbose_name="Orden de visualización")
+    is_main = models.BooleanField(default=False, verbose_name="Imagen principal")
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Imagen de {self.product.name} - {self.order}"
+
+    class Meta:
+        ordering = ['order', '-is_main']
+        verbose_name = "Imagen de Galería"
+        verbose_name_plural = "Imágenes de Galería"
+
+    def save(self, *args, **kwargs):
+        # Si es imagen principal, desmarcar otras como principales
+        if self.is_main:
+            ProductImage.objects.filter(product=self.product, is_main=True).exclude(pk=self.pk).update(is_main=False)
+        super().save(*args, **kwargs)
+
+
+class ProductVideo(models.Model):
+    """Modelo para múltiples videos por producto - Galería de videos"""
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='videos', verbose_name="Producto")
+    video = models.FileField(upload_to='products/videos/', verbose_name="Video")
+    title = models.CharField(max_length=255, blank=True, verbose_name="Título del Video")
+    description = models.TextField(blank=True, verbose_name="Descripción")
+    order = models.PositiveIntegerField(default=0, verbose_name="Orden de visualización")
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Video de {self.product.name} - {self.title or f'Video {self.order}'}"
+
+    class Meta:
+        ordering = ['order']
+        verbose_name = "Video de Galería"
+        verbose_name_plural = "Videos de Galería"

@@ -14,21 +14,140 @@
     </nav>
 
     <div class="row">
+        <!-- Galería Profesional de Medios -->
         <div class="col-md-6 mb-4">
-            {% if object.image %}
-                <img src="{{ object.image.url }}" class="img-fluid rounded" alt="{{ object.name }}">
-            {% else %}
-                <img src="{% static 'img/no-image.jpg' %}" class="img-fluid rounded" alt="Sin imagen">
-            {% endif %}
-            
-            {% if object.video_url %}
-            <div class="mt-3">
-                <h5>Video del producto:</h5>
-                <div class="ratio ratio-16x9">
-                    <iframe src="{{ object.video_url }}" allowfullscreen></iframe>
+            <div class="product-gallery">
+                <!-- Imagen Principal Grande -->
+                <div class="main-media-container mb-3">
+                    <img id="mainMedia" src="{% if main_image %}{{ main_image.url }}{% elif object.image %}{{ object.image.url }}{% else %}{% static 'img/no-image.jpg' %}{% endif %}" 
+                         class="img-fluid rounded shadow-lg" 
+                         alt="{{ object.name }}" 
+                         style="width: 100%; height: 450px; object-fit: cover; border-radius: 12px;">
+                    
+                    <!-- Overlay para identificar videos -->
+                    <div id="videoOverlay" class="video-play-overlay d-none">
+                        <i class="bi bi-play-circle-fill text-white" style="font-size: 4rem; opacity: 0.8;"></i>
+                    </div>
                 </div>
+                
+                <!-- Galería de Thumbnails (Imágenes + Videos) -->
+                <div class="media-thumbnails-container">
+                    <div class="thumbnails-scroll-wrapper">
+                        <button class="thumbnail-nav-btn prev-btn" id="thumbPrev" aria-label="Anterior">
+                            <i class="bi bi-chevron-left"></i>
+                        </button>
+                        
+                        <div class="thumbnails-track" id="thumbnailsTrack">
+                            <!-- Imagen Principal del Producto (siempre primera) -->
+                            {% if object.image %}
+                            <div class="thumbnail-item active" data-type="image" data-src="{{ object.image.url }}" data-alt="{{ object.name }}">
+                                <img src="{{ object.image.url }}" alt="{{ object.name }}" class="thumbnail-img">
+                                <div class="thumbnail-overlay">
+                                    <span class="thumbnail-label">Principal</span>
+                                </div>
+                            </div>
+                            {% endif %}
+                            
+                            <!-- Imágenes de la Galería -->
+                            {% for image in gallery_images %}
+                                {% if not image.is_main or not object.image %}
+                                <div class="thumbnail-item" data-type="image" data-src="{{ image.image.url }}" data-alt="{{ image.alt_text|default:object.name }}">
+                                    <img src="{{ image.image.url }}" alt="{{ image.alt_text|default:object.name }}" class="thumbnail-img">
+                                    {% if image.is_main and not object.image %}
+                                    <div class="thumbnail-overlay">
+                                        <span class="thumbnail-label">Principal</span>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                {% endif %}
+                            {% endfor %}
+                            
+                            <!-- Videos de la Galería -->
+                            {% for video in gallery_videos %}
+                            <div class="thumbnail-item" data-type="video" data-src="{{ video.video.url }}" data-alt="{{ video.title|default:'Video del producto' }}">
+                                <video class="thumbnail-img" muted preload="metadata">
+                                    <source src="{{ video.video.url }}" type="video/mp4">
+                                    Tu navegador no soporta el elemento video.
+                                </video>
+                                <div class="thumbnail-overlay">
+                                    <i class="bi bi-play-circle-fill text-white"></i>
+                                    {% if video.title %}
+                                    <span class="thumbnail-label">{{ video.title|truncatechars:15 }}</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            {% endfor %}
+                            
+                            <!-- Video Principal (si existe y no hay videos en galería) -->
+                            {% if object.video and not gallery_videos.exists %}
+                            <div class="thumbnail-item" data-type="video" data-src="{{ object.video.url }}" data-alt="Video del producto">
+                                <video class="thumbnail-img" muted preload="metadata">
+                                    <source src="{{ object.video.url }}" type="video/mp4">
+                                    Tu navegador no soporta el elemento video.
+                                </video>
+                                <div class="thumbnail-overlay">
+                                    <i class="bi bi-play-circle-fill text-white"></i>
+                                    <span class="thumbnail-label">Video</span>
+                                </div>
+                            </div>
+                            {% endif %}
+                        </div>
+                        
+                        <button class="thumbnail-nav-btn next-btn" id="thumbNext" aria-label="Siguiente">
+                            <i class="bi bi-chevron-right"></i>
+                        </button>
+                    </div>
+                    
+                    <!-- Indicador de posición -->
+                    <div class="thumbnails-indicator mt-2">
+                        <span id="mediaCounter">1 / <span id="totalMedia">1</span></span>
+                    </div>
+                </div>
+                
+                <!-- Modal para vista completa -->
+                <div class="modal fade" id="mediaModal" tabindex="-1" aria-labelledby="mediaModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-xl modal-dialog-centered">
+                        <div class="modal-content bg-dark border-0">
+                            <div class="modal-header border-0 position-absolute" style="z-index: 1050; top: 15px; right: 15px;">
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                            </div>
+                            <div class="modal-body p-0 position-relative">
+                                <!-- Contenedor principal del modal -->
+                                <div class="modal-media-container">
+                                    <!-- Media principal del modal -->
+                                    <div class="modal-main-media" id="modalMainMedia">
+                                        <!-- El contenido se insertará dinámicamente -->
+                                    </div>
+                                    
+                                    <!-- Controles de navegación del modal -->
+                                    <button class="modal-nav-btn modal-prev" id="modalPrev" aria-label="Anterior">
+                                        <i class="bi bi-chevron-left"></i>
+                                    </button>
+                                    <button class="modal-nav-btn modal-next" id="modalNext" aria-label="Siguiente">
+                                        <i class="bi bi-chevron-right"></i>
+                                    </button>
+                                    
+                                    <!-- Información del media -->
+                                    <div class="modal-media-info">
+                                        <div class="modal-counter">
+                                            <span id="modalCounter">1</span> / <span id="modalTotal">1</span>
+                                        </div>
+                                        <div class="modal-title" id="modalTitle">{{ object.name }}</div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Thumbnails del modal -->
+                                <div class="modal-thumbnails-section">
+                                    <div class="modal-thumbnails-track" id="modalThumbnailsTrack">
+                                        <!-- Los thumbnails se insertarán dinámicamente -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
             </div>
-            {% endif %}
         </div>
         
         <div class="col-md-6">
@@ -204,12 +323,15 @@
 </div>
 {% endblock %}
 
-{% block extra_js %}
-{{ block.super }}
-<script src="{% static 'js/related-carousel.js' %}"></script>
-{% endblock %}
-
 {% block extra_css %}
 {{ block.super }}
+<link rel="stylesheet" href="{% static 'css/product-gallery.css' %}">
 <link rel="stylesheet" href="{% static 'css/related-carousel.css' %}">
+{% endblock %}
+
+{% block extra_js %}
+{{ block.super }}
+<script src="{% static 'js/simple-gallery.js' %}"></script>
+<script src="{% static 'js/product-gallery.js' %}"></script>
+<script src="{% static 'js/related-carousel.js' %}"></script>
 {% endblock %}

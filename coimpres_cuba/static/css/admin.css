@@ -1,0 +1,371 @@
+/* Admin Panel CSS - Gestión de Productos */
+
+.admin-container {
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 15px;
+}
+
+.admin-header {
+    text-align: center;
+    margin-bottom: 20px;
+    padding: 15px;
+    background: #2C2A28;
+    color: white;
+    border-radius: 10px;
+}
+
+.admin-tabs {
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #ddd;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    white-space: nowrap;
+    -ms-overflow-style: none;
+}
+
+.admin-tabs::-webkit-scrollbar {
+    display: none;
+}
+
+.tab-button {
+    background: none;
+    border: none;
+    padding: 12px 20px;
+    margin: 0 3px;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    font-weight: 500;
+    color: #666;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    font-size: 14px;
+}
+
+.tab-button.active {
+    color: #9fa322;
+    border-bottom-color: #525402ff;
+}
+
+.tab-button:hover {
+    color: #525402ff;
+    background-color: #f8f9fa;
+}
+
+.tab-content {
+    display: none;
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+.form-grid {
+    display: grid;
+    gap: 15px;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 600;
+    color: #333;
+    font-size: 14px;
+}
+
+.form-control {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #e1e5e9;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: border-color 0.3s ease;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: #9fa322;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.btn {
+    padding: 12px 25px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+}
+
+.btn-primary {
+    background: #9fa322;
+    color: white;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.btn-success {
+    background: #9fa322;
+    color: white;
+}
+
+.btn-success:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(86, 171, 47, 0.3);
+}
+
+.btn-outline-primary {
+    background: transparent;
+    border: 2px solid #9fa322;
+    color: #9fa322;
+}
+
+.btn-outline-primary:hover {
+    background: #9fa322;
+    color: white;
+    transform: translateY(-2px);
+}
+
+.alert {
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    border-left: 4px solid;
+}
+
+.alert-success {
+    background-color: #d4edda;
+    border-color: #28a745;
+    color: #155724;
+}
+
+.alert-error {
+    background-color: #f8d7da;
+    border-color: #dc3545;
+    color: #721c24;
+}
+
+.file-input-wrapper {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    width: 100%;
+}
+
+.file-input {
+    opacity: 0;
+    position: absolute;
+    z-index: -1;
+    width: 0.1px;
+    height: 0.1px;
+    overflow: hidden;
+}
+
+.file-input-label {
+    display: block;
+    padding: 12px 15px;
+    border: 2px dashed #e1e5e9;
+    border-radius: 8px;
+    text-align: center;
+    background: #f8f9fa;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+.file-input-label:hover,
+.file-input:focus + .file-input-label {
+    border-color: #9fa322;
+    background: #f0f2ff;
+    transform: translateY(-1px);
+}
+
+.file-input:focus + .file-input-label {
+    outline: 2px solid #9fa322;
+    outline-offset: 2px;
+}
+
+.section-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* Estilos para Galería Múltiple */
+.form-section {
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 20px 0;
+}
+
+.form-section h3 {
+    color: #495057;
+    border-bottom: 2px solid #007bff;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.gallery-item, .video-item {
+    background: white;
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+    padding: 15px;
+    margin-bottom: 15px;
+    position: relative;
+}
+
+.gallery-grid {
+    grid-template-columns: 2fr 2fr 1fr 1fr;
+    gap: 15px;
+    align-items: end;
+}
+
+.video-grid {
+    grid-template-columns: 2fr 2fr 3fr 1fr;
+    gap: 15px;
+    align-items: end;
+}
+
+.remove-item-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    font-size: 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.3s ease;
+}
+
+.remove-item-btn:hover {
+    background: #c82333;
+}
+
+.gallery-image-input:focus + .file-input-label,
+.gallery-video-input:focus + .file-input-label {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .admin-container {
+        padding: 10px;
+    }
+    
+    .admin-header {
+        padding: 12px;
+        margin-bottom: 15px;
+    }
+    
+    .admin-header h1 {
+        font-size: 1.5rem;
+    }
+    
+    .admin-header p {
+        font-size: 0.9rem;
+    }
+    
+    .tab-button {
+        padding: 10px 15px;
+        font-size: 13px;
+    }
+    
+    .tab-content {
+        padding: 15px;
+    }
+    
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .gallery-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .video-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .btn {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+    
+    .form-control {
+        font-size: 16px; /* Mejor tamaño para inputs móviles */
+        padding: 10px 12px;
+    }
+    
+    .section-title {
+        font-size: 1.3rem;
+    }
+    
+    .form-section {
+        padding: 15px;
+        margin: 15px 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .admin-header h1 {
+        font-size: 1.3rem;
+    }
+    
+    .admin-tabs {
+        margin-bottom: 15px;
+    }
+    
+    .tab-button {
+        padding: 8px 12px;
+        font-size: 12px;
+    }
+    
+    .form-group label {
+        font-size: 13px;
+    }
+    
+    .file-input-label {
+        padding: 10px;
+        font-size: 13px;
+    }
+    
+    .alert {
+        padding: 12px;
+        font-size: 13px;
+    }
+}

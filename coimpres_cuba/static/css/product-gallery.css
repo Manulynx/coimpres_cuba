@@ -1,0 +1,613 @@
+/* Galería de Producto Profesional */
+.product-gallery {
+    position: relative;
+}
+
+/* Contenedor de media principal */
+.main-media-container {
+    position: relative;
+    overflow: hidden;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    background: #f8f9fa;
+}
+
+.main-media-container img,
+.main-media-container video {
+    transition: transform 0.3s ease;
+    cursor: zoom-in;
+}
+
+.main-media-container video {
+    cursor: pointer;
+    background-color: #000;
+}
+
+.main-media-container video::-webkit-media-controls-panel {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.main-media-container:hover img,
+.main-media-container:hover video {
+    transform: scale(1.02);
+}
+
+/* Overlay para videos */
+.video-play-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    z-index: 2;
+}
+
+/* Contenedor de thumbnails */
+.media-thumbnails-container {
+    margin-top: 1rem;
+}
+
+.thumbnails-scroll-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.thumbnails-track {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    padding: 8px 0;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    flex: 1;
+}
+
+.thumbnails-track::-webkit-scrollbar {
+    display: none;
+}
+
+/* Thumbnail items */
+.thumbnail-item {
+    position: relative;
+    min-width: 80px;
+    width: 80px;
+    height: 80px;
+    border-radius: 8px;
+    overflow: hidden;
+    cursor: pointer;
+    border: 3px solid transparent;
+    transition: all 0.3s ease;
+    background: #f8f9fa;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+.thumbnail-item:hover {
+    border-color: #007bff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+}
+
+.thumbnail-item.active {
+    border-color: #007bff;
+    box-shadow: 0 0 0 1px #007bff;
+    transform: translateY(-1px);
+}
+
+.thumbnail-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    pointer-events: none;
+}
+
+.thumbnail-img video {
+    background-color: #000;
+}
+
+/* Para videos en thumbnails */
+.thumbnail-item video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Overlay en thumbnails */
+.thumbnail-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+    color: white;
+    padding: 4px 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    min-height: 24px;
+}
+
+.thumbnail-label {
+    font-size: 0.7rem;
+    font-weight: 500;
+    text-align: center;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.thumbnail-overlay i {
+    font-size: 1.2rem;
+    margin-bottom: 2px;
+}
+
+/* Botones de navegación de thumbnails */
+.thumbnail-nav-btn {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    flex-shrink: 0;
+}
+
+.thumbnail-nav-btn:hover {
+    background: #007bff;
+    color: white;
+    border-color: #007bff;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+}
+
+.thumbnail-nav-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+    background: #f8f9fa;
+}
+
+.thumbnail-nav-btn:disabled:hover {
+    background: #f8f9fa;
+    color: #6c757d;
+    transform: none;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Indicador de posición */
+.thumbnails-indicator {
+    text-align: center;
+}
+
+.thumbnails-indicator span {
+    font-size: 0.85rem;
+    color: #6c757d;
+    font-weight: 500;
+}
+
+/* Hint de pantalla completa */
+.media-fullscreen-hint {
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
+}
+
+.product-gallery:hover .media-fullscreen-hint {
+    opacity: 1;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .main-media-container {
+        margin-bottom: 1rem;
+    }
+    
+    .main-media-container img,
+    .main-media-container video {
+        height: 300px;
+    }
+    
+    .thumbnail-item {
+        min-width: 70px;
+        width: 70px;
+        height: 70px;
+    }
+    
+    .thumbnails-scroll-wrapper {
+        gap: 6px;
+    }
+    
+    .thumbnails-track {
+        gap: 6px;
+    }
+    
+    .thumbnail-nav-btn {
+        width: 32px;
+        height: 32px;
+    }
+}
+
+@media (max-width: 480px) {
+    .main-media-container img,
+    .main-media-container video {
+        height: 250px;
+        border-radius: 8px;
+    }
+    
+    .thumbnail-item {
+        min-width: 60px;
+        width: 60px;
+        height: 60px;
+    }
+    
+    .thumbnail-label {
+        font-size: 0.6rem;
+    }
+    
+    .thumbnail-nav-btn {
+        width: 28px;
+        height: 28px;
+        font-size: 0.8rem;
+    }
+}
+
+/* Estados especiales */
+.thumbnail-item[data-type="video"]::before {
+    content: '';
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    width: 16px;
+    height: 16px;
+    background: rgba(0, 0, 0, 0.7);
+    border-radius: 50%;
+    z-index: 1;
+}
+
+.thumbnail-item[data-type="video"]::after {
+    content: '▶';
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    width: 16px;
+    height: 16px;
+    color: white;
+    font-size: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.thumbnail-item {
+    animation: fadeIn 0.3s ease;
+}
+
+/* Focus states para accesibilidad */
+.thumbnail-item:focus,
+.thumbnail-nav-btn:focus {
+    outline: 2px solid #007bff;
+    outline-offset: 2px;
+}
+
+/* Mejoras de performance */
+.thumbnail-img {
+    will-change: transform;
+}
+
+.main-media-container img,
+.main-media-container video {
+    will-change: transform;
+}
+
+/* MODAL PROFESIONAL ESTILO AMAZON */
+
+/* Modal personalizado */
+#mediaModal .modal-dialog {
+    max-width: 95vw;
+    margin: 1rem;
+}
+
+#mediaModal .modal-content {
+    background: #0d1117;
+    border-radius: 12px;
+    overflow: hidden;
+    min-height: 80vh;
+}
+
+/* Contenedor principal del modal */
+.modal-media-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 80vh;
+    min-height: 600px;
+}
+
+/* Media principal del modal */
+.modal-main-media {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: #000;
+    position: relative;
+}
+
+.modal-main-media img,
+.modal-main-media video {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    border-radius: 8px;
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5);
+}
+
+.modal-main-media video {
+    background: #000;
+}
+
+/* Botones de navegación del modal */
+.modal-nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1.5rem;
+    backdrop-filter: blur(10px);
+    z-index: 10;
+}
+
+.modal-nav-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.4);
+    transform: translateY(-50%) scale(1.1);
+    box-shadow: 0 4px 20px rgba(255, 255, 255, 0.2);
+}
+
+.modal-prev {
+    left: 20px;
+}
+
+.modal-next {
+    right: 20px;
+}
+
+.modal-nav-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+    transform: translateY(-50%) scale(1);
+}
+
+/* Información del media */
+.modal-media-info {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 12px 20px;
+    border-radius: 25px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    text-align: center;
+    min-width: 200px;
+}
+
+.modal-counter {
+    font-size: 0.9rem;
+    opacity: 0.8;
+    margin-bottom: 4px;
+}
+
+.modal-title {
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+/* Sección de thumbnails del modal */
+.modal-thumbnails-section {
+    background: #161b22;
+    padding: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.modal-thumbnails-track {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    padding: 5px 0;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+}
+
+.modal-thumbnails-track::-webkit-scrollbar {
+    height: 6px;
+}
+
+.modal-thumbnails-track::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+}
+
+.modal-thumbnails-track::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 3px;
+}
+
+.modal-thumbnails-track::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.5);
+}
+
+/* Thumbnails del modal */
+.modal-thumbnail {
+    min-width: 80px;
+    width: 80px;
+    height: 60px;
+    border-radius: 6px;
+    overflow: hidden;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+    position: relative;
+    background: #000;
+}
+
+.modal-thumbnail:hover {
+    border-color: rgba(255, 255, 255, 0.5);
+    transform: scale(1.05);
+}
+
+.modal-thumbnail.active {
+    border-color: #007bff;
+    box-shadow: 0 0 0 1px #007bff;
+}
+
+.modal-thumbnail img,
+.modal-thumbnail video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.modal-thumbnail::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.3);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.modal-thumbnail:hover::after {
+    opacity: 1;
+}
+
+.modal-thumbnail.active::after {
+    opacity: 0;
+}
+
+/* Icono de play para videos en modal */
+.modal-thumbnail[data-type="video"]::before {
+    content: '▶';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 12px;
+    z-index: 5;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+}
+
+/* Animaciones del modal */
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+#mediaModal.show .modal-content {
+    animation: modalFadeIn 0.3s ease;
+}
+
+/* Responsive para el modal */
+@media (max-width: 768px) {
+    #mediaModal .modal-dialog {
+        margin: 0.5rem;
+        max-width: 98vw;
+    }
+    
+    .modal-media-container {
+        height: 75vh;
+        min-height: 500px;
+    }
+    
+    .modal-nav-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem;
+    }
+    
+    .modal-prev {
+        left: 10px;
+    }
+    
+    .modal-next {
+        right: 10px;
+    }
+    
+    .modal-media-info {
+        bottom: 10px;
+        padding: 8px 16px;
+        min-width: 150px;
+    }
+    
+    .modal-thumbnails-section {
+        padding: 15px;
+    }
+    
+    .modal-thumbnail {
+        min-width: 60px;
+        width: 60px;
+        height: 45px;
+    }
+}
+
+@media (max-width: 480px) {
+    .modal-media-container {
+        height: 70vh;
+        min-height: 400px;
+    }
+    
+    .modal-main-media {
+        padding: 10px;
+    }
+    
+    .modal-media-info {
+        font-size: 0.9rem;
+        padding: 6px 12px;
+    }
+    
+    .modal-title {
+        font-size: 0.9rem;
+    }
+    
+    .modal-counter {
+        font-size: 0.8rem;
+    }
+}

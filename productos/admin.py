@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.utils.html import format_html
 from django.db import models
 from django.forms import TextInput, Textarea
-from .models import Category, Product, Proveedor, Subcategory, Estatus
+from .models import Category, Product, Proveedor, Subcategory, Estatus, ProductImage, ProductVideo
 
 @admin.register(Proveedor)
 class ProveedorAdmin(admin.ModelAdmin):
@@ -158,8 +158,8 @@ class ProductAdmin(admin.ModelAdmin):
             'classes': ('wide',)
         }),
         ('Archivos Multimedia', {
-            'fields': ('image', 'video', 'ficha_tecnica'),
-            'description': 'Sube la imagen, video y ficha técnica del producto'
+            'fields': ('image', 'ficha_tecnica'),
+            'description': 'Sube la imagen principal y ficha técnica del producto'
         }),
         ('Estado y Promociones', {
             'fields': ('is_active', 'en_oferta', 'destacado'),
@@ -176,6 +176,21 @@ class ProductAdmin(admin.ModelAdmin):
         models.TextField: {'widget': Textarea(attrs={'rows': 4, 'cols': 80})},
         models.CharField: {'widget': TextInput(attrs={'size': '80'})},
     }
+    
+    # Inlines para galería de imágenes y videos
+    class ProductImageInline(admin.TabularInline):
+        model = ProductImage
+        extra = 1
+        fields = ('image', 'alt_text', 'order', 'is_main')
+        readonly_fields = ()
+        
+    class ProductVideoInline(admin.TabularInline):
+        model = ProductVideo
+        extra = 1
+        fields = ('video', 'title', 'description', 'order')
+        readonly_fields = ()
+    
+    inlines = [ProductImageInline, ProductVideoInline]
     
     def display_image(self, obj):
         if obj.image:
@@ -258,3 +273,39 @@ class ProductAdmin(admin.ModelAdmin):
 admin.site.site_header = "Administración de Coimpres Cuba"
 admin.site.site_title = "Coimpres Admin"
 admin.site.index_title = "Panel de Administración"
+
+
+@admin.register(ProductImage)
+class ProductImageAdmin(admin.ModelAdmin):
+    list_display = ('product', 'display_image', 'order', 'is_main', 'created_at')
+    list_filter = ('is_main', 'created_at', 'product__category')
+    search_fields = ('product__name', 'alt_text')
+    list_editable = ('order', 'is_main')
+    ordering = ('product', 'order')
+    
+    def display_image(self, obj):
+        if obj.image:
+            return format_html(
+                '<img src="{}" width="50" height="50" style="border-radius: 5px; object-fit: cover;" />',
+                obj.image.url
+            )
+        return format_html('<span class="text-muted">Sin imagen</span>')
+    display_image.short_description = "Vista previa"
+
+
+@admin.register(ProductVideo)
+class ProductVideoAdmin(admin.ModelAdmin):
+    list_display = ('product', 'title', 'order', 'created_at')
+    list_filter = ('created_at', 'product__category')
+    search_fields = ('product__name', 'title', 'description')
+    list_editable = ('title', 'order')
+    ordering = ('product', 'order')
+    
+    fieldsets = (
+        ('Información del Video', {
+            'fields': ('product', 'video', 'title', 'description')
+        }),
+        ('Configuración', {
+            'fields': ('order',)
+        }),
+    )
