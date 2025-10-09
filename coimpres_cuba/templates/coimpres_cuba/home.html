@@ -11,7 +11,7 @@
     <div class="hero-collage" aria-hidden="true">
         {% for product in featured_products|slice:":8" %}
             {% if product.image %}
-                <img src="{{ product.image.url }}" alt="" class="collage-item">
+                <img src="{{ product.image.url }}" alt="" class="collage-item" loading="lazy" decoding="async">
             {% endif %}
         {% endfor %}
     </div>
