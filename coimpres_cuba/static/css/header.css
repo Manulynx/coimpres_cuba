@@ -29,8 +29,9 @@
 }
 
 .logo-img {
-    height: 75px;
+    height: 95px; /* increased from 75px */
     width: auto;
+    max-width: 220px; /* prevent width clamping from global 180px */
     object-fit: contain;
     transition: transform 0.3s ease;
     filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15));
@@ -527,6 +528,7 @@
     }
     
     .logo-img {
-        height: 65px;
+        height: 72px; /* slightly larger on mobile */
+        max-width: 200px;
     }
 }
