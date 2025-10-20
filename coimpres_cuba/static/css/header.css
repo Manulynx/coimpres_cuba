@@ -528,7 +528,7 @@
     }
     
     .logo-img {
-        height: 72px; /* slightly larger on mobile */
-        max-width: 200px;
+        height: 84px; /* increased a bit more on mobile */
+        max-width: 220px;
     }
 }
