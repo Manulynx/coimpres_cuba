@@ -90,31 +90,38 @@ body {
     color: var(--color-primary) !important;
 }
 
-/* Navbar del header principal */
-.enhanced-header,
+/* Header del template base - Respetar estilos originales */
+.enhanced-header {
+    background: #2C2A28 !important;
+    color: var(--color-white) !important;
+}
+
 .enhanced-nav {
-    background-color: var(--color-white) !important;
+    background-color: rgba(255,255,255,0.05) !important;
 }
 
 .location-full .location-text,
 .location-badge span {
-    color: var(--color-primary) !important;
+    color: var(--color-white) !important;
 }
 
 .navbar-toggler {
-    border: 1px solid var(--color-primary) !important;
+    color: var(--color-white) !important;
+    background-color: rgba(255,255,255,0.12) !important;
+    border: none !important;
 }
 
 .navbar-toggler i {
-    color: var(--color-primary) !important;
+    color: var(--color-white) !important;
 }
 
 .nav-link {
-    color: var(--color-primary) !important;
+    color: rgba(255,255,255,0.85) !important;
 }
 
-.nav-link.active {
-    color: var(--color-accent) !important;
+.nav-link.active,
+.nav-link:hover {
+    color: var(--color-white) !important;
 }
 
 /* Admin nav específico */
