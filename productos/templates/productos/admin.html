@@ -6,7 +6,86 @@
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/admin.css' %}">
 <style>
-/* CSS crítico inline para móvil */
+/* CSS crítico inline para móvil - Corregir colores */
+:root {
+    --color-primary: #2C2A28 !important;
+    --color-accent: #9fa322 !important;
+    --color-background: #F9F6F1 !important;
+    --color-white: #FFFFFF !important;
+    --color-text-muted: #6c757d !important;
+}
+
+/* Forzar colores correctos en body y contenedores principales */
+body {
+    background-color: var(--color-background) !important;
+    color: var(--color-primary) !important;
+}
+
+/* Header y navbar fixes */
+.enhanced-header,
+.enhanced-nav {
+    background-color: var(--color-white) !important;
+}
+
+.location-full .location-text,
+.location-badge span {
+    color: var(--color-white) !important;
+}
+
+/* Botón hamburguesa */
+.navbar-toggler {
+    border: none !important;
+    padding: 4px 8px !important;
+}
+
+.navbar-toggler i {
+    color: var(--color-white) !important;
+    font-size: 1.2rem !important;
+}
+
+/* Admin header y containers */
+.admin-container {
+    background-color: var(--color-background) !important;
+    color: var(--color-primary) !important;
+}
+
+.admin-header h1 {
+    color: var(--color-primary) !important;
+}
+
+.admin-header p {
+    color: var(--color-text-muted) !important;
+}
+
+/* Cards y contenedores */
+.card,
+.admin-section,
+.table-responsive,
+.admin-filters {
+    background-color: var(--color-white) !important;
+    border: 1px solid #dee2e6 !important;
+}
+
+.modal-content {
+    background-color: var(--color-white) !important;
+}
+
+/* Mobile cards específicamente */
+.mobile-card {
+    background-color: var(--color-white) !important;
+    border: 1px solid #dee2e6 !important;
+    color: var(--color-primary) !important;
+}
+
+.mobile-card h3 {
+    color: var(--color-primary) !important;
+}
+
+.mobile-card-field strong {
+    color: var(--color-primary) !important;
+}
+
+/* Paginación fixes */
 @media (max-width: 768px) {
     .admin-pagination .page-link.active,
     .admin-pagination .page-item.active .page-link {
@@ -19,6 +98,10 @@
         background-color: #9fa322 !important;
         border-color: #9fa322 !important;
         color: white !important;
+    }
+    
+    .admin-pagination {
+        background-color: var(--color-white) !important;
     }
     
     .product-thumb {
@@ -39,6 +122,42 @@
         border-radius: 4px !important;
         font-size: 14px !important;
     }
+}
+
+/* Dark mode override para asegurar colores claros */
+@media (prefers-color-scheme: dark) {
+    body,
+    .admin-container,
+    .card,
+    .modal-content,
+    .mobile-card,
+    .admin-section {
+        background-color: var(--color-white) !important;
+        color: var(--color-primary) !important;
+    }
+    
+    .enhanced-header,
+    .enhanced-nav {
+        background-color: var(--color-white) !important;
+    }
+}
+
+/* Fallback para elementos específicos que pueden estar oscuros */
+.table-mobile-cards,
+.admin-table,
+.admin-nav,
+.section-header {
+    background-color: var(--color-white) !important;
+    color: var(--color-primary) !important;
+}
+
+.admin-nav .nav-link {
+    color: var(--color-primary) !important;
+}
+
+.admin-nav .nav-link.active {
+    background-color: var(--color-accent) !important;
+    color: var(--color-white) !important;
 }
 </style>
 

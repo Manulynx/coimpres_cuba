@@ -208,7 +208,7 @@
                 <h3>➕ Agregar Imagen</h3>
                 <button onclick="hideImageForm()" class="close-btn">✕</button>
             </div>
-            <form method="post" enctype="multipart/form-data" action="{% url 'productos:add_product_image' product.pk %}">
+            <form method="post" enctype="multipart/form-data" action="{% url 'productos:image' product.pk %}">
                 {% csrf_token %}
                 <div class="form-group">
                     <label for="image_file">Imagen *</label>
