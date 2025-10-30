@@ -25,14 +25,7 @@
     --transition: all 0.3s ease !important;
 }
 
-/* Forzar colores exactos del admin.css */
-body {
-    background-color: var(--color-background) !important;
-    color: var(--color-primary) !important;
-    font-family: 'Lato', sans-serif !important;
-}
-
-/* Admin container exacto */
+/* Forzar colores exactos del admin.css solo para contenido admin */
 .admin-container {
     background-color: var(--color-background) !important;
     color: var(--color-primary) !important;
@@ -153,9 +146,8 @@ body {
     border-radius: var(--border-radius-sm) !important;
 }
 
-/* Dark mode override completo */
+/* Dark mode override solo para contenido admin */
 @media (prefers-color-scheme: dark) {
-    body,
     .admin-container,
     .admin-section,
     .card,
@@ -166,11 +158,6 @@ body {
     .admin-pagination {
         background-color: var(--color-white) !important;
         color: var(--color-primary) !important;
-    }
-    
-    .enhanced-header,
-    .enhanced-nav {
-        background-color: var(--color-white) !important;
     }
     
     .admin-nav {
