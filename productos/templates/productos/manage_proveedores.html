@@ -1,0 +1,221 @@
+{% extends 'coimpres_cuba/base.html' %}
+{% load static %}
+
+{% block title %}Gestión de Proveedores{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/admin.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="admin-container">
+    <div class="admin-header">
+        <h1>🏭 Gestión de Proveedores</h1>
+        <p>Administra los proveedores de productos</p>
+    </div>
+    
+    <!-- Navigation Menu -->
+    <div class="admin-nav">
+        <a href="{% url 'productos:admin_panel' %}" class="nav-link">📦 Productos</a>
+        <a href="{% url 'productos:manage_proveedores' %}" class="nav-link active">🏭 Proveedores</a>
+        <a href="{% url 'productos:manage_categories' %}" class="nav-link">📂 Categorías</a>
+        <a href="{% url 'productos:manage_subcategories' %}" class="nav-link">📁 Subcategorías</a>
+        <a href="{% url 'productos:manage_estatus' %}" class="nav-link">🏷️ Estatus</a>
+    </div>
+    
+    <!-- Mensajes de éxito/error -->
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+    
+    <div class="admin-section">
+        <div class="section-header">
+            <h2>Lista de Proveedores</h2>
+            <button class="btn btn-primary" onclick="showAddForm()">➕ Agregar Proveedor</button>
+        </div>
+        
+        <div class="table-responsive">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Logo</th>
+                        <th>Nombre</th>
+                        <th>ID Único</th>
+                        <th>Catálogo</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for proveedor in proveedores %}
+                    <tr>
+                        <td>
+                            {% if proveedor.logo %}
+                                <img src="{{ proveedor.logo.url }}" alt="{{ proveedor.name }}" class="product-thumb">
+                            {% else %}
+                                <div class="no-image">🏭</div>
+                            {% endif %}
+                        </td>
+                        <td><strong>{{ proveedor.name }}</strong></td>
+                        <td><code>{{ proveedor.id_unico }}</code></td>
+                        <td>
+                            {% if proveedor.catalogo %}
+                                <a href="{{ proveedor.catalogo.url }}" target="_blank" class="btn btn-sm btn-outline-primary">📄 Ver PDF</a>
+                            {% else %}
+                                <span class="text-muted">Sin catálogo</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div class="action-buttons">
+                                <a href="{% url 'productos:edit_proveedor' proveedor.pk %}" class="btn btn-sm btn-warning" title="Editar">✏️</a>
+                                <button onclick="deleteItem({{ proveedor.pk }}, '{{ proveedor.name|escapejs }}', 'proveedor')" class="btn btn-sm btn-danger" title="Eliminar">🗑️</button>
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" class="text-center text-muted">No hay proveedores registrados</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Mobile Cards View -->
+        <div class="table-mobile-cards">
+            {% for proveedor in proveedores %}
+            <div class="mobile-card">
+                <div class="mobile-card-header">
+                    {% if proveedor.logo %}
+                        <img src="{{ proveedor.logo.url }}" alt="{{ proveedor.name }}" class="mobile-card-thumb">
+                    {% else %}
+                        <div class="no-image" style="width: 60px; height: 60px; font-size: 24px;">🏭</div>
+                    {% endif %}
+                    <div class="mobile-card-title">
+                        <h3>{{ proveedor.name }}</h3>
+                        <p>ID: {{ proveedor.id_unico }}</p>
+                    </div>
+                </div>
+                <div class="mobile-card-body">
+                    <div class="mobile-card-field">
+                        <strong>Catálogo</strong>
+                        <span>
+                            {% if proveedor.catalogo %}
+                                <a href="{{ proveedor.catalogo.url }}" target="_blank" class="btn btn-sm btn-outline-primary">📄 Ver PDF</a>
+                            {% else %}
+                                Sin catálogo
+                            {% endif %}
+                        </span>
+                    </div>
+                </div>
+                <div class="mobile-card-actions">
+                    <a href="{% url 'productos:edit_proveedor' proveedor.pk %}" class="btn btn-sm btn-warning">✏️ Editar</a>
+                    <button onclick="deleteItem({{ proveedor.pk }}, '{{ proveedor.name|escapejs }}', 'proveedor')" class="btn btn-sm btn-danger">🗑️ Eliminar</button>
+                </div>
+            </div>
+            {% empty %}
+            <div class="text-center text-muted" style="padding: 40px;">
+                No hay proveedores registrados
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    
+    <!-- Add Form Modal -->
+    <div id="addModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>➕ Agregar Nuevo Proveedor</h3>
+                <button onclick="hideAddForm()" class="close-btn">✕</button>
+            </div>
+            <form method="post" enctype="multipart/form-data" action="{% url 'productos:add_proveedor' %}">
+                {% csrf_token %}
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="proveedor_name">Nombre del Proveedor *</label>
+                        <input type="text" id="proveedor_name" name="name" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="proveedor_id_unico">ID Único *</label>
+                        <input type="text" id="proveedor_id_unico" name="id_unico" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="proveedor_logo">Logo del Proveedor</label>
+                        <input type="file" id="proveedor_logo" name="logo" class="form-control" accept="image/*">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="proveedor_catalogo">Catálogo (PDF)</label>
+                        <input type="file" id="proveedor_catalogo" name="catalogo" class="form-control" accept=".pdf">
+                    </div>
+                </div>
+                
+                <div class="modal-footer">
+                    <button type="button" onclick="hideAddForm()" class="btn btn-secondary">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">💾 Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Delete confirmation modal -->
+    <div id="deleteModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>🗑️ Confirmar Eliminación</h3>
+            </div>
+            <div class="modal-body">
+                <p>¿Estás seguro de que quieres eliminar el proveedor <strong id="deleteItemName"></strong>?</p>
+                <p class="text-danger"><small>Esta acción no se puede deshacer.</small></p>
+            </div>
+            <div class="modal-footer">
+                <button onclick="hideDeleteModal()" class="btn btn-secondary">Cancelar</button>
+                <form id="deleteForm" method="post" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">🗑️ Eliminar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function showAddForm() {
+    document.getElementById('addModal').style.display = 'block';
+}
+
+function hideAddForm() {
+    document.getElementById('addModal').style.display = 'none';
+}
+
+function deleteItem(itemId, itemName, itemType) {
+    document.getElementById('deleteItemName').textContent = itemName;
+    document.getElementById('deleteForm').action = '/productos/admin/proveedores/delete/' + itemId + '/';
+    document.getElementById('deleteModal').style.display = 'block';
+}
+
+function hideDeleteModal() {
+    document.getElementById('deleteModal').style.display = 'none';
+}
+
+// Close modal when clicking outside
+window.onclick = function(event) {
+    const addModal = document.getElementById('addModal');
+    const deleteModal = document.getElementById('deleteModal');
+    if (event.target == addModal) {
+        addModal.style.display = 'none';
+    }
+    if (event.target == deleteModal) {
+        deleteModal.style.display = 'none';
+    }
+}
+</script>
+{% endblock %}

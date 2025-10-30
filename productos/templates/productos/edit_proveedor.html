@@ -1,0 +1,86 @@
+{% extends 'coimpres_cuba/base.html' %}
+{% load static %}
+
+{% block title %}Editar Proveedor{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/admin.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="admin-container">
+    <div class="admin-header">
+        <h1>✏️ Editar Proveedor</h1>
+        <p>Modifica la información del proveedor</p>
+    </div>
+    
+    <!-- Navigation Menu -->
+    <div class="admin-nav">
+        <a href="{% url 'productos:admin_panel' %}" class="nav-link">📦 Productos</a>
+        <a href="{% url 'productos:manage_proveedores' %}" class="nav-link active">🏭 Proveedores</a>
+        <a href="{% url 'productos:manage_categories' %}" class="nav-link">📂 Categorías</a>
+        <a href="{% url 'productos:manage_subcategories' %}" class="nav-link">📁 Subcategorías</a>
+        <a href="{% url 'productos:manage_estatus' %}" class="nav-link">🏷️ Estatus</a>
+    </div>
+    
+    <!-- Mensajes de éxito/error -->
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+    
+    <div class="admin-section">
+        <div class="section-header">
+            <h2>Información del Proveedor</h2>
+            <a href="{% url 'productos:manage_proveedores' %}" class="btn btn-secondary">⬅️ Volver</a>
+        </div>
+        
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="proveedor_name">Nombre del Proveedor *</label>
+                    <input type="text" id="proveedor_name" name="name" class="form-control" value="{{ proveedor.name }}" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="proveedor_id_unico">ID Único *</label>
+                    <input type="text" id="proveedor_id_unico" name="id_unico" class="form-control" value="{{ proveedor.id_unico }}" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="proveedor_logo">Logo del Proveedor</label>
+                    {% if proveedor.logo %}
+                        <div class="current-file">
+                            <img src="{{ proveedor.logo.url }}" alt="{{ proveedor.name }}" class="current-logo">
+                            <p><small>Logo actual</small></p>
+                        </div>
+                    {% endif %}
+                    <input type="file" id="proveedor_logo" name="logo" class="form-control" accept="image/*">
+                    <small class="form-text text-muted">Dejar vacío para mantener el logo actual</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="proveedor_catalogo">Catálogo (PDF)</label>
+                    {% if proveedor.catalogo %}
+                        <div class="current-file">
+                            <a href="{{ proveedor.catalogo.url }}" target="_blank" class="btn btn-sm btn-outline-primary">📄 Ver catálogo actual</a>
+                        </div>
+                    {% endif %}
+                    <input type="file" id="proveedor_catalogo" name="catalogo" class="form-control" accept=".pdf">
+                    <small class="form-text text-muted">Dejar vacío para mantener el catálogo actual</small>
+                </div>
+            </div>
+            
+            <div class="form-actions">
+                <a href="{% url 'productos:manage_proveedores' %}" class="btn btn-secondary">Cancelar</a>
+                <button type="submit" class="btn btn-primary">💾 Guardar Cambios</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

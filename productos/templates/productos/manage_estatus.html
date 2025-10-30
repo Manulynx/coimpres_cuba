@@ -1,0 +1,156 @@
+{% extends 'coimpres_cuba/base.html' %}
+{% load static %}
+
+{% block title %}Gestión de Estatus{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/admin.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="admin-container">
+    <div class="admin-header">
+        <h1>🏷️ Gestión de Estatus</h1>
+        <p>Administra los estatus de productos</p>
+    </div>
+    
+    <!-- Navigation Menu -->
+    <div class="admin-nav">
+        <a href="{% url 'productos:admin_panel' %}" class="nav-link">📦 Productos</a>
+        <a href="{% url 'productos:manage_proveedores' %}" class="nav-link">🏭 Proveedores</a>
+        <a href="{% url 'productos:manage_categories' %}" class="nav-link">📂 Categorías</a>
+        <a href="{% url 'productos:manage_subcategories' %}" class="nav-link">📁 Subcategorías</a>
+        <a href="{% url 'productos:manage_estatus' %}" class="nav-link active">🏷️ Estatus</a>
+    </div>
+    
+    <!-- Mensajes de éxito/error -->
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+    
+    <div class="admin-section">
+        <div class="section-header">
+            <h2>Lista de Estatus</h2>
+            <button class="btn btn-primary" onclick="showAddForm()">➕ Agregar Estatus</button>
+        </div>
+        
+        <div class="table-responsive">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Descripción</th>
+                        <th>Productos</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for estatus in all_estatus %}
+                    <tr>
+                        <td><strong>{{ estatus.name }}</strong></td>
+                        <td>{{ estatus.description|default:"-" }}</td>
+                        <td>{{ estatus.product_set.count }}</td>
+                        <td>
+                            <div class="action-buttons">
+                                <a href="{% url 'productos:edit_estatus' estatus.pk %}" class="btn btn-sm btn-warning" title="Editar">✏️</a>
+                                <button onclick="deleteItem({{ estatus.pk }}, '{{ estatus.name|escapejs }}', 'estatus')" class="btn btn-sm btn-danger" title="Eliminar">🗑️</button>
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4" class="text-center text-muted">No hay estatus registrados</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <!-- Add Form Modal -->
+    <div id="addModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>➕ Agregar Nuevo Estatus</h3>
+                <button onclick="hideAddForm()" class="close-btn">✕</button>
+            </div>
+            <form method="post" action="{% url 'productos:add_estatus' %}">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="estatus_name">Nombre del Estatus *</label>
+                    <input type="text" id="estatus_name" name="name" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="estatus_description">Descripción</label>
+                    <textarea id="estatus_description" name="description" class="form-control" rows="3" placeholder="Descripción opcional del estatus"></textarea>
+                </div>
+                
+                <div class="modal-footer">
+                    <button type="button" onclick="hideAddForm()" class="btn btn-secondary">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">💾 Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Delete confirmation modal -->
+    <div id="deleteModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>🗑️ Confirmar Eliminación</h3>
+            </div>
+            <div class="modal-body">
+                <p>¿Estás seguro de que quieres eliminar el estatus <strong id="deleteItemName"></strong>?</p>
+                <p class="text-danger"><small>Esta acción no se puede deshacer.</small></p>
+            </div>
+            <div class="modal-footer">
+                <button onclick="hideDeleteModal()" class="btn btn-secondary">Cancelar</button>
+                <form id="deleteForm" method="post" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">🗑️ Eliminar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function showAddForm() {
+    document.getElementById('addModal').style.display = 'block';
+}
+
+function hideAddForm() {
+    document.getElementById('addModal').style.display = 'none';
+}
+
+function deleteItem(itemId, itemName, itemType) {
+    document.getElementById('deleteItemName').textContent = itemName;
+    document.getElementById('deleteForm').action = '/productos/admin/estatus/delete/' + itemId + '/';
+    document.getElementById('deleteModal').style.display = 'block';
+}
+
+function hideDeleteModal() {
+    document.getElementById('deleteModal').style.display = 'none';
+}
+
+// Close modal when clicking outside
+window.onclick = function(event) {
+    const addModal = document.getElementById('addModal');
+    const deleteModal = document.getElementById('deleteModal');
+    if (event.target == addModal) {
+        addModal.style.display = 'none';
+    }
+    if (event.target == deleteModal) {
+        deleteModal.style.display = 'none';
+    }
+}
+</script>
+{% endblock %}

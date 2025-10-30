@@ -11,16 +11,16 @@
 <div class="admin-container">
     <div class="admin-header">
         <h1>Panel de Administración</h1>
-        <p>Gestiona proveedores, categorías, subcategorías, productos y estatus</p>
+        <p>Gestiona productos, proveedores, categorías y más</p>
     </div>
     
-    <!-- Tabs de navegación -->
-    <div class="admin-tabs">
-        <button class="tab-button active" onclick="showTab('proveedores')">Proveedores</button>
-        <button class="tab-button" onclick="showTab('categorias')">Categorías</button>
-        <button class="tab-button" onclick="showTab('subcategorias')">Subcategorías</button>
-        <button class="tab-button" onclick="showTab('estatus')">Estatus</button>
-        <button class="tab-button" onclick="showTab('productos')">Productos</button>
+    <!-- Navigation Menu -->
+    <div class="admin-nav">
+        <a href="{% url 'productos:admin_panel' %}" class="nav-link active">📦 Productos</a>
+        <a href="{% url 'productos:manage_proveedores' %}" class="nav-link">🏭 Proveedores</a>
+        <a href="{% url 'productos:manage_categories' %}" class="nav-link">📂 Categorías</a>
+        <a href="{% url 'productos:manage_subcategories' %}" class="nav-link">📁 Subcategorías</a>
+        <a href="{% url 'productos:manage_estatus' %}" class="nav-link">🏷️ Estatus</a>
     </div>
     
     <!-- Mensajes de éxito/error -->
@@ -32,300 +32,346 @@
         {% endfor %}
     {% endif %}
     
-    <!-- Tab: Proveedores -->
-    <div id="proveedores" class="tab-content active">
-        <h2 class="section-title">Gestión de Proveedores</h2>
-        <form method="post" enctype="multipart/form-data" action="{% url 'productos:add_proveedor' %}">
-            {% csrf_token %}
-            <div class="form-grid">
-                <div class="form-group">
-                    <label for="proveedor_name">Nombre del Proveedor *</label>
-                    <input type="text" id="proveedor_name" name="name" class="form-control" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="proveedor_id_unico">ID Único *</label>
-                    <input type="text" id="proveedor_id_unico" name="id_unico" class="form-control" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="proveedor_logo">Logo del Proveedor</label>
-                    <div class="file-input-wrapper">
-                        <input type="file" id="proveedor_logo" name="logo" class="file-input" accept="image/*">
-                        <label for="proveedor_logo" class="file-input-label">
-                            📷 Seleccionar Logo
-                        </label>
+    <!-- Productos Section -->
+    <div class="admin-section">
+        <div class="section-header">
+            <h2>📦 Gestión de Productos</h2>
+            <button class="btn btn-primary" onclick="showAddProductForm()">➕ Agregar Producto</button>
+        </div>
+        
+        <!-- Search and filters -->
+        <div class="admin-filters">
+            <form method="get" class="search-form">
+                <input type="text" name="search" value="{{ search }}" placeholder="Buscar productos..." class="search-input">
+                <button type="submit" class="btn btn-outline-primary">🔍 Buscar</button>
+                {% if search %}
+                    <a href="{% url 'productos:admin_panel' %}" class="btn btn-outline-secondary">✕ Limpiar</a>
+                {% endif %}
+            </form>
+        </div>
+        
+        <!-- Products Table -->
+        <div class="table-responsive">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Imagen</th>
+                        <th>Nombre</th>
+                        <th>Código</th>
+                        <th>Categoría</th>
+                        <th>Proveedor</th>
+                        <th>Precio</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for product in products %}
+                    <tr>
+                        <td>
+                            {% if product.image %}
+                                <img src="{{ product.image.url }}" alt="{{ product.name }}" class="product-thumb">
+                            {% else %}
+                                <div class="no-image">📷</div>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <strong>{{ product.name }}</strong>
+                            {% if product.description %}
+                                <br><small class="text-muted">{{ product.description|truncatechars:60 }}</small>
+                            {% endif %}
+                        </td>
+                        <td><code>{{ product.code|default:"-" }}</code></td>
+                        <td>
+                            {{ product.category.name|default:"-" }}
+                            {% if product.subcategory %}
+                                <br><small class="text-muted">{{ product.subcategory.name }}</small>
+                            {% endif %}
+                        </td>
+                        <td>{{ product.proveedor.nombre|default:"-" }}</td>
+                        <td>
+                            {% if product.precio %}
+                                ${{ product.precio }}
+                            {% else %}
+                                <span class="text-muted">Consultar</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if product.destacado %}
+                                <span class="badge badge-warning">Destacado</span><br>
+                            {% endif %}
+                            <span class="badge badge-success">{{ product.estatus.name|default:"Activo" }}</span>
+                        </td>
+                        <td>
+                            <div class="action-buttons">
+                                <a href="{% url 'productos:product_detail' product.slug %}" class="btn btn-sm btn-info" title="Ver">👁️</a>
+                                <a href="{% url 'productos:edit_product' product.pk %}" class="btn btn-sm btn-warning" title="Editar">✏️</a>
+                                <button onclick="deleteProduct({{ product.pk }}, '{{ product.name|escapejs }}')" class="btn btn-sm btn-danger" title="Eliminar">🗑️</button>
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="8" class="text-center text-muted">
+                            {% if search %}
+                                No se encontraron productos que coincidan con "{{ search }}"
+                            {% else %}
+                                No hay productos registrados
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Mobile Cards View -->
+        <div class="table-mobile-cards">
+            {% for product in products %}
+            <div class="mobile-card">
+                <div class="mobile-card-header">
+                    {% if product.image %}
+                        <img src="{{ product.image.url }}" alt="{{ product.name }}" class="mobile-card-thumb">
+                    {% else %}
+                        <div class="no-image" style="width: 60px; height: 60px; font-size: 24px;">📷</div>
+                    {% endif %}
+                    <div class="mobile-card-title">
+                        <h3>{{ product.name }}</h3>
+                        {% if product.description %}
+                            <p>{{ product.description|truncatechars:80 }}</p>
+                        {% endif %}
                     </div>
                 </div>
-                
-                <div class="form-group">
-                    <label for="proveedor_catalogo">Catálogo (PDF)</label>
-                    <div class="file-input-wrapper">
-                        <input type="file" id="proveedor_catalogo" name="catalogo" class="file-input" accept=".pdf">
-                        <label for="proveedor_catalogo" class="file-input-label">
-                            📄 Seleccionar Catálogo PDF
-                        </label>
+                <div class="mobile-card-body">
+                    <div class="mobile-card-field">
+                        <strong>Código</strong>
+                        <span>{{ product.code|default:"-" }}</span>
                     </div>
+                    <div class="mobile-card-field">
+                        <strong>Categoría</strong>
+                        <span>{{ product.category.name|default:"-" }}</span>
+                    </div>
+                    <div class="mobile-card-field">
+                        <strong>Proveedor</strong>
+                        <span>{{ product.proveedor.nombre|default:"-" }}</span>
+                    </div>
+                    <div class="mobile-card-field">
+                        <strong>Precio</strong>
+                        <span>
+                            {% if product.precio %}
+                                ${{ product.precio }}
+                            {% else %}
+                                Consultar
+                            {% endif %}
+                        </span>
+                    </div>
+                    {% if product.subcategory %}
+                    <div class="mobile-card-field">
+                        <strong>Subcategoría</strong>
+                        <span>{{ product.subcategory.name }}</span>
+                    </div>
+                    {% endif %}
+                    <div class="mobile-card-field">
+                        <strong>Estado</strong>
+                        <span>
+                            {% if product.destacado %}
+                                <span class="badge badge-warning">Destacado</span><br>
+                            {% endif %}
+                            <span class="badge badge-success">{{ product.estatus.name|default:"Activo" }}</span>
+                        </span>
+                    </div>
+                </div>
+                <div class="mobile-card-actions">
+                    <a href="{% url 'productos:product_detail' product.slug %}" class="btn btn-sm btn-info">👁️ Ver</a>
+                    <a href="{% url 'productos:edit_product' product.pk %}" class="btn btn-sm btn-warning">✏️ Editar</a>
+                    <button onclick="deleteProduct({{ product.pk }}, '{{ product.name|escapejs }}')" class="btn btn-sm btn-danger">🗑️ Eliminar</button>
                 </div>
             </div>
-            
-            <button type="submit" class="btn btn-primary"> Agregar Proveedor</button>
-        </form>
+            {% empty %}
+            <div class="text-center text-muted" style="padding: 40px;">
+                {% if search %}
+                    No se encontraron productos que coincidan con "{{ search }}"
+                {% else %}
+                    No hay productos registrados
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
     </div>
     
-    <!-- Tab: Categorías -->
-    <div id="categorias" class="tab-content">
-        <h2 class="section-title">Gestión de Categorías</h2>
-        <form method="post" action="{% url 'productos:add_category' %}">
-            {% csrf_token %}
-            <div class="form-grid">
-                <div class="form-group">
-                    <label for="category_name">Nombre de la Categoría *</label>
-                    <input type="text" id="category_name" name="name" class="form-control" required>
-                </div>
+    <!-- Add Product Form Modal -->
+    <div id="addProductModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>➕ Agregar Nuevo Producto</h3>
+                <button onclick="hideAddProductForm()" class="close-btn">✕</button>
             </div>
-            
-            <button type="submit" class="btn btn-primary"> Agregar Categoría</button>
-        </form>
+            <form method="post" enctype="multipart/form-data" action="{% url 'productos:add_product' %}">
+                {% csrf_token %}
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="product_name">Nombre del Producto *</label>
+                        <input type="text" id="product_name" name="name" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="product_sku">Código SKU</label>
+                        <input type="text" id="product_sku" name="sku" class="form-control">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="product_proveedor">Proveedor</label>
+                        <select id="product_proveedor" name="proveedor" class="form-control">
+                            <option value="">Seleccionar proveedor...</option>
+                            {% for proveedor in proveedores %}
+                                <option value="{{ proveedor.id }}">{{ proveedor.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="product_category">Categoría *</label>
+                        <select id="product_category" name="category" class="form-control" required>
+                            <option value="">Seleccionar categoría...</option>
+                            {% for category in categories %}
+                                <option value="{{ category.id }}">{{ category.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="product_subcategory">Subcategoría</label>
+                        <select id="product_subcategory" name="subcategory" class="form-control">
+                            <option value="">Seleccionar subcategoría...</option>
+                            {% for subcategory in subcategories %}
+                                <option value="{{ subcategory.id }}" data-category="{{ subcategory.category.id }}">{{ subcategory.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="product_estatus">Estatus de Procedencia</label>
+                        <select id="product_estatus" name="estatus" class="form-control">
+                            <option value="">Seleccionar estatus...</option>
+                            {% for estatus in estatus_list %}
+                                <option value="{{ estatus.id }}">{{ estatus.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="product_price">Precio</label>
+                        <input type="number" id="product_price" name="price" class="form-control" step="0.01" min="0">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="product_peso">Peso (kg)</label>
+                        <input type="number" id="product_peso" name="peso" class="form-control" step="0.01" min="0">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="product_short_description">Descripción Corta</label>
+                    <input type="text" id="product_short_description" name="short_description" class="form-control" maxlength="500">
+                </div>
+                
+                <div class="form-group">
+                    <label for="product_description">Descripción Completa</label>
+                    <textarea id="product_description" name="description" class="form-control" rows="4"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="product_image">Imagen Principal</label>
+                    <input type="file" id="product_image" name="image" class="form-control" accept="image/*">
+                </div>
+                
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="product_is_active" name="is_active" checked> 
+                        Producto Activo
+                    </label>
+                </div>
+                
+                <div class="modal-footer">
+                    <button type="button" onclick="hideAddProductForm()" class="btn btn-secondary">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">💾 Guardar Producto</button>
+                </div>
+            </form>
+        </div>
     </div>
     
-    <!-- Tab: Subcategorías -->
-    <div id="subcategorias" class="tab-content">
-        <h2 class="section-title">Gestión de Subcategorías</h2>
-        <form method="post" action="{% url 'productos:add_subcategory' %}">
-            {% csrf_token %}
-            <div class="form-grid">
-                <div class="form-group">
-                    <label for="subcategory_name">Nombre de la Subcategoría *</label>
-                    <input type="text" id="subcategory_name" name="name" class="form-control" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="subcategory_category">Categoría *</label>
-                    <select id="subcategory_category" name="category" class="form-control" required>
-                        <option value="">Seleccionar categoría...</option>
-                        {% for category in categories %}
-                            <option value="{{ category.id }}">{{ category.name }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
+    <!-- Delete confirmation modal -->
+    <div id="deleteModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>🗑️ Confirmar Eliminación</h3>
             </div>
-            
-            <button type="submit" class="btn btn-primary"> Agregar Subcategoría</button>
-        </form>
-    </div>
-    
-    <!-- Tab: Estatus -->
-    <div id="estatus" class="tab-content">
-        <h2 class="section-title">Gestión de Estatus de Procedencia</h2>
-        <form method="post" action="{% url 'productos:add_estatus' %}">
-            {% csrf_token %}
-            <div class="form-grid">
-                <div class="form-group">
-                    <label for="estatus_name">Nombre del Estatus *</label>
-                    <input type="text" id="estatus_name" name="name" class="form-control" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="estatus_description">Descripción</label>
-                    <textarea id="estatus_description" name="description" class="form-control" rows="3" placeholder="Descripción opcional del estatus..."></textarea>
-                </div>
+            <div class="modal-body">
+                <p>¿Estás seguro de que quieres eliminar el producto <strong id="deleteProductName"></strong>?</p>
+                <p class="text-danger"><small>Esta acción no se puede deshacer.</small></p>
             </div>
-            
-            <button type="submit" class="btn btn-primary"> Agregar Estatus</button>
-        </form>
-    </div>
-    
-    <!-- Tab: Productos -->
-    <div id="productos" class="tab-content">
-        <h2 class="section-title">Gestión de Productos</h2>
-        <form method="post" enctype="multipart/form-data" action="{% url 'productos:add_product' %}">
-            {% csrf_token %}
-            <div class="form-grid">
-                <div class="form-group">
-                    <label for="product_name">Nombre del Producto *</label>
-                    <input type="text" id="product_name" name="name" class="form-control" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="product_sku">Código SKU</label>
-                    <input type="text" id="product_sku" name="sku" class="form-control">
-                </div>
-                
-                <div class="form-group">
-                    <label for="product_proveedor">Proveedor</label>
-                    <select id="product_proveedor" name="proveedor" class="form-control">
-                        <option value="">Seleccionar proveedor...</option>
-                        {% for proveedor in proveedores %}
-                            <option value="{{ proveedor.id }}">{{ proveedor.name }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label for="product_category">Categoría *</label>
-                    <select id="product_category" name="category" class="form-control" required>
-                        <option value="">Seleccionar categoría...</option>
-                        {% for category in categories %}
-                            <option value="{{ category.id }}">{{ category.name }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label for="product_subcategory">Subcategoría</label>
-                    <select id="product_subcategory" name="subcategory" class="form-control">
-                        <option value="">Seleccionar subcategoría...</option>
-                        {% for subcategory in subcategories %}
-                            <option value="{{ subcategory.id }}" data-category="{{ subcategory.category.id }}">{{ subcategory.name }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label for="product_estatus">Estatus de Procedencia</label>
-                    <select id="product_estatus" name="estatus" class="form-control">
-                        <option value="">Seleccionar estatus...</option>
-                        {% for estatus in estatus_list %}
-                            <option value="{{ estatus.id }}">{{ estatus.name }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label for="product_price">Precio</label>
-                    <input type="number" id="product_price" name="price" class="form-control" step="0.01" min="0">
-                </div>
-                
-                <div class="form-group">
-                    <label for="product_peso">Peso (kg)</label>
-                    <input type="number" id="product_peso" name="peso" class="form-control" step="0.01" min="0">
-                </div>
-                
-                <div class="form-group">
-                    <label for="product_origen">País de Origen</label>
-                    <input type="text" id="product_origen" name="origen" class="form-control">
-                </div>
+            <div class="modal-footer">
+                <button onclick="hideDeleteModal()" class="btn btn-secondary">Cancelar</button>
+                <form id="deleteForm" method="post" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">🗑️ Eliminar</button>
+                </form>
             </div>
-            
-            <div class="form-group">
-                <label for="product_short_description">Descripción Corta</label>
-                <input type="text" id="product_short_description" name="short_description" class="form-control" maxlength="500">
-            </div>
-            
-            <div class="form-group">
-                <label for="product_description">Descripción Completa</label>
-                <textarea id="product_description" name="description" class="form-control" rows="4" placeholder="Descripción detallada del producto..."></textarea>
-            </div>
-            
-            <div class="form-grid">
-                <div class="form-group">
-                    <label for="product_image">Imagen Principal del Producto</label>
-                    <div class="file-input-wrapper">
-                        <input type="file" id="product_image" name="image" class="file-input" accept="image/*">
-                        <label for="product_image" class="file-input-label">
-                            🖼️ Seleccionar Imagen Principal
-                        </label>
-                    </div>
-                </div>
-                
-                <div class="form-group">
-                    <label for="product_ficha_tecnica">Ficha Técnica (PDF)</label>
-                    <div class="file-input-wrapper">
-                        <input type="file" id="product_ficha_tecnica" name="ficha_tecnica" class="file-input" accept=".pdf">
-                        <label for="product_ficha_tecnica" class="file-input-label">
-                            📋 Seleccionar Ficha Técnica
-                        </label>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Galería de Imágenes Múltiples -->
-            <div class="form-section">
-                <h3>📸 Galería de Imágenes</h3>
-                <div id="gallery-images-container">
-                    <div class="gallery-item">
-                        <div class="form-grid gallery-grid">
-                            <div class="form-group">
-                                <label>Imagen</label>
-                                <div class="file-input-wrapper">
-                                    <input type="file" id="gallery_image_1" name="gallery_images[]" class="file-input gallery-image-input" accept="image/*">
-                                    <label for="gallery_image_1" class="file-input-label">
-                                        🖼️ Seleccionar Imagen
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label>Texto Alternativo</label>
-                                <input type="text" name="gallery_alt_texts[]" class="form-control" placeholder="Descripción de la imagen">
-                            </div>
-                            <div class="form-group">
-                                <label>Orden</label>
-                                <input type="number" name="gallery_orders[]" class="form-control" value="1" min="1">
-                            </div>
-                            <div class="form-group">
-                                <label>
-                                    <input type="checkbox" name="gallery_is_main[]" value="1"> 
-                                    Imagen Principal
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <button type="button" class="btn btn-outline-primary" onclick="addGalleryImage()">
-                    ➕ Agregar Otra Imagen
-                </button>
-            </div>
-            
-            <!-- Galería de Videos Múltiples -->
-            <div class="form-section">
-                <h3>🎬 Galería de Videos</h3>
-                <div id="gallery-videos-container">
-                    <div class="video-item">
-                        <div class="form-grid video-grid">
-                            <div class="form-group">
-                                <label>Video</label>
-                                <div class="file-input-wrapper">
-                                    <input type="file" id="gallery_video_1" name="gallery_videos[]" class="file-input gallery-video-input" accept="video/*">
-                                    <label for="gallery_video_1" class="file-input-label">
-                                        🎥 Seleccionar Video
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label>Título del Video</label>
-                                <input type="text" name="video_titles[]" class="form-control" placeholder="Título del video">
-                            </div>
-                            <div class="form-group">
-                                <label>Descripción</label>
-                                <textarea name="video_descriptions[]" class="form-control" rows="2" placeholder="Descripción del video"></textarea>
-                            </div>
-                            <div class="form-group">
-                                <label>Orden</label>
-                                <input type="number" name="video_orders[]" class="form-control" value="1" min="1">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <button type="button" class="btn btn-outline-primary" onclick="addGalleryVideo()">
-                    ➕ Agregar Otro Video
-                </button>
-            </div>
-            
-            <div class="form-group">
-                <label>
-                    <input type="checkbox" id="product_is_active" name="is_active" checked> 
-                    Producto Activo
-                </label>
-            </div>
-            
-            <button type="submit" class="btn btn-success">🛍️ Agregar Producto</button>
-        </form>
+        </div>
     </div>
 </div>
 
 {% endblock %}
 
 {% block extra_js %}
-<script src="{% static 'js/admin.js' %}"></script>
+<script>
+function showAddProductForm() {
+    document.getElementById('addProductModal').style.display = 'block';
+}
+
+function hideAddProductForm() {
+    document.getElementById('addProductModal').style.display = 'none';
+}
+
+function deleteProduct(productId, productName) {
+    document.getElementById('deleteProductName').textContent = productName;
+    document.getElementById('deleteForm').action = '/productos/admin/productos/delete/' + productId + '/';
+    document.getElementById('deleteModal').style.display = 'block';
+}
+
+function hideDeleteModal() {
+    document.getElementById('deleteModal').style.display = 'none';
+}
+
+// Close modal when clicking outside
+window.onclick = function(event) {
+    const addModal = document.getElementById('addProductModal');
+    const deleteModal = document.getElementById('deleteModal');
+    if (event.target == addModal) {
+        addModal.style.display = 'none';
+    }
+    if (event.target == deleteModal) {
+        deleteModal.style.display = 'none';
+    }
+}
+
+// Update subcategories based on selected category
+document.getElementById('product_category').addEventListener('change', function() {
+    const categoryId = this.value;
+    const subcategorySelect = document.getElementById('product_subcategory');
+    const options = subcategorySelect.querySelectorAll('option[data-category]');
+    
+    // Reset subcategory
+    subcategorySelect.value = '';
+    
+    // Show/hide options based on category
+    options.forEach(function(option) {
+        if (option.getAttribute('data-category') === categoryId || categoryId === '') {
+            option.style.display = 'block';
+        } else {
+            option.style.display = 'none';
+        }
+    });
+});
+</script>
 {% endblock %}

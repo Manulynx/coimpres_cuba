@@ -1,0 +1,333 @@
+{% extends 'coimpres_cuba/base.html' %}
+{% load static %}
+
+{% block title %}Editar Producto{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/admin.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="admin-container">
+    <div class="admin-header">
+        <h1>✏️ Editar Producto</h1>
+        <p>Modifica los datos del producto</p>
+    </div>
+    
+    <!-- Navigation Menu -->
+    <div class="admin-nav">
+        <a href="{% url 'productos:admin_panel' %}" class="nav-link active">📦 Productos</a>
+        <a href="{% url 'productos:manage_proveedores' %}" class="nav-link">🏭 Proveedores</a>
+        <a href="{% url 'productos:manage_categories' %}" class="nav-link">📂 Categorías</a>
+        <a href="{% url 'productos:manage_subcategories' %}" class="nav-link">📁 Subcategorías</a>
+        <a href="{% url 'productos:manage_estatus' %}" class="nav-link">🏷️ Estatus</a>
+    </div>
+    
+    <!-- Mensajes de éxito/error -->
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+    
+    <div class="admin-section">
+        <div class="section-header">
+            <h2>Información del Producto</h2>
+            <a href="{% url 'productos:admin_panel' %}" class="btn btn-secondary">← Volver a la lista</a>
+        </div>
+        
+        <div class="form-container">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                
+                <div class="form-row">
+                    <div class="form-group col-md-8">
+                        <label for="name">Nombre del Producto *</label>
+                        <input type="text" id="name" name="name" value="{{ product.name }}" class="form-control" required>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="code">Código *</label>
+                        <input type="text" id="code" name="code" value="{{ product.code }}" class="form-control" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="description">Descripción</label>
+                    <textarea id="description" name="description" class="form-control" rows="4">{{ product.description }}</textarea>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="category">Categoría *</label>
+                        <select id="category" name="category" class="form-control" required onchange="updateSubcategories()">
+                            <option value="">Selecciona una categoría</option>
+                            {% for cat in categories %}
+                                <option value="{{ cat.pk }}" {% if cat.pk == product.category.pk %}selected{% endif %}>
+                                    {{ cat.name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="subcategory">Subcategoría</label>
+                        <select id="subcategory" name="subcategory" class="form-control">
+                            <option value="">Selecciona una subcategoría</option>
+                            {% for subcat in subcategories %}
+                                <option value="{{ subcat.pk }}" data-category="{{ subcat.category.pk }}" 
+                                        {% if subcat.pk == product.subcategory.pk %}selected{% endif %}>
+                                    {{ subcat.name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="proveedor">Proveedor</label>
+                        <select id="proveedor" name="proveedor" class="form-control">
+                            <option value="">Selecciona un proveedor</option>
+                            {% for prov in proveedores %}
+                                <option value="{{ prov.pk }}" {% if prov.pk == product.proveedor.pk %}selected{% endif %}>
+                                    {{ prov.nombre }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="estatus">Estatus</label>
+                        <select id="estatus" name="estatus" class="form-control">
+                            <option value="">Selecciona un estatus</option>
+                            {% for est in all_estatus %}
+                                <option value="{{ est.pk }}" {% if est.pk == product.estatus.pk %}selected{% endif %}>
+                                    {{ est.name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="procedencia">Procedencia</label>
+                        <input type="text" id="procedencia" name="procedencia" value="{{ product.procedencia }}" class="form-control">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="precio">Precio</label>
+                        <input type="number" id="precio" name="precio" value="{{ product.precio }}" step="0.01" class="form-control">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="catalogo">Catálogo</label>
+                    <input type="file" id="catalogo" name="catalogo" accept=".pdf" class="form-control">
+                    {% if product.catalogo %}
+                        <small class="form-text text-muted">
+                            Archivo actual: <a href="{{ product.catalogo.url }}" target="_blank">{{ product.catalogo.name }}</a>
+                        </small>
+                    {% endif %}
+                </div>
+                
+                <div class="form-group">
+                    <div class="form-check">
+                        <input type="checkbox" id="destacado" name="destacado" value="true" class="form-check-input" 
+                               {% if product.destacado %}checked{% endif %}>
+                        <label for="destacado" class="form-check-label">Producto Destacado</label>
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <a href="{% url 'productos:admin_panel' %}" class="btn btn-secondary">Cancelar</a>
+                    <button type="submit" class="btn btn-primary">💾 Guardar Cambios</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Product Images Section -->
+    <div class="admin-section">
+        <div class="section-header">
+            <h2>🖼️ Imágenes del Producto</h2>
+            <button class="btn btn-primary" onclick="showImageForm()">➕ Agregar Imagen</button>
+        </div>
+        
+        <div class="images-grid">
+            {% for image in product.productimage_set.all %}
+                <div class="image-item">
+                    <img src="{{ image.image.url }}" alt="{{ image.alt_text }}" loading="lazy">
+                    <div class="image-info">
+                        <p><strong>{{ image.alt_text|default:"Sin descripción" }}</strong></p>
+                        <p>Orden: {{ image.order }}</p>
+                        <button onclick="deleteImage({{ image.pk }})" class="btn btn-sm btn-danger">🗑️ Eliminar</button>
+                    </div>
+                </div>
+            {% empty %}
+                <div class="text-center text-muted" style="grid-column: 1 / -1; padding: 40px;">
+                    <p>📷 No hay imágenes para este producto</p>
+                    <button class="btn btn-primary" onclick="showImageForm()">➕ Agregar Primera Imagen</button>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    
+    <!-- Product Videos Section -->
+    <div class="admin-section">
+        <div class="section-header">
+            <h2>🎥 Videos del Producto</h2>
+            <button class="btn btn-primary" onclick="showVideoForm()">➕ Agregar Video</button>
+        </div>
+        
+        <div class="videos-grid">
+            {% for video in product.productvideo_set.all %}
+                <div class="video-item">
+                    <video controls loading="lazy" preload="metadata">
+                        <source src="{{ video.video.url }}" type="video/mp4">
+                        Tu navegador no soporta la reproducción de videos.
+                    </video>
+                    <div class="video-info">
+                        <p><strong>{{ video.title|default:"Sin título" }}</strong></p>
+                        <p>Orden: {{ video.order }}</p>
+                        <button onclick="deleteVideo({{ video.pk }})" class="btn btn-sm btn-danger">🗑️ Eliminar</button>
+                    </div>
+                </div>
+            {% empty %}
+                <div class="text-center text-muted" style="grid-column: 1 / -1; padding: 40px;">
+                    <p>🎥 No hay videos para este producto</p>
+                    <button class="btn btn-primary" onclick="showVideoForm()">➕ Agregar Primer Video</button>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    
+    <!-- Add Image Modal -->
+    <div id="imageModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>➕ Agregar Imagen</h3>
+                <button onclick="hideImageForm()" class="close-btn">✕</button>
+            </div>
+            <form method="post" enctype="multipart/form-data" action="{% url 'productos:add_product_image' product.pk %}">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="image_file">Imagen *</label>
+                    <input type="file" id="image_file" name="image" accept="image/*" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="image_alt">Descripción</label>
+                    <input type="text" id="image_alt" name="alt_text" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="image_order">Orden</label>
+                    <input type="number" id="image_order" name="order" class="form-control" value="1" min="1">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" onclick="hideImageForm()" class="btn btn-secondary">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">💾 Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Add Video Modal -->
+    <div id="videoModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>➕ Agregar Video</h3>
+                <button onclick="hideVideoForm()" class="close-btn">✕</button>
+            </div>
+            <form method="post" enctype="multipart/form-data" action="{% url 'productos:add_product_video' product.pk %}">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="video_file">Video *</label>
+                    <input type="file" id="video_file" name="video" accept="video/*" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="video_title">Título</label>
+                    <input type="text" id="video_title" name="title" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="video_order">Orden</label>
+                    <input type="number" id="video_order" name="order" class="form-control" value="1" min="1">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" onclick="hideVideoForm()" class="btn btn-secondary">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">💾 Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Update subcategories based on selected category
+function updateSubcategories() {
+    const categorySelect = document.getElementById('category');
+    const subcategorySelect = document.getElementById('subcategory');
+    const selectedCategory = categorySelect.value;
+    
+    // Clear subcategory options except the first one
+    subcategorySelect.innerHTML = '<option value="">Selecciona una subcategoría</option>';
+    
+    if (selectedCategory) {
+        // Show only subcategories for the selected category
+        const allOptions = document.querySelectorAll('#subcategory option[data-category]');
+        allOptions.forEach(option => {
+            if (option.dataset.category === selectedCategory) {
+                subcategorySelect.appendChild(option.cloneNode(true));
+            }
+        });
+    }
+}
+
+// Modal functions
+function showImageForm() {
+    document.getElementById('imageModal').style.display = 'block';
+}
+
+function hideImageForm() {
+    document.getElementById('imageModal').style.display = 'none';
+}
+
+function showVideoForm() {
+    document.getElementById('videoModal').style.display = 'block';
+}
+
+function hideVideoForm() {
+    document.getElementById('videoModal').style.display = 'none';
+}
+
+function deleteImage(imageId) {
+    if (confirm('¿Estás seguro de que quieres eliminar esta imagen?')) {
+        window.location.href = '/productos/admin/producto-imagen/delete/' + imageId + '/';
+    }
+}
+
+function deleteVideo(videoId) {
+    if (confirm('¿Estás seguro de que quieres eliminar este video?')) {
+        window.location.href = '/productos/admin/producto-video/delete/' + videoId + '/';
+    }
+}
+
+// Initialize subcategories on page load
+document.addEventListener('DOMContentLoaded', function() {
+    updateSubcategories();
+});
+
+// Close modal when clicking outside
+window.onclick = function(event) {
+    const imageModal = document.getElementById('imageModal');
+    const videoModal = document.getElementById('videoModal');
+    if (event.target == imageModal) {
+        imageModal.style.display = 'none';
+    }
+    if (event.target == videoModal) {
+        videoModal.style.display = 'none';
+    }
+}
+</script>
+{% endblock %}

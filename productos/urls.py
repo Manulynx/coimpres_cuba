@@ -7,10 +7,37 @@ app_name = 'productos'
 urlpatterns = [
     path('', views.ProductListView.as_view(), name='product_list'),
     path('admin/', views.admin_panel, name='admin_panel'),
+    
+    # URLs para agregar entidades
     path('admin/add-proveedor/', views.add_proveedor, name='add_proveedor'),
     path('admin/add-category/', views.add_category, name='add_category'),
     path('admin/add-subcategory/', views.add_subcategory, name='add_subcategory'),
     path('admin/add-estatus/', views.add_estatus, name='add_estatus'),
     path('admin/add-product/', views.add_product, name='add_product'),
+    
+    # URLs para gestionar proveedores
+    path('admin/proveedores/', views.manage_proveedores, name='manage_proveedores'),
+    path('admin/proveedores/edit/<int:pk>/', views.edit_proveedor, name='edit_proveedor'),
+    path('admin/proveedores/delete/<int:pk>/', views.delete_proveedor, name='delete_proveedor'),
+    
+    # URLs para gestionar categorías
+    path('admin/categorias/', views.manage_categories, name='manage_categories'),
+    path('admin/categorias/edit/<int:pk>/', views.edit_category, name='edit_category'),
+    path('admin/categorias/delete/<int:pk>/', views.delete_category, name='delete_category'),
+    
+    # URLs para gestionar subcategorías
+    path('admin/subcategorias/', views.manage_subcategories, name='manage_subcategories'),
+    path('admin/subcategorias/edit/<int:pk>/', views.edit_subcategory, name='edit_subcategory'),
+    path('admin/subcategorias/delete/<int:pk>/', views.delete_subcategory, name='delete_subcategory'),
+    
+    # URLs para gestionar estatus
+    path('admin/estatus/', views.manage_estatus, name='manage_estatus'),
+    path('admin/estatus/edit/<int:pk>/', views.edit_estatus, name='edit_estatus'),
+    path('admin/estatus/delete/<int:pk>/', views.delete_estatus, name='delete_estatus'),
+    
+    # URLs para gestionar productos
+    path('admin/productos/edit/<int:pk>/', views.edit_product, name='edit_product'),
+    path('admin/productos/delete/<int:pk>/', views.delete_product, name='delete_product'),
+    
     path('<slug:slug>/', views.ProductDetailView.as_view(), name='product_detail'),
 ]
