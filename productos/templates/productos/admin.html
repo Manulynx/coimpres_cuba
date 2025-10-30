@@ -5,6 +5,43 @@
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/admin.css' %}">
+<style>
+/* CSS crítico inline para móvil */
+@media (max-width: 768px) {
+    .admin-pagination .page-link.active,
+    .admin-pagination .page-item.active .page-link {
+        background-color: #9fa322 !important;
+        border-color: #9fa322 !important;
+        color: white !important;
+    }
+    
+    .admin-pagination .page-link:hover {
+        background-color: #9fa322 !important;
+        border-color: #9fa322 !important;
+        color: white !important;
+    }
+    
+    .product-thumb {
+        width: 35px !important;
+        height: 35px !important;
+        object-fit: cover !important;
+        border-radius: 4px !important;
+    }
+    
+    .no-image {
+        width: 35px !important;
+        height: 35px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        background: #f8f9fa !important;
+        border: 1px solid #dee2e6 !important;
+        border-radius: 4px !important;
+        font-size: 14px !important;
+    }
+}
+</style>
+
 {% endblock %}
 
 {% block content %}
