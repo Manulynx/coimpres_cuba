@@ -208,7 +208,7 @@
                 <h3>➕ Agregar Imagen</h3>
                 <button onclick="hideImageForm()" class="close-btn">✕</button>
             </div>
-            <form method="post" enctype="multipart/form-data" action="{% url 'productos:image' product.pk %}">
+            <form method="post" enctype="multipart/form-data" action="{% url 'productos:add_product_image' product.pk %}">
                 {% csrf_token %}
                 <div class="form-group">
                     <label for="image_file">Imagen *</label>
@@ -303,13 +303,13 @@ function hideVideoForm() {
 
 function deleteImage(imageId) {
     if (confirm('¿Estás seguro de que quieres eliminar esta imagen?')) {
-        window.location.href = '/productos/admin/producto-imagen/delete/' + imageId + '/';
+        window.location.href = '{% url "productos:delete_product_image" 0 %}'.replace('0', imageId);
     }
 }
 
 function deleteVideo(videoId) {
     if (confirm('¿Estás seguro de que quieres eliminar este video?')) {
-        window.location.href = '/productos/admin/producto-video/delete/' + videoId + '/';
+        window.location.href = '{% url "productos:delete_product_video" 0 %}'.replace('0', videoId);
     }
 }
 

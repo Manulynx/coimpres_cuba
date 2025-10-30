@@ -6,74 +6,79 @@
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/admin.css' %}">
 <style>
-/* CSS crítico inline para móvil - Corregir colores */
+/* CSS crítico inline para móvil - Variables exactas de admin.css */
 :root {
     --color-primary: #2C2A28 !important;
     --color-accent: #9fa322 !important;
     --color-background: #F9F6F1 !important;
     --color-white: #FFFFFF !important;
+    --color-light-gray: #f8f9fa !important;
+    --color-border: #e1e5e9 !important;
     --color-text-muted: #6c757d !important;
+    --color-success: #28a745 !important;
+    --color-danger: #dc3545 !important;
+    --color-warning: #ffc107 !important;
+    --shadow-soft: 0 2px 10px rgba(44, 42, 40, 0.08) !important;
+    --shadow-hover: 0 5px 15px rgba(44, 42, 40, 0.12) !important;
+    --border-radius: 10px !important;
+    --border-radius-sm: 6px !important;
+    --transition: all 0.3s ease !important;
 }
 
-/* Forzar colores correctos en body y contenedores principales */
+/* Forzar colores exactos del admin.css */
 body {
     background-color: var(--color-background) !important;
     color: var(--color-primary) !important;
+    font-family: 'Lato', sans-serif !important;
 }
 
-/* Header y navbar fixes */
-.enhanced-header,
-.enhanced-nav {
-    background-color: var(--color-white) !important;
-}
-
-.location-full .location-text,
-.location-badge span {
-    color: var(--color-white) !important;
-}
-
-/* Botón hamburguesa */
-.navbar-toggler {
-    border: none !important;
-    padding: 4px 8px !important;
-}
-
-.navbar-toggler i {
-    color: var(--color-white) !important;
-    font-size: 1.2rem !important;
-}
-
-/* Admin header y containers */
+/* Admin container exacto */
 .admin-container {
     background-color: var(--color-background) !important;
     color: var(--color-primary) !important;
+    font-family: 'Lato', sans-serif !important;
+}
+
+/* Header específico del admin */
+.admin-header {
+    background: linear-gradient(135deg, var(--color-primary) 0%, rgba(44, 42, 40, 0.9) 100%) !important;
+    color: var(--color-white) !important;
+    border-radius: var(--border-radius) !important;
+    box-shadow: var(--shadow-soft) !important;
 }
 
 .admin-header h1 {
-    color: var(--color-primary) !important;
+    color: var(--color-white) !important;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
 }
 
 .admin-header p {
-    color: var(--color-text-muted) !important;
+    color: var(--color-white) !important;
+    opacity: 0.9 !important;
 }
 
-/* Cards y contenedores */
-.card,
-.admin-section,
-.table-responsive,
-.admin-filters {
+/* Cards y secciones */
+.admin-section {
     background-color: var(--color-white) !important;
-    border: 1px solid #dee2e6 !important;
+    border: 1px solid var(--color-border) !important;
+    border-radius: var(--border-radius) !important;
+    box-shadow: var(--shadow-soft) !important;
 }
 
+.card,
+.table-responsive,
+.admin-filters,
 .modal-content {
     background-color: var(--color-white) !important;
+    border: 1px solid var(--color-border) !important;
 }
 
-/* Mobile cards específicamente */
+/* Mobile cards específicas */
 .mobile-card {
     background-color: var(--color-white) !important;
-    border: 1px solid #dee2e6 !important;
+    border: 1px solid var(--color-border) !important;
+    border-radius: var(--border-radius-sm) !important;
+    box-shadow: var(--shadow-soft) !important;
     color: var(--color-primary) !important;
 }
 
@@ -85,70 +90,38 @@ body {
     color: var(--color-primary) !important;
 }
 
-/* Paginación fixes */
-@media (max-width: 768px) {
-    .admin-pagination .page-link.active,
-    .admin-pagination .page-item.active .page-link {
-        background-color: #9fa322 !important;
-        border-color: #9fa322 !important;
-        color: white !important;
-    }
-    
-    .admin-pagination .page-link:hover {
-        background-color: #9fa322 !important;
-        border-color: #9fa322 !important;
-        color: white !important;
-    }
-    
-    .admin-pagination {
-        background-color: var(--color-white) !important;
-    }
-    
-    .product-thumb {
-        width: 35px !important;
-        height: 35px !important;
-        object-fit: cover !important;
-        border-radius: 4px !important;
-    }
-    
-    .no-image {
-        width: 35px !important;
-        height: 35px !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        background: #f8f9fa !important;
-        border: 1px solid #dee2e6 !important;
-        border-radius: 4px !important;
-        font-size: 14px !important;
-    }
-}
-
-/* Dark mode override para asegurar colores claros */
-@media (prefers-color-scheme: dark) {
-    body,
-    .admin-container,
-    .card,
-    .modal-content,
-    .mobile-card,
-    .admin-section {
-        background-color: var(--color-white) !important;
-        color: var(--color-primary) !important;
-    }
-    
-    .enhanced-header,
-    .enhanced-nav {
-        background-color: var(--color-white) !important;
-    }
-}
-
-/* Fallback para elementos específicos que pueden estar oscuros */
-.table-mobile-cards,
-.admin-table,
-.admin-nav,
-.section-header {
+/* Navbar del header principal */
+.enhanced-header,
+.enhanced-nav {
     background-color: var(--color-white) !important;
+}
+
+.location-full .location-text,
+.location-badge span {
     color: var(--color-primary) !important;
+}
+
+.navbar-toggler {
+    border: 1px solid var(--color-primary) !important;
+}
+
+.navbar-toggler i {
+    color: var(--color-primary) !important;
+}
+
+.nav-link {
+    color: var(--color-primary) !important;
+}
+
+.nav-link.active {
+    color: var(--color-accent) !important;
+}
+
+/* Admin nav específico */
+.admin-nav {
+    background-color: var(--color-white) !important;
+    border: 1px solid var(--color-border) !important;
+    border-radius: var(--border-radius) !important;
 }
 
 .admin-nav .nav-link {
@@ -158,6 +131,100 @@ body {
 .admin-nav .nav-link.active {
     background-color: var(--color-accent) !important;
     color: var(--color-white) !important;
+}
+
+/* Paginación específica */
+.admin-pagination {
+    background-color: var(--color-white) !important;
+    border: 1px solid var(--color-border) !important;
+    border-radius: var(--border-radius) !important;
+}
+
+.admin-pagination .page-link {
+    color: var(--color-primary) !important;
+    background: var(--color-white) !important;
+    border: 1px solid var(--color-border) !important;
+    border-radius: var(--border-radius-sm) !important;
+}
+
+.admin-pagination .page-link:hover {
+    color: var(--color-white) !important;
+    background: var(--color-accent) !important;
+    border-color: var(--color-accent) !important;
+}
+
+.admin-pagination .page-item.active .page-link {
+    color: var(--color-white) !important;
+    background: var(--color-accent) !important;
+    border-color: var(--color-accent) !important;
+}
+
+/* Tablas */
+.admin-table {
+    background-color: var(--color-white) !important;
+}
+
+.admin-table th,
+.admin-table td {
+    border-color: var(--color-border) !important;
+}
+
+/* Thumbnails */
+.product-thumb {
+    border-radius: var(--border-radius-sm) !important;
+}
+
+.no-image {
+    background: var(--color-light-gray) !important;
+    border: 1px solid var(--color-border) !important;
+    border-radius: var(--border-radius-sm) !important;
+}
+
+/* Dark mode override completo */
+@media (prefers-color-scheme: dark) {
+    body,
+    .admin-container,
+    .admin-section,
+    .card,
+    .modal-content,
+    .mobile-card,
+    .table-responsive,
+    .admin-filters,
+    .admin-pagination {
+        background-color: var(--color-white) !important;
+        color: var(--color-primary) !important;
+    }
+    
+    .enhanced-header,
+    .enhanced-nav {
+        background-color: var(--color-white) !important;
+    }
+    
+    .admin-nav {
+        background-color: var(--color-white) !important;
+    }
+}
+
+/* Mobile específico */
+@media (max-width: 768px) {
+    .product-thumb {
+        width: 35px !important;
+        height: 35px !important;
+        object-fit: cover !important;
+        border-radius: var(--border-radius-sm) !important;
+    }
+    
+    .no-image {
+        width: 35px !important;
+        height: 35px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        background: var(--color-light-gray) !important;
+        border: 1px solid var(--color-border) !important;
+        border-radius: var(--border-radius-sm) !important;
+        font-size: 14px !important;
+    }
 }
 </style>
 

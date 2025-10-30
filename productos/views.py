@@ -686,3 +686,101 @@ def admin_logout_view(request):
         messages.success(request, f'Sesión cerrada correctamente. ¡Hasta luego, {user_name}!')
     
     return redirect('home')
+
+# =================== VISTAS PARA GESTIONAR IMÁGENES Y VIDEOS DE PRODUCTOS ===================
+
+@require_staff_login
+def add_product_image(request, product_pk):
+    """Vista para agregar una imagen a un producto"""
+    product = get_object_or_404(Product, pk=product_pk)
+    
+    if request.method == 'POST':
+        try:
+            image = request.FILES.get('image')
+            alt_text = request.POST.get('alt_text', '')
+            order = request.POST.get('order', 1)
+            
+            if image:
+                ProductImage.objects.create(
+                    product=product,
+                    image=image,
+                    alt_text=alt_text,
+                    order=int(order)
+                )
+                messages.success(request, f'Imagen agregada exitosamente al producto "{product.name}"')
+            else:
+                messages.error(request, 'Por favor selecciona una imagen')
+                
+        except Exception as e:
+            messages.error(request, f'Error al agregar la imagen: {str(e)}')
+    
+    return redirect('productos:edit_product', pk=product_pk)
+
+@require_staff_login
+def delete_product_image(request, pk):
+    """Vista para eliminar una imagen de producto"""
+    image = get_object_or_404(ProductImage, pk=pk)
+    product_pk = image.product.pk
+    product_name = image.product.name
+    
+    try:
+        # Eliminar el archivo físico
+        if image.image:
+            image.image.delete()
+        
+        # Eliminar el registro de la base de datos
+        image.delete()
+        messages.success(request, f'Imagen eliminada exitosamente del producto "{product_name}"')
+        
+    except Exception as e:
+        messages.error(request, f'Error al eliminar la imagen: {str(e)}')
+    
+    return redirect('productos:edit_product', pk=product_pk)
+
+@require_staff_login
+def add_product_video(request, product_pk):
+    """Vista para agregar un video a un producto"""
+    product = get_object_or_404(Product, pk=product_pk)
+    
+    if request.method == 'POST':
+        try:
+            video = request.FILES.get('video')
+            title = request.POST.get('title', '')
+            order = request.POST.get('order', 1)
+            
+            if video:
+                ProductVideo.objects.create(
+                    product=product,
+                    video=video,
+                    title=title,
+                    order=int(order)
+                )
+                messages.success(request, f'Video agregado exitosamente al producto "{product.name}"')
+            else:
+                messages.error(request, 'Por favor selecciona un video')
+                
+        except Exception as e:
+            messages.error(request, f'Error al agregar el video: {str(e)}')
+    
+    return redirect('productos:edit_product', pk=product_pk)
+
+@require_staff_login
+def delete_product_video(request, pk):
+    """Vista para eliminar un video de producto"""
+    video = get_object_or_404(ProductVideo, pk=pk)
+    product_pk = video.product.pk
+    product_name = video.product.name
+    
+    try:
+        # Eliminar el archivo físico
+        if video.video:
+            video.video.delete()
+        
+        # Eliminar el registro de la base de datos
+        video.delete()
+        messages.success(request, f'Video eliminado exitosamente del producto "{product_name}"')
+        
+    except Exception as e:
+        messages.error(request, f'Error al eliminar el video: {str(e)}')
+    
+    return redirect('productos:edit_product', pk=product_pk)
