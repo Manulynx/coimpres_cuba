@@ -1417,3 +1417,118 @@
         border-width: 2px;
     }
 }
+
+/* ==================== PAGINACIÓN ADMIN ==================== */
+.admin-pagination {
+    background: var(--color-white);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    padding: 15px 20px;
+    margin-top: 20px;
+}
+
+.admin-pagination .pagination {
+    margin: 0;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+.admin-pagination .page-item {
+    margin: 0;
+}
+
+.admin-pagination .page-link {
+    color: var(--color-primary);
+    background: var(--color-white);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-sm);
+    padding: 8px 12px;
+    font-size: 14px;
+    font-weight: 500;
+    transition: var(--transition);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 40px;
+    height: 40px;
+}
+
+.admin-pagination .page-link:hover {
+    color: var(--color-white);
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(159, 163, 34, 0.2);
+    text-decoration: none;
+}
+
+.admin-pagination .page-link:focus {
+    color: var(--color-accent);
+    background: var(--color-background);
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 0.25rem rgba(159, 163, 34, 0.25);
+    text-decoration: none;
+}
+
+.admin-pagination .page-item.active .page-link {
+    color: var(--color-white);
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(159, 163, 34, 0.3);
+}
+
+.admin-pagination .page-item.disabled .page-link {
+    color: #6c757d;
+    background: #f8f9fa;
+    border-color: var(--color-border);
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.admin-pagination .pagination-info {
+    color: var(--color-text-muted);
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.admin-pagination .pagination-info i {
+    color: var(--color-accent);
+    font-size: 16px;
+}
+
+/* Estilos específicos para iconos en paginación admin */
+.admin-pagination .bi {
+    font-size: 14px;
+}
+
+@media (max-width: 768px) {
+    .admin-pagination {
+        padding: 12px 15px;
+    }
+    
+    .admin-pagination nav {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+    }
+    
+    .admin-pagination .pagination {
+        justify-content: center;
+    }
+    
+    .admin-pagination .pagination-info {
+        justify-content: center;
+        font-size: 13px;
+    }
+    
+    .admin-pagination .page-link {
+        padding: 6px 10px;
+        font-size: 13px;
+        min-width: 35px;
+        height: 35px;
+    }
+}

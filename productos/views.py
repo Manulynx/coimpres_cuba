@@ -34,7 +34,7 @@ def require_staff_login(view_func):
 class ProductListView(ListView):
     model = Product
     template_name = 'productos/product_list.html'
-    paginate_by = 12
+    paginate_by = 10
     
     def get_queryset(self):
         queryset = Product.objects.filter(is_active=True).select_related('proveedor', 'category', 'subcategory', 'estatus')
@@ -151,6 +151,8 @@ class ProductDetailView(DetailView):
 @require_staff_login
 def admin_panel(request):
     """Vista principal del panel de administración - Lista de Productos"""
+    from django.core.paginator import Paginator
+    
     products = Product.objects.all().select_related('proveedor', 'category', 'subcategory', 'estatus').order_by('-created_at')
     
     # Filtros opcionales
@@ -163,8 +165,16 @@ def admin_panel(request):
             Q(description__icontains=search)
         )
     
+    # Paginación
+    paginator = Paginator(products, 10)  # 10 productos por página
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    
     context = {
-        'products': products,
+        'products': page_obj,
+        'page_obj': page_obj,
+        'is_paginated': page_obj.has_other_pages(),
+        'paginator': paginator,
         'search': search,
         'categories': Category.objects.all(),
         'subcategories': Subcategory.objects.all(),

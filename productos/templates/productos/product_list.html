@@ -109,38 +109,56 @@
       </div>
 
       {% if is_paginated %}
-      <nav aria-label="Page navigation" class="mt-4">
+      <nav aria-label="Navegación de páginas" class="mt-5">
           <ul class="pagination justify-content-center">
               {% if page_obj.has_previous %}
                   <li class="page-item">
-                      <a class="page-link" href="?page=1">&laquo; Primera</a>
+                      <a class="page-link" href="?page=1{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}{% if request.GET.subcategory %}&subcategory={{ request.GET.subcategory }}{% endif %}{% if request.GET.proveedor %}&proveedor={{ request.GET.proveedor }}{% endif %}{% if request.GET.estatus %}&estatus={{ request.GET.estatus }}{% endif %}" title="Primera página">
+                          <i class="bi bi-chevron-double-left"></i> <span>Primera</span>
+                      </a>
                   </li>
                   <li class="page-item">
-                      <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Anterior</a>
+                      <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}{% if request.GET.subcategory %}&subcategory={{ request.GET.subcategory }}{% endif %}{% if request.GET.proveedor %}&proveedor={{ request.GET.proveedor }}{% endif %}{% if request.GET.estatus %}&estatus={{ request.GET.estatus }}{% endif %}" title="Página anterior">
+                          <i class="bi bi-chevron-left"></i> <span>Anterior</span>
+                      </a>
                   </li>
               {% endif %}
 
               {% for num in page_obj.paginator.page_range %}
                   {% if page_obj.number == num %}
                       <li class="page-item active">
-                          <span class="page-link">{{ num }} <span class="sr-only">(current)</span></span>
+                          <span class="page-link">
+                              {{ num }} <span class="visually-hidden">(página actual)</span>
+                          </span>
                       </li>
                   {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
                       <li class="page-item">
-                          <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                          <a class="page-link" href="?page={{ num }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}{% if request.GET.subcategory %}&subcategory={{ request.GET.subcategory }}{% endif %}{% if request.GET.proveedor %}&proveedor={{ request.GET.proveedor }}{% endif %}{% if request.GET.estatus %}&estatus={{ request.GET.estatus }}{% endif %}">{{ num }}</a>
                       </li>
                   {% endif %}
               {% endfor %}
 
               {% if page_obj.has_next %}
                   <li class="page-item">
-                      <a class="page-link" href="?page={{ page_obj.next_page_number }}">Siguiente</a>
+                      <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}{% if request.GET.subcategory %}&subcategory={{ request.GET.subcategory }}{% endif %}{% if request.GET.proveedor %}&proveedor={{ request.GET.proveedor }}{% endif %}{% if request.GET.estatus %}&estatus={{ request.GET.estatus }}{% endif %}" title="Página siguiente">
+                          <span>Siguiente</span> <i class="bi bi-chevron-right"></i>
+                      </a>
                   </li>
                   <li class="page-item">
-                      <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Última &raquo;</a>
+                      <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}{% if request.GET.subcategory %}&subcategory={{ request.GET.subcategory }}{% endif %}{% if request.GET.proveedor %}&proveedor={{ request.GET.proveedor }}{% endif %}{% if request.GET.estatus %}&estatus={{ request.GET.estatus }}{% endif %}" title="Última página">
+                          <span>Última</span> <i class="bi bi-chevron-double-right"></i>
+                      </a>
                   </li>
               {% endif %}
           </ul>
+          
+          <div class="text-center mt-3">
+              <small class="text-muted">
+                  <i class="bi bi-info-circle me-1" style="color: var(--color-accent);"></i>
+                  Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }} 
+                  ({{ paginator.count }} productos en total)
+              </small>
+          </div>
       </nav>
       {% endif %}
     </div>
