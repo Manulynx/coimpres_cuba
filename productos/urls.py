@@ -6,6 +6,12 @@ app_name = 'productos'
 
 urlpatterns = [
     path('', views.ProductListView.as_view(), name='product_list'),
+    
+    # URLs de autenticación (secretas) - DEBEN IR ANTES que el slug genérico
+    path('secret-admin-login/', views.secret_login_view, name='secret_login'),
+    path('admin/logout/', views.admin_logout_view, name='admin_logout'),
+    
+    # URLs del panel de administración (protegidas)
     path('admin/', views.admin_panel, name='admin_panel'),
     
     # URLs para agregar entidades
@@ -39,5 +45,6 @@ urlpatterns = [
     path('admin/productos/edit/<int:pk>/', views.edit_product, name='edit_product'),
     path('admin/productos/delete/<int:pk>/', views.delete_product, name='delete_product'),
     
+    # URL genérica para productos - DEBE IR AL FINAL
     path('<slug:slug>/', views.ProductDetailView.as_view(), name='product_detail'),
 ]

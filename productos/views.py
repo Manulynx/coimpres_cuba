@@ -1,9 +1,35 @@
 # products/views.py
 from django.views.generic import ListView, DetailView
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.mixins import UserPassesTestMixin
 from django.urls import reverse
+from django.http import Http404
 from .models import Product, Category, Subcategory, Proveedor, Estatus, ProductImage, ProductVideo
+
+# =================== FUNCIONES DE AUTENTICACIÓN Y SEGURIDAD ===================
+
+def is_staff_user(user):
+    """Función para verificar si el usuario es staff o superuser"""
+    return user.is_authenticated and (user.is_staff or user.is_superuser)
+
+def require_staff_login(view_func):
+    """Decorador personalizado para requerir login de staff"""
+    def wrapper(request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            messages.warning(request, 'Debes iniciar sesión para acceder a esta página.')
+            return redirect('productos:secret_login')
+        
+        if not is_staff_user(request.user):
+            messages.error(request, 'No tienes permisos para acceder a esta página.')
+            raise Http404("Página no encontrada")
+        
+        return view_func(request, *args, **kwargs)
+    return wrapper
+
+# =================== VISTAS PÚBLICAS ===================
 
 class ProductListView(ListView):
     model = Product
@@ -120,7 +146,9 @@ class ProductDetailView(DetailView):
             
         return context
 
-# Vistas de Administración
+# =================== VISTAS DE ADMINISTRACIÓN (PROTEGIDAS) ===================
+
+@require_staff_login
 def admin_panel(request):
     """Vista principal del panel de administración - Lista de Productos"""
     products = Product.objects.all().select_related('proveedor', 'category', 'subcategory', 'estatus').order_by('-created_at')
@@ -145,6 +173,7 @@ def admin_panel(request):
     }
     return render(request, 'productos/admin.html', context)
 
+@require_staff_login
 def add_proveedor(request):
     """Vista para agregar un nuevo proveedor"""
     if request.method == 'POST':
@@ -168,6 +197,7 @@ def add_proveedor(request):
     
     return redirect('productos:admin_panel')
 
+@require_staff_login
 def add_category(request):
     """Vista para agregar una nueva categoría"""
     if request.method == 'POST':
@@ -183,6 +213,7 @@ def add_category(request):
     
     return redirect('productos:admin_panel')
 
+@require_staff_login
 def add_subcategory(request):
     """Vista para agregar una nueva subcategoría"""
     if request.method == 'POST':
@@ -204,6 +235,7 @@ def add_subcategory(request):
     
     return redirect('productos:admin_panel')
 
+@require_staff_login
 def add_estatus(request):
     """Vista para agregar un nuevo estatus"""
     if request.method == 'POST':
@@ -220,6 +252,7 @@ def add_estatus(request):
     
     return redirect('productos:admin_panel')
 
+@require_staff_login
 def add_product(request):
     """Vista para agregar un nuevo producto"""
     if request.method == 'POST':
@@ -310,6 +343,7 @@ def add_product(request):
     return redirect('productos:admin_panel')
 
 # Vistas de gestión de Proveedores
+@require_staff_login
 def manage_proveedores(request):
     """Vista para gestionar proveedores"""
     proveedores = Proveedor.objects.all().order_by('name')
@@ -319,6 +353,7 @@ def manage_proveedores(request):
     }
     return render(request, 'productos/manage_proveedores.html', context)
 
+@require_staff_login
 def edit_proveedor(request, pk):
     """Vista para editar un proveedor"""
     from django.shortcuts import get_object_or_404
@@ -348,6 +383,7 @@ def edit_proveedor(request, pk):
     }
     return render(request, 'productos/edit_proveedor.html', context)
 
+@require_staff_login
 def delete_proveedor(request, pk):
     """Vista para eliminar un proveedor"""
     from django.shortcuts import get_object_or_404
@@ -364,6 +400,7 @@ def delete_proveedor(request, pk):
     return redirect('productos:manage_proveedores')
 
 # Vistas de gestión de Categorías
+@require_staff_login
 def manage_categories(request):
     """Vista para gestionar categorías"""
     categories = Category.objects.all().order_by('name')
@@ -373,6 +410,7 @@ def manage_categories(request):
     }
     return render(request, 'productos/manage_categories.html', context)
 
+@require_staff_login
 def edit_category(request, pk):
     """Vista para editar una categoría"""
     from django.shortcuts import get_object_or_404
@@ -394,6 +432,7 @@ def edit_category(request, pk):
     }
     return render(request, 'productos/edit_category.html', context)
 
+@require_staff_login
 def delete_category(request, pk):
     """Vista para eliminar una categoría"""
     from django.shortcuts import get_object_or_404
@@ -410,6 +449,7 @@ def delete_category(request, pk):
     return redirect('productos:manage_categories')
 
 # Vistas de gestión de Subcategorías
+@require_staff_login
 def manage_subcategories(request):
     """Vista para gestionar subcategorías"""
     subcategories = Subcategory.objects.all().select_related('category').order_by('category__name', 'name')
@@ -421,6 +461,7 @@ def manage_subcategories(request):
     }
     return render(request, 'productos/manage_subcategories.html', context)
 
+@require_staff_login
 def edit_subcategory(request, pk):
     """Vista para editar una subcategoría"""
     from django.shortcuts import get_object_or_404
@@ -446,6 +487,7 @@ def edit_subcategory(request, pk):
     }
     return render(request, 'productos/edit_subcategory.html', context)
 
+@require_staff_login
 def delete_subcategory(request, pk):
     """Vista para eliminar una subcategoría"""
     from django.shortcuts import get_object_or_404
@@ -462,6 +504,7 @@ def delete_subcategory(request, pk):
     return redirect('productos:manage_subcategories')
 
 # Vistas de gestión de Estatus
+@require_staff_login
 def manage_estatus(request):
     """Vista para gestionar estatus"""
     estatus_list = Estatus.objects.all().order_by('name')
@@ -471,6 +514,7 @@ def manage_estatus(request):
     }
     return render(request, 'productos/manage_estatus.html', context)
 
+@require_staff_login
 def edit_estatus(request, pk):
     """Vista para editar un estatus"""
     from django.shortcuts import get_object_or_404
@@ -493,6 +537,7 @@ def edit_estatus(request, pk):
     }
     return render(request, 'productos/edit_estatus.html', context)
 
+@require_staff_login
 def delete_estatus(request, pk):
     """Vista para eliminar un estatus"""
     from django.shortcuts import get_object_or_404
@@ -509,6 +554,7 @@ def delete_estatus(request, pk):
     return redirect('productos:manage_estatus')
 
 # Vistas de gestión de Productos
+@require_staff_login
 def edit_product(request, pk):
     """Vista para editar un producto"""
     from django.shortcuts import get_object_or_404
@@ -575,6 +621,7 @@ def edit_product(request, pk):
     }
     return render(request, 'productos/edit_product.html', context)
 
+@require_staff_login
 def delete_product(request, pk):
     """Vista para eliminar un producto"""
     from django.shortcuts import get_object_or_404
@@ -589,3 +636,43 @@ def delete_product(request, pk):
             messages.error(request, f'Error al eliminar el producto: {str(e)}')
     
     return redirect('productos:admin_panel')
+
+# =================== VISTAS DE AUTENTICACIÓN ===================
+
+def secret_login_view(request):
+    """Vista de login secreto para staff/superusers"""
+    # Si ya está autenticado y es staff, redirigir al admin
+    if request.user.is_authenticated and is_staff_user(request.user):
+        return redirect('productos:admin_panel')
+    
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        
+        if username and password:
+            user = authenticate(request, username=username, password=password)
+            if user is not None:
+                if is_staff_user(user):
+                    login(request, user)
+                    messages.success(request, f'Bienvenido al panel de administración, {user.get_full_name() or user.username}')
+                    
+                    # Redirigir a la página solicitada o al admin por defecto
+                    next_url = request.GET.get('next', 'productos:admin_panel')
+                    return redirect(next_url)
+                else:
+                    messages.error(request, 'No tienes permisos para acceder al panel de administración.')
+            else:
+                messages.error(request, 'Credenciales incorrectas.')
+        else:
+            messages.error(request, 'Por favor, completa todos los campos.')
+    
+    return render(request, 'productos/secret_login.html')
+
+def admin_logout_view(request):
+    """Vista para cerrar sesión del admin"""
+    if request.user.is_authenticated:
+        user_name = request.user.get_full_name() or request.user.username
+        logout(request)
+        messages.success(request, f'Sesión cerrada correctamente. ¡Hasta luego, {user_name}!')
+    
+    return redirect('home')

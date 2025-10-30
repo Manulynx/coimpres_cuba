@@ -116,11 +116,13 @@
                     <!-- Navigation Links -->
                     <div class="navbar-collapse collapse-mobile d-lg-flex align-items-center justify-content-center" id="navbarNav">
                         <ul class="navbar-nav d-flex align-items-center">
+                            {% if user.is_authenticated and user.is_staff %}
                             <li class="nav-item">
-                                <a class="nav-link {% if '/productos/admin/' in request.path %}active{% endif %}" href="{% url 'productos:admin_panel' %}">
+                                <a class="nav-link {% if '/productos/admin/' in request.path %}active{% endif %}" href="{% url 'productos:admin_panel' %}" title="Panel de Administración">
                                     <i class="bi bi-gear-fill"></i> Admin
                                 </a>
                             </li>
+                            {% endif %}
                             <li class="nav-item">
                                 <a class="nav-link {% if request.path == '/' %}active{% endif %}" href="/">
                                     <i class="bi bi-house-door"></i> {{ i18n.home|default:"Inicio" }}
@@ -139,6 +141,19 @@
                             </li>
                         </ul>
                         
+                        <!-- User Authentication Info -->
+                        {% if user.is_authenticated and user.is_staff %}
+                        <div class="navbar-auth-info d-flex align-items-center ms-lg-3">
+                            <div class="auth-user-info d-none d-lg-flex align-items-center me-3">
+                                <i class="bi bi-person-check-fill text-success me-2"></i>
+                                <span class="text-white small">{{ user.get_full_name|default:user.username }}</span>
+                            </div>
+                            <a href="{% url 'productos:admin_logout' %}" class="btn btn-outline-light btn-sm" title="Cerrar Sesión">
+                                <i class="bi bi-box-arrow-right"></i>
+                                <span class="d-none d-lg-inline ms-1">Logout</span>
+                            </a>
+                        </div>
+                        {% endif %}
                         
                     </div>
                 </div>

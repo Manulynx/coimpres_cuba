@@ -9,10 +9,7 @@
 
 {% block content %}
 <div class="admin-container">
-    <div class="admin-header">
-        <h1>🏭 Gestión de Proveedores</h1>
-        <p>Administra los proveedores de productos</p>
-    </div>
+    {% include 'productos/partials/admin_header.html' with page_title="🏭 Gestión de Proveedores" page_description="Administra los proveedores de productos" %}
     
     <!-- Navigation Menu -->
     <div class="admin-nav">
