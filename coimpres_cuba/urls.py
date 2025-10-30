@@ -26,6 +26,12 @@ urlpatterns = [
     path('', views.home_view, name='home'),
     path('productos/', include('productos.urls')),
     path('contact/', views.ContactView.as_view(), name='contact'),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]
+
+# Servir archivos media y static en desarrollo Y producción
 if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+else:
+    # Para producción con WhiteNoise
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

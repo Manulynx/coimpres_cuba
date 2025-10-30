@@ -121,15 +121,22 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+# Solo incluir directorios que realmente existan
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'coimpres_cuba', 'static'),
-    os.path.join(BASE_DIR, 'productos', 'static'),
+    # Remover productos/static si no existe
+    # os.path.join(BASE_DIR, 'productos', 'static'),
 ]
 
-# Whitenoise para servir archivos estáticos
+# Media files configuration (CRÍTICO para las imágenes)
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# WhiteNoise configuration mejorada
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',  # ← Añadir esto
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # Debe estar aquí
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -138,9 +145,13 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-# Configuración para Whitenoise
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+# Configuración específica para Render
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
+WHITENOISE_USE_FINDERS = True
 
+# Configuración para servir archivos de media en producción
+WHITENOISE_STATIC_PREFIX = '/static/'
+WHITENOISE_MEDIA_PREFIX = '/media/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
