@@ -66,6 +66,23 @@
     border: 1px solid var(--color-border) !important;
 }
 
+/* Mobile cards específicas */
+.mobile-card {
+    background-color: var(--color-white) !important;
+    border: 1px solid var(--color-border) !important;
+    border-radius: var(--border-radius-sm) !important;
+    box-shadow: var(--shadow-soft) !important;
+    color: var(--color-primary) !important;
+}
+
+.mobile-card h3 {
+    color: var(--color-primary) !important;
+}
+
+.mobile-card-field strong {
+    color: var(--color-primary) !important;
+}
+
 /* Admin nav específico */
 .admin-nav {
     background-color: var(--color-white) !important;
@@ -98,6 +115,7 @@
     .admin-section,
     .card,
     .modal-content,
+    .mobile-card,
     .table-responsive,
     .admin-filters {
         background-color: var(--color-white) !important;
@@ -174,6 +192,38 @@
                     {% endfor %}
                 </tbody>
             </table>
+        </div>
+        
+        <!-- Mobile Cards View -->
+        <div class="table-mobile-cards">
+            {% for category in categories %}
+            <div class="mobile-card">
+                <div class="mobile-card-header">
+                    <div class="mobile-card-title">
+                        <h3>📂 {{ category.name }}</h3>
+                        <p><code>{{ category.slug }}</code></p>
+                    </div>
+                </div>
+                <div class="mobile-card-body">
+                    <div class="mobile-card-field">
+                        <strong>Subcategorías</strong>
+                        <span>{{ category.subcategory_set.count }}</span>
+                    </div>
+                    <div class="mobile-card-field">
+                        <strong>Productos</strong>
+                        <span>{{ category.product_set.count }}</span>
+                    </div>
+                </div>
+                <div class="mobile-card-actions">
+                    <a href="{% url 'productos:edit_category' category.pk %}" class="btn btn-sm btn-warning">✏️ Editar</a>
+                    <button onclick="deleteItem({{ category.pk }}, '{{ category.name|escapejs }}', 'categoría')" class="btn btn-sm btn-danger">🗑️ Eliminar</button>
+                </div>
+            </div>
+            {% empty %}
+            <div class="text-center text-muted" style="padding: 40px;">
+                No hay categorías registradas
+            </div>
+            {% endfor %}
         </div>
     </div>
     
