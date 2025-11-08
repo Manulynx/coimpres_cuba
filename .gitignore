@@ -19,20 +19,22 @@ dist/
 *.egg
 
 # === Django Specific ===
-# Base de datos local (SQLite)
+# Base de datos local (SQLite) - SIEMPRE IGNORAR
 db.sqlite3
 *.sqlite3
 *.db
+/db.sqlite3
 
 # Django collected static files (generadas por collectstatic)
 /staticfiles/
 /static_root/
 staticfiles/
 
-# Archivos media subidos por usuarios
+# Archivos media subidos por usuarios - SIEMPRE IGNORAR
 media/
 /media/
 **/media/
+# Pero mantener estructura con .gitkeep
 
 # Django secret key y configuraciones locales
 local_settings.py
