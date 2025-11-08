@@ -123,6 +123,38 @@
     }
 }
 
+/* Estilos para inputs con valores precargados */
+.form-control {
+    transition: var(--transition) !important;
+}
+
+.form-control:not(:placeholder-shown) {
+    background-color: #e8f4f8 !important;
+    border-color: var(--color-accent) !important;
+    color: var(--color-primary) !important;
+    font-weight: 500 !important;
+}
+
+.form-control:focus {
+    border-color: var(--color-accent) !important;
+    box-shadow: 0 0 0 0.2rem rgba(159, 163, 34, 0.25) !important;
+}
+
+select.form-control option:checked {
+    background-color: var(--color-accent) !important;
+    color: var(--color-white) !important;
+}
+
+.form-text.text-muted {
+    color: var(--color-primary) !important;
+    font-weight: 500 !important;
+}
+
+.form-text.text-muted strong {
+    color: var(--color-accent) !important;
+    font-weight: 700 !important;
+}
+
 /* Mobile específico */
 @media (max-width: 768px) {
     .product-thumb,
@@ -179,6 +211,10 @@
             <a href="{% url 'productos:admin_panel' %}" class="btn btn-secondary">← Volver a la lista</a>
         </div>
         
+        <div class="alert alert-info" style="margin: 20px; background-color: #d1ecf1; border-color: #bee5eb; color: #0c5460;">
+            <strong>ℹ️ Nota:</strong> Los campos con fondo azul claro contienen valores actuales. Si no modificas un campo, se mantendrá su valor original.
+        </div>
+        
         <div class="form-container">
             <form method="post" enctype="multipart/form-data">
                 {% csrf_token %}
@@ -186,17 +222,23 @@
                 <div class="form-row">
                     <div class="form-group col-md-8">
                         <label for="name">Nombre del Producto *</label>
-                        <input type="text" id="name" name="name" value="{{ product.name }}" class="form-control" required>
+                        <input type="text" id="name" name="name" value="{{ product.name|default:'' }}" class="form-control" required placeholder="Nombre del producto">
                     </div>
                     <div class="form-group col-md-4">
-                        <label for="code">Código *</label>
-                        <input type="text" id="code" name="code" value="{{ product.code }}" class="form-control" required>
+                        <label for="sku">Código SKU</label>
+                        <input type="text" id="sku" name="sku" value="{{ product.sku|default:'' }}" class="form-control" placeholder="Código SKU (opcional)">
+                        {% if product.sku %}
+                            <small class="form-text text-muted">Valor actual: <strong>{{ product.sku }}</strong></small>
+                        {% endif %}
                     </div>
                 </div>
                 
                 <div class="form-group">
                     <label for="description">Descripción</label>
-                    <textarea id="description" name="description" class="form-control" rows="4">{{ product.description }}</textarea>
+                    <textarea id="description" name="description" class="form-control" rows="4" placeholder="Descripción del producto">{{ product.description|default:'' }}</textarea>
+                    {% if product.description %}
+                        <small class="form-text text-muted">Longitud: <strong>{{ product.description|length }} caracteres</strong></small>
+                    {% endif %}
                 </div>
                 
                 <div class="form-row">
@@ -206,10 +248,13 @@
                             <option value="">Selecciona una categoría</option>
                             {% for cat in categories %}
                                 <option value="{{ cat.pk }}" {% if cat.pk == product.category.pk %}selected{% endif %}>
-                                    {{ cat.name }}
+                                    {{ cat.name }}{% if cat.pk == product.category.pk %} ✓ (Actual){% endif %}
                                 </option>
                             {% endfor %}
                         </select>
+                        {% if product.category %}
+                            <small class="form-text text-muted">Valor actual: <strong>{{ product.category.name }}</strong></small>
+                        {% endif %}
                     </div>
                     <div class="form-group col-md-6">
                         <label for="subcategory">Subcategoría</label>
@@ -218,10 +263,13 @@
                             {% for subcat in subcategories %}
                                 <option value="{{ subcat.pk }}" data-category="{{ subcat.category.pk }}" 
                                         {% if subcat.pk == product.subcategory.pk %}selected{% endif %}>
-                                    {{ subcat.name }}
+                                    {{ subcat.name }}{% if subcat.pk == product.subcategory.pk %} ✓ (Actual){% endif %}
                                 </option>
                             {% endfor %}
                         </select>
+                        {% if product.subcategory %}
+                            <small class="form-text text-muted">Valor actual: <strong>{{ product.subcategory.name }}</strong></small>
+                        {% endif %}
                     </div>
                 </div>
                 
@@ -232,10 +280,13 @@
                             <option value="">Selecciona un proveedor</option>
                             {% for prov in proveedores %}
                                 <option value="{{ prov.pk }}" {% if prov.pk == product.proveedor.pk %}selected{% endif %}>
-                                    {{ prov.nombre }}
+                                    {{ prov.name }}{% if prov.pk == product.proveedor.pk %} ✓ (Actual){% endif %}
                                 </option>
                             {% endfor %}
                         </select>
+                        {% if product.proveedor %}
+                            <small class="form-text text-muted">Valor actual: <strong>{{ product.proveedor.name }}</strong></small>
+                        {% endif %}
                     </div>
                     <div class="form-group col-md-6">
                         <label for="estatus">Estatus</label>
@@ -243,30 +294,38 @@
                             <option value="">Selecciona un estatus</option>
                             {% for est in all_estatus %}
                                 <option value="{{ est.pk }}" {% if est.pk == product.estatus.pk %}selected{% endif %}>
-                                    {{ est.name }}
+                                    {{ est.name }}{% if est.pk == product.estatus.pk %} ✓ (Actual){% endif %}
                                 </option>
                             {% endfor %}
                         </select>
+                        {% if product.estatus %}
+                            <small class="form-text text-muted">Valor actual: <strong>{{ product.estatus.name }}</strong></small>
+                        {% endif %}
                     </div>
                 </div>
                 
                 <div class="form-row">
                     <div class="form-group col-md-6">
-                        <label for="procedencia">Procedencia</label>
-                        <input type="text" id="procedencia" name="procedencia" value="{{ product.procedencia }}" class="form-control">
+                        <label for="origen">Origen</label>
+                        <input type="text" id="origen" name="origen" value="{{ product.origen|default:'' }}" class="form-control" placeholder="País de origen">
                     </div>
                     <div class="form-group col-md-6">
-                        <label for="precio">Precio</label>
-                        <input type="number" id="precio" name="precio" value="{{ product.precio }}" step="0.01" class="form-control">
+                        <label for="price">Precio</label>
+                        <input type="number" id="price" name="price" value="{{ product.price|default:'' }}" step="0.01" class="form-control" placeholder="Precio del producto">
+                        {% if product.price %}
+                            <small class="form-text text-muted">Valor actual: <strong>${{ product.price }}</strong></small>
+                        {% else %}
+                            <small class="form-text text-muted">Sin precio establecido</small>
+                        {% endif %}
                     </div>
                 </div>
                 
                 <div class="form-group">
-                    <label for="catalogo">Catálogo</label>
-                    <input type="file" id="catalogo" name="catalogo" accept=".pdf" class="form-control">
-                    {% if product.catalogo %}
+                    <label for="ficha_tecnica">Ficha Técnica (PDF)</label>
+                    <input type="file" id="ficha_tecnica" name="ficha_tecnica" accept=".pdf" class="form-control">
+                    {% if product.ficha_tecnica %}
                         <small class="form-text text-muted">
-                            Archivo actual: <a href="{{ product.catalogo.url }}" target="_blank">{{ product.catalogo.name }}</a>
+                            Archivo actual: <a href="{{ product.ficha_tecnica.url }}" target="_blank">{{ product.ficha_tecnica.name }}</a>
                         </small>
                     {% endif %}
                 </div>
@@ -301,7 +360,7 @@
                     <div class="image-info">
                         <p><strong>{{ image.alt_text|default:"Sin descripción" }}</strong></p>
                         <p>Orden: {{ image.order }}</p>
-                        <button onclick="deleteImage({{ image.pk }})" class="btn btn-sm btn-danger">🗑️ Eliminar</button>
+                        <button class="btn btn-sm btn-danger" data-image-id="{{ image.pk }}" onclick="deleteImage(this.dataset.imageId)">🗑️ Eliminar</button>
                     </div>
                 </div>
             {% empty %}
@@ -330,7 +389,7 @@
                     <div class="video-info">
                         <p><strong>{{ video.title|default:"Sin título" }}</strong></p>
                         <p>Orden: {{ video.order }}</p>
-                        <button onclick="deleteVideo({{ video.pk }})" class="btn btn-sm btn-danger">🗑️ Eliminar</button>
+                        <button class="btn btn-sm btn-danger" data-video-id="{{ video.pk }}" onclick="deleteVideo(this.dataset.videoId)">🗑️ Eliminar</button>
                     </div>
                 </div>
             {% empty %}

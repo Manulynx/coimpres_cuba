@@ -223,7 +223,7 @@
                         <td>
                             <div class="action-buttons">
                                 <a href="{% url 'productos:edit_proveedor' proveedor.pk %}" class="btn btn-sm btn-warning" title="Editar">✏️</a>
-                                <button onclick="deleteItem({{ proveedor.pk }}, '{{ proveedor.name|escapejs }}', 'proveedor')" class="btn btn-sm btn-danger" title="Eliminar">🗑️</button>
+                                <button class="btn btn-sm btn-danger" title="Eliminar" data-item-id="{{ proveedor.pk }}" data-item-name="{{ proveedor.name }}" data-item-type="proveedor" onclick="deleteItem(this.dataset.itemId, this.dataset.itemName, this.dataset.itemType)">🗑️</button>
                             </div>
                         </td>
                     </tr>
@@ -265,7 +265,7 @@
                 </div>
                 <div class="mobile-card-actions">
                     <a href="{% url 'productos:edit_proveedor' proveedor.pk %}" class="btn btn-sm btn-warning">✏️ Editar</a>
-                    <button onclick="deleteItem({{ proveedor.pk }}, '{{ proveedor.name|escapejs }}', 'proveedor')" class="btn btn-sm btn-danger">🗑️ Eliminar</button>
+                    <button class="btn btn-sm btn-danger" data-item-id="{{ proveedor.pk }}" data-item-name="{{ proveedor.name }}" data-item-type="proveedor" onclick="deleteItem(this.dataset.itemId, this.dataset.itemName, this.dataset.itemType)">🗑️ Eliminar</button>
                 </div>
             </div>
             {% empty %}

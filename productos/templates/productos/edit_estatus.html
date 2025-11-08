@@ -192,9 +192,9 @@
                     {% for product in estatus.product_set.all|slice:":10" %}
                     <tr>
                         <td>{{ product.name }}</td>
-                        <td><code>{{ product.code }}</code></td>
+                        <td><code>{{ product.sku }}</code></td>
                         <td>{{ product.category.name|default:"-" }}</td>
-                        <td>{{ product.proveedor.nombre|default:"-" }}</td>
+                        <td>{{ product.proveedor.name|default:"-" }}</td>
                         <td>
                             <a href="{% url 'productos:edit_product' product.pk %}" class="btn btn-sm btn-warning" title="Editar">✏️</a>
                         </td>

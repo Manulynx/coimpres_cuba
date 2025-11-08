@@ -574,25 +574,46 @@ def edit_product(request, pk):
         try:
             # Actualizar datos básicos
             product.name = request.POST.get('name')
-            product.sku = request.POST.get('sku', '')
-            product.short_description = request.POST.get('short_description', '')
-            product.description = request.POST.get('description', '')
-            product.origen = request.POST.get('origen', '')
+            
+            # Actualizar SKU solo si se proporciona
+            sku = request.POST.get('sku')
+            if sku is not None:  # Permitir string vacío
+                product.sku = sku
+            
+            # Actualizar short_description solo si se proporciona
+            short_desc = request.POST.get('short_description')
+            if short_desc is not None:
+                product.short_description = short_desc
+            
+            # Actualizar description solo si se proporciona
+            description = request.POST.get('description')
+            if description is not None:
+                product.description = description
+            
+            # Actualizar origen solo si se proporciona
+            origen = request.POST.get('origen')
+            if origen is not None:
+                product.origen = origen
+            
             product.is_active = request.POST.get('is_active') == 'on'
             
-            # Actualizar precio
+            # Actualizar precio solo si se proporciona un nuevo valor
             price = request.POST.get('price')
-            if price:
-                product.price = float(price)
-            else:
-                product.price = None
+            if price and price.strip():  # Solo actualizar si hay un valor
+                try:
+                    product.price = float(price)
+                except ValueError:
+                    pass  # Mantener el valor actual si hay error de conversión
+            # Si price está vacío, mantener el valor actual (no hacer nada)
             
-            # Actualizar peso
+            # Actualizar peso solo si se proporciona un nuevo valor
             peso = request.POST.get('peso')
-            if peso:
-                product.peso = float(peso)
-            else:
-                product.peso = None
+            if peso and peso.strip():  # Solo actualizar si hay un valor
+                try:
+                    product.peso = float(peso)
+                except ValueError:
+                    pass  # Mantener el valor actual si hay error de conversión
+            # Si peso está vacío, mantener el valor actual (no hacer nada)
             
             # Actualizar relaciones
             proveedor_id = request.POST.get('proveedor')
@@ -606,6 +627,9 @@ def edit_product(request, pk):
             
             estatus_id = request.POST.get('estatus')
             product.estatus = Estatus.objects.get(id=estatus_id) if estatus_id else None
+            
+            # Actualizar destacado
+            product.destacado = request.POST.get('destacado') == 'true'
             
             # Actualizar archivos solo si se proporcionan nuevos
             if request.FILES.get('image'):
@@ -626,7 +650,7 @@ def edit_product(request, pk):
         'categories': Category.objects.all(),
         'subcategories': Subcategory.objects.all(),
         'proveedores': Proveedor.objects.all(),
-        'estatus_list': Estatus.objects.all(),
+        'all_estatus': Estatus.objects.all(),
         'active_tab': 'productos'
     }
     return render(request, 'productos/edit_product.html', context)

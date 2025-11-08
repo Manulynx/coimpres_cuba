@@ -169,7 +169,7 @@
                     <label for="category_filter">Filtrar por Categoría:</label>
                     <select name="category" id="category_filter" class="form-control" onchange="this.form.submit()">
                         <option value="">Todas las categorías</option>
-                        {% for cat in all_categories %}
+                        {% for cat in categories %}
                             <option value="{{ cat.pk }}" {% if cat.pk|stringformat:"s" == request.GET.category %}selected{% endif %}>
                                 {{ cat.name }}
                             </option>
@@ -200,7 +200,7 @@
                         <td>
                             <div class="action-buttons">
                                 <a href="{% url 'productos:edit_subcategory' subcategory.pk %}" class="btn btn-sm btn-warning" title="Editar">✏️</a>
-                                <button onclick="deleteItem({{ subcategory.pk }}, '{{ subcategory.name|escapejs }}', 'subcategoría')" class="btn btn-sm btn-danger" title="Eliminar">🗑️</button>
+                                <button class="btn btn-sm btn-danger" title="Eliminar" data-item-id="{{ subcategory.pk }}" data-item-name="{{ subcategory.name }}" data-item-type="subcategoría" onclick="deleteItem(this.dataset.itemId, this.dataset.itemName, this.dataset.itemType)">🗑️</button>
                             </div>
                         </td>
                     </tr>
@@ -235,7 +235,7 @@
                 </div>
                 <div class="mobile-card-actions">
                     <a href="{% url 'productos:edit_subcategory' subcategory.pk %}" class="btn btn-sm btn-warning">✏️ Editar</a>
-                    <button onclick="deleteItem({{ subcategory.pk }}, '{{ subcategory.name|escapejs }}', 'subcategoría')" class="btn btn-sm btn-danger">🗑️ Eliminar</button>
+                    <button class="btn btn-sm btn-danger" data-item-id="{{ subcategory.pk }}" data-item-name="{{ subcategory.name }}" data-item-type="subcategoría" onclick="deleteItem(this.dataset.itemId, this.dataset.itemName, this.dataset.itemType)">🗑️ Eliminar</button>
                 </div>
             </div>
             {% empty %}
@@ -264,7 +264,7 @@
                     <label for="category_id">Categoría *</label>
                     <select id="category_id" name="category" class="form-control" required>
                         <option value="">Selecciona una categoría</option>
-                        {% for category in all_categories %}
+                        {% for category in categories %}
                             <option value="{{ category.pk }}">{{ category.name }}</option>
                         {% endfor %}
                     </select>

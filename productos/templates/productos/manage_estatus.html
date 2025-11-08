@@ -171,7 +171,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for estatus in all_estatus %}
+                    {% for estatus in estatus_list %}
                     <tr>
                         <td><strong>{{ estatus.name }}</strong></td>
                         <td>{{ estatus.description|default:"-" }}</td>
@@ -179,7 +179,7 @@
                         <td>
                             <div class="action-buttons">
                                 <a href="{% url 'productos:edit_estatus' estatus.pk %}" class="btn btn-sm btn-warning" title="Editar">✏️</a>
-                                <button onclick="deleteItem({{ estatus.pk }}, '{{ estatus.name|escapejs }}', 'estatus')" class="btn btn-sm btn-danger" title="Eliminar">🗑️</button>
+                                <button class="btn btn-sm btn-danger" title="Eliminar" data-item-id="{{ estatus.pk }}" data-item-name="{{ estatus.name }}" data-item-type="estatus" onclick="deleteItem(this.dataset.itemId, this.dataset.itemName, this.dataset.itemType)">🗑️</button>
                             </div>
                         </td>
                     </tr>
@@ -194,7 +194,7 @@
         
         <!-- Mobile Cards View -->
         <div class="table-mobile-cards">
-            {% for estatus in all_estatus %}
+            {% for estatus in estatus_list %}
             <div class="mobile-card">
                 <div class="mobile-card-header">
                     <div class="mobile-card-title">
@@ -212,7 +212,7 @@
                 </div>
                 <div class="mobile-card-actions">
                     <a href="{% url 'productos:edit_estatus' estatus.pk %}" class="btn btn-sm btn-warning">✏️ Editar</a>
-                    <button onclick="deleteItem({{ estatus.pk }}, '{{ estatus.name|escapejs }}', 'estatus')" class="btn btn-sm btn-danger">🗑️ Eliminar</button>
+                    <button class="btn btn-sm btn-danger" data-item-id="{{ estatus.pk }}" data-item-name="{{ estatus.name }}" data-item-type="estatus" onclick="deleteItem(this.dataset.itemId, this.dataset.itemName, this.dataset.itemType)">🗑️ Eliminar</button>
                 </div>
             </div>
             {% empty %}

@@ -261,17 +261,17 @@
                                 <br><small class="text-muted">{{ product.description|truncatechars:60 }}</small>
                             {% endif %}
                         </td>
-                        <td><code>{{ product.code|default:"-" }}</code></td>
+                        <td><code>{{ product.sku|default:"-" }}</code></td>
                         <td>
                             {{ product.category.name|default:"-" }}
                             {% if product.subcategory %}
                                 <br><small class="text-muted">{{ product.subcategory.name }}</small>
                             {% endif %}
                         </td>
-                        <td>{{ product.proveedor.nombre|default:"-" }}</td>
+                        <td>{{ product.proveedor.name|default:"-" }}</td>
                         <td>
-                            {% if product.precio %}
-                                ${{ product.precio }}
+                            {% if product.price %}
+                                ${{ product.price }}
                             {% else %}
                                 <span class="text-muted">Consultar</span>
                             {% endif %}
@@ -286,7 +286,7 @@
                             <div class="action-buttons">
                                 <a href="{% url 'productos:product_detail' product.slug %}" class="btn btn-sm btn-info" title="Ver">👁️</a>
                                 <a href="{% url 'productos:edit_product' product.pk %}" class="btn btn-sm btn-warning" title="Editar">✏️</a>
-                                <button onclick="deleteProduct({{ product.pk }}, '{{ product.name|escapejs }}')" class="btn btn-sm btn-danger" title="Eliminar">🗑️</button>
+                                <button class="btn btn-sm btn-danger" title="Eliminar" data-product-id="{{ product.pk }}" data-product-name="{{ product.name }}" onclick="deleteProduct(this.dataset.productId, this.dataset.productName)">🗑️</button>
                             </div>
                         </td>
                     </tr>
@@ -325,7 +325,7 @@
                 <div class="mobile-card-body">
                     <div class="mobile-card-field">
                         <strong>Código</strong>
-                        <span>{{ product.code|default:"-" }}</span>
+                        <span>{{ product.sku|default:"-" }}</span>
                     </div>
                     <div class="mobile-card-field">
                         <strong>Categoría</strong>
@@ -333,13 +333,13 @@
                     </div>
                     <div class="mobile-card-field">
                         <strong>Proveedor</strong>
-                        <span>{{ product.proveedor.nombre|default:"-" }}</span>
+                        <span>{{ product.proveedor.name|default:"-" }}</span>
                     </div>
                     <div class="mobile-card-field">
                         <strong>Precio</strong>
                         <span>
-                            {% if product.precio %}
-                                ${{ product.precio }}
+                            {% if product.price %}
+                                ${{ product.price }}
                             {% else %}
                                 Consultar
                             {% endif %}
@@ -364,7 +364,7 @@
                 <div class="mobile-card-actions">
                     <a href="{% url 'productos:product_detail' product.slug %}" class="btn btn-sm btn-info">👁️ Ver</a>
                     <a href="{% url 'productos:edit_product' product.pk %}" class="btn btn-sm btn-warning">✏️ Editar</a>
-                    <button onclick="deleteProduct({{ product.pk }}, '{{ product.name|escapejs }}')" class="btn btn-sm btn-danger">🗑️ Eliminar</button>
+                    <button class="btn btn-sm btn-danger" data-product-id="{{ product.pk }}" data-product-name="{{ product.name }}" onclick="deleteProduct(this.dataset.productId, this.dataset.productName)">🗑️ Eliminar</button>
                 </div>
             </div>
             {% empty %}
