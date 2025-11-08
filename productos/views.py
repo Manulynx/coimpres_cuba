@@ -595,7 +595,7 @@ def edit_product(request, pk):
             if origen is not None:
                 product.origen = origen
             
-            product.is_active = request.POST.get('is_active') == 'on'
+            product.is_active = request.POST.get('is_active') == 'true'
             
             # Actualizar precio solo si se proporciona un nuevo valor
             price = request.POST.get('price')
@@ -628,8 +628,9 @@ def edit_product(request, pk):
             estatus_id = request.POST.get('estatus')
             product.estatus = Estatus.objects.get(id=estatus_id) if estatus_id else None
             
-            # Actualizar destacado
+            # Actualizar destacado y en_oferta
             product.destacado = request.POST.get('destacado') == 'true'
+            product.en_oferta = request.POST.get('en_oferta') == 'true'
             
             # Actualizar archivos solo si se proporcionan nuevos
             if request.FILES.get('image'):
