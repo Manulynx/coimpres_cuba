@@ -19,17 +19,24 @@ dist/
 *.egg
 
 # === Django Specific ===
-# SQLite database (manténla fuera si no quieres compartir datos locales)
+# Base de datos local (SQLite)
 db.sqlite3
-# Si quieres incluir la base, elimina la línea anterior.
+*.sqlite3
+*.db
 
 # Django collected static files (generadas por collectstatic)
 /staticfiles/
 /static_root/
+staticfiles/
 
-# Media subida por usuarios (descomenta si NO quieres subirla)
-# media/
+# Archivos media subidos por usuarios
+media/
 /media/
+**/media/
+
+# Django secret key y configuraciones locales
+local_settings.py
+settings_local.py
 
 # === Logs ===
 *.log
@@ -61,8 +68,61 @@ nosetests.xml
 coverage.xml
 *.cover
 
+# === Archivos de desarrollo local ===
+# Migraciones locales (opcional, descomenta si no quieres sincronizar)
+# */migrations/*.py
+# !*/migrations/__init__.py
+
+# Archivos de configuración del servidor local
+.env.development
+.env.production
+.env.staging
+
+# Archivos temporales de Django
+*.pyc
+*.pyo
+
 # === Otros ===
 *.bak
 *.swp
 *.tmp
 ~$*
+
+# === Archivos específicos del proyecto ===
+# Archivos media subidos localmente
+media/catalogos/*
+media/products/*
+media/proveedores/*
+
+# Mantener estructura de carpetas
+!media/catalogos/.gitkeep
+!media/products/.gitkeep  
+!media/proveedores/.gitkeep
+!media/products/gallery/.gitkeep
+!media/products/videos/.gitkeep
+
+# Tipos de archivos media a ignorar
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.webp
+*.svg
+*.pdf
+*.mp4
+*.avi
+*.mov
+*.wmv
+
+# Excepciones: mantener archivos en static (logos del proyecto, etc.)
+!**/static/**/*.jpg
+!**/static/**/*.jpeg  
+!**/static/**/*.png
+!**/static/**/*.gif
+!**/static/**/*.webp
+!**/static/**/*.svg
+
+# Respaldos de base de datos
+*.sql
+*.dump
+backup/
