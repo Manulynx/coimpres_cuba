@@ -29,6 +29,7 @@ db.sqlite3
 
 # Media subida por usuarios (descomenta si NO quieres subirla)
 # media/
+/media/
 
 # === Logs ===
 *.log
