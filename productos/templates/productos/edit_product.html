@@ -349,23 +349,39 @@ select.form-control option:checked {
     <!-- Product Images Section -->
     <div class="admin-section">
         <div class="section-header">
-            <h2>🖼️ Imágenes del Producto</h2>
+            <h2>🖼️ Imágenes del Producto ({{ product.images.count }})</h2>
             <button class="btn btn-primary" onclick="showImageForm()">➕ Agregar Imagen</button>
         </div>
         
-        <div class="images-grid">
-            {% for image in product.productimage_set.all %}
-                <div class="image-item">
-                    <img src="{{ image.image.url }}" alt="{{ image.alt_text }}" loading="lazy">
-                    <div class="image-info">
-                        <p><strong>{{ image.alt_text|default:"Sin descripción" }}</strong></p>
-                        <p>Orden: {{ image.order }}</p>
-                        <button class="btn btn-sm btn-danger" data-image-id="{{ image.pk }}" onclick="deleteImage(this.dataset.imageId)">🗑️ Eliminar</button>
+        {% if product.images.all %}
+            <div class="alert alert-info" style="margin: 20px; background-color: #d1ecf1; border-color: #bee5eb; color: #0c5460;">
+                <strong>💡 Tip:</strong> Puedes editar la descripción y orden de cada imagen, o eliminarlas si ya no las necesitas.
+            </div>
+        {% endif %}
+        
+        <div class="images-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; padding: 20px;">
+            {% for image in product.images.all %}
+                <div class="image-item" style="border: 1px solid var(--color-border); border-radius: var(--border-radius); overflow: hidden; background: white;">
+                    <div style="position: relative; width: 100%; height: 200px; overflow: hidden;">
+                        <img src="{{ image.image.url }}" alt="{{ image.alt_text }}" loading="lazy" style="width: 100%; height: 100%; object-fit: cover;">
+                        {% if image.is_main %}
+                            <span style="position: absolute; top: 10px; right: 10px; background: var(--color-accent); color: white; padding: 5px 10px; border-radius: 5px; font-size: 12px; font-weight: bold;">
+                                ⭐ Principal
+                            </span>
+                        {% endif %}
+                    </div>
+                    <div class="image-info" style="padding: 15px;">
+                        <p style="margin: 0 0 5px 0; font-weight: 600;">{{ image.alt_text|default:"Sin descripción" }}</p>
+                        <p style="margin: 0 0 10px 0; color: #6c757d; font-size: 14px;">Orden: {{ image.order }}</p>
+                        <div style="display: flex; gap: 8px;">
+                            <button class="btn btn-sm btn-warning" data-image-id="{{ image.pk }}" data-image-alt="{{ image.alt_text }}" data-image-order="{{ image.order }}" onclick="editImage(this.dataset.imageId, this.dataset.imageAlt, this.dataset.imageOrder)" style="flex: 1;">✏️ Editar</button>
+                            <button class="btn btn-sm btn-danger" data-image-id="{{ image.pk }}" onclick="deleteImage(this.dataset.imageId)" style="flex: 1;">🗑️ Eliminar</button>
+                        </div>
                     </div>
                 </div>
             {% empty %}
                 <div class="text-center text-muted" style="grid-column: 1 / -1; padding: 40px;">
-                    <p>📷 No hay imágenes para este producto</p>
+                    <p style="font-size: 18px; margin-bottom: 20px;">📷 No hay imágenes para este producto</p>
                     <button class="btn btn-primary" onclick="showImageForm()">➕ Agregar Primera Imagen</button>
                 </div>
             {% endfor %}
@@ -375,26 +391,38 @@ select.form-control option:checked {
     <!-- Product Videos Section -->
     <div class="admin-section">
         <div class="section-header">
-            <h2>🎥 Videos del Producto</h2>
+            <h2>🎥 Videos del Producto ({{ product.videos.count }})</h2>
             <button class="btn btn-primary" onclick="showVideoForm()">➕ Agregar Video</button>
         </div>
         
-        <div class="videos-grid">
-            {% for video in product.productvideo_set.all %}
-                <div class="video-item">
-                    <video controls loading="lazy" preload="metadata">
+        {% if product.videos.all %}
+            <div class="alert alert-info" style="margin: 20px; background-color: #d1ecf1; border-color: #bee5eb; color: #0c5460;">
+                <strong>💡 Tip:</strong> Puedes editar el título y orden de cada video, o eliminarlos si ya no los necesitas.
+            </div>
+        {% endif %}
+        
+        <div class="videos-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; padding: 20px;">
+            {% for video in product.videos.all %}
+                <div class="video-item" style="border: 1px solid var(--color-border); border-radius: var(--border-radius); overflow: hidden; background: white;">
+                    <video controls loading="lazy" preload="metadata" style="width: 100%; height: 200px; background: black;">
                         <source src="{{ video.video.url }}" type="video/mp4">
                         Tu navegador no soporta la reproducción de videos.
                     </video>
-                    <div class="video-info">
-                        <p><strong>{{ video.title|default:"Sin título" }}</strong></p>
-                        <p>Orden: {{ video.order }}</p>
-                        <button class="btn btn-sm btn-danger" data-video-id="{{ video.pk }}" onclick="deleteVideo(this.dataset.videoId)">🗑️ Eliminar</button>
+                    <div class="video-info" style="padding: 15px;">
+                        <p style="margin: 0 0 5px 0; font-weight: 600;">{{ video.title|default:"Sin título" }}</p>
+                        {% if video.description %}
+                            <p style="margin: 0 0 5px 0; color: #6c757d; font-size: 13px;">{{ video.description|truncatechars:50 }}</p>
+                        {% endif %}
+                        <p style="margin: 0 0 10px 0; color: #6c757d; font-size: 14px;">Orden: {{ video.order }}</p>
+                        <div style="display: flex; gap: 8px;">
+                            <button class="btn btn-sm btn-warning" data-video-id="{{ video.pk }}" data-video-title="{{ video.title }}" data-video-description="{{ video.description }}" data-video-order="{{ video.order }}" onclick="editVideo(this.dataset.videoId, this.dataset.videoTitle, this.dataset.videoDescription, this.dataset.videoOrder)" style="flex: 1;">✏️ Editar</button>
+                            <button class="btn btn-sm btn-danger" data-video-id="{{ video.pk }}" onclick="deleteVideo(this.dataset.videoId)" style="flex: 1;">🗑️ Eliminar</button>
+                        </div>
                     </div>
                 </div>
             {% empty %}
                 <div class="text-center text-muted" style="grid-column: 1 / -1; padding: 40px;">
-                    <p>🎥 No hay videos para este producto</p>
+                    <p style="font-size: 18px; margin-bottom: 20px;">🎥 No hay videos para este producto</p>
                     <button class="btn btn-primary" onclick="showVideoForm()">➕ Agregar Primer Video</button>
                 </div>
             {% endfor %}
@@ -448,12 +476,70 @@ select.form-control option:checked {
                     <input type="text" id="video_title" name="title" class="form-control">
                 </div>
                 <div class="form-group">
+                    <label for="video_description">Descripción</label>
+                    <textarea id="video_description" name="description" class="form-control" rows="3"></textarea>
+                </div>
+                <div class="form-group">
                     <label for="video_order">Orden</label>
                     <input type="number" id="video_order" name="order" class="form-control" value="1" min="1">
                 </div>
                 <div class="modal-footer">
                     <button type="button" onclick="hideVideoForm()" class="btn btn-secondary">Cancelar</button>
                     <button type="submit" class="btn btn-primary">💾 Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Edit Image Modal -->
+    <div id="editImageModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>✏️ Editar Imagen</h3>
+                <button onclick="hideEditImageForm()" class="close-btn">✕</button>
+            </div>
+            <form method="post" action="" id="editImageForm">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="edit_image_alt">Descripción</label>
+                    <input type="text" id="edit_image_alt" name="alt_text" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="edit_image_order">Orden</label>
+                    <input type="number" id="edit_image_order" name="order" class="form-control" min="1">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" onclick="hideEditImageForm()" class="btn btn-secondary">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">💾 Guardar Cambios</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Edit Video Modal -->
+    <div id="editVideoModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>✏️ Editar Video</h3>
+                <button onclick="hideEditVideoForm()" class="close-btn">✕</button>
+            </div>
+            <form method="post" action="" id="editVideoForm">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="edit_video_title">Título</label>
+                    <input type="text" id="edit_video_title" name="title" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="edit_video_description">Descripción</label>
+                    <textarea id="edit_video_description" name="description" class="form-control" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="edit_video_order">Orden</label>
+                    <input type="number" id="edit_video_order" name="order" class="form-control" min="1">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" onclick="hideEditVideoForm()" class="btn btn-secondary">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">💾 Guardar Cambios</button>
                 </div>
             </form>
         </div>
@@ -501,6 +587,47 @@ function hideVideoForm() {
     document.getElementById('videoModal').style.display = 'none';
 }
 
+function showEditImageForm() {
+    document.getElementById('editImageModal').style.display = 'block';
+}
+
+function hideEditImageForm() {
+    document.getElementById('editImageModal').style.display = 'none';
+}
+
+function showEditVideoForm() {
+    document.getElementById('editVideoModal').style.display = 'block';
+}
+
+function hideEditVideoForm() {
+    document.getElementById('editVideoModal').style.display = 'none';
+}
+
+function editImage(imageId, altText, order) {
+    // Set the form action to the correct URL
+    const form = document.getElementById('editImageForm');
+    form.action = '{% url "productos:edit_product_image" 0 %}'.replace('0', imageId);
+    
+    // Populate the form with current values
+    document.getElementById('edit_image_alt').value = altText || '';
+    document.getElementById('edit_image_order').value = order || 1;
+    
+    showEditImageForm();
+}
+
+function editVideo(videoId, title, description, order) {
+    // Set the form action to the correct URL
+    const form = document.getElementById('editVideoForm');
+    form.action = '{% url "productos:edit_product_video" 0 %}'.replace('0', videoId);
+    
+    // Populate the form with current values
+    document.getElementById('edit_video_title').value = title || '';
+    document.getElementById('edit_video_description').value = description || '';
+    document.getElementById('edit_video_order').value = order || 1;
+    
+    showEditVideoForm();
+}
+
 function deleteImage(imageId) {
     if (confirm('¿Estás seguro de que quieres eliminar esta imagen?')) {
         window.location.href = '{% url "productos:delete_product_image" 0 %}'.replace('0', imageId);
@@ -522,11 +649,20 @@ document.addEventListener('DOMContentLoaded', function() {
 window.onclick = function(event) {
     const imageModal = document.getElementById('imageModal');
     const videoModal = document.getElementById('videoModal');
+    const editImageModal = document.getElementById('editImageModal');
+    const editVideoModal = document.getElementById('editVideoModal');
+    
     if (event.target == imageModal) {
         imageModal.style.display = 'none';
     }
     if (event.target == videoModal) {
         videoModal.style.display = 'none';
+    }
+    if (event.target == editImageModal) {
+        editImageModal.style.display = 'none';
+    }
+    if (event.target == editVideoModal) {
+        editVideoModal.style.display = 'none';
     }
 }
 </script>

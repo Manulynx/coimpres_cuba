@@ -808,3 +808,67 @@ def delete_product_video(request, pk):
         messages.error(request, f'Error al eliminar el video: {str(e)}')
     
     return redirect('productos:edit_product', pk=product_pk)
+
+
+@require_staff_login
+def edit_product_image(request, pk):
+    """Vista para editar los metadatos de una imagen de producto"""
+    image = get_object_or_404(ProductImage, pk=pk)
+    product_pk = image.product.pk
+    product_name = image.product.name
+    
+    if request.method == 'POST':
+        try:
+            # Actualizar campos
+            alt_text = request.POST.get('alt_text', '').strip()
+            order = request.POST.get('order', '1')
+            
+            if alt_text:
+                image.alt_text = alt_text
+            
+            try:
+                image.order = int(order)
+            except ValueError:
+                image.order = 1
+            
+            image.save()
+            messages.success(request, f'Imagen actualizada exitosamente para el producto "{product_name}"')
+            
+        except Exception as e:
+            messages.error(request, f'Error al actualizar la imagen: {str(e)}')
+    
+    return redirect('productos:edit_product', pk=product_pk)
+
+
+@require_staff_login
+def edit_product_video(request, pk):
+    """Vista para editar los metadatos de un video de producto"""
+    video = get_object_or_404(ProductVideo, pk=pk)
+    product_pk = video.product.pk
+    product_name = video.product.name
+    
+    if request.method == 'POST':
+        try:
+            # Actualizar campos
+            title = request.POST.get('title', '').strip()
+            description = request.POST.get('description', '').strip()
+            order = request.POST.get('order', '1')
+            
+            if title:
+                video.title = title
+            
+            if description:
+                video.description = description
+            
+            try:
+                video.order = int(order)
+            except ValueError:
+                video.order = 1
+            
+            video.save()
+            messages.success(request, f'Video actualizado exitosamente para el producto "{product_name}"')
+            
+        except Exception as e:
+            messages.error(request, f'Error al actualizar el video: {str(e)}')
+    
+    return redirect('productos:edit_product', pk=product_pk)

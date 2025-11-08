@@ -47,10 +47,12 @@ urlpatterns = [
     
     # URLs para gestionar imágenes de productos
     path('admin/producto-imagen/add/<int:product_pk>/', views.add_product_image, name='add_product_image'),
+    path('admin/producto-imagen/edit/<int:pk>/', views.edit_product_image, name='edit_product_image'),
     path('admin/producto-imagen/delete/<int:pk>/', views.delete_product_image, name='delete_product_image'),
     
     # URLs para gestionar videos de productos
     path('admin/producto-video/add/<int:product_pk>/', views.add_product_video, name='add_product_video'),
+    path('admin/producto-video/edit/<int:pk>/', views.edit_product_video, name='edit_product_video'),
     path('admin/producto-video/delete/<int:pk>/', views.delete_product_video, name='delete_product_video'),
     
     # URL genérica para productos - DEBE IR AL FINAL
