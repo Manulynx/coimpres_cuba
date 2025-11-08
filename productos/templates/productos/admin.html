@@ -5,6 +5,8 @@
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/admin.css' %}">
+<!-- SweetAlert2 CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 <style>
 /* CSS crítico inline para móvil - Variables exactas de admin.css */
 :root {
@@ -146,6 +148,35 @@
     border-radius: var(--border-radius-sm) !important;
 }
 
+/* SweetAlert2 Custom Styles */
+.swal-custom-popup {
+    font-family: 'Lato', sans-serif !important;
+    border-radius: var(--border-radius) !important;
+}
+
+.swal-custom-title {
+    color: var(--color-primary) !important;
+    font-weight: 600 !important;
+}
+
+.swal2-html-container {
+    color: var(--color-primary) !important;
+}
+
+.swal2-icon {
+    border-color: var(--color-accent) !important;
+}
+
+.swal2-icon.swal2-warning {
+    border-color: var(--color-warning) !important;
+    color: var(--color-warning) !important;
+}
+
+.swal2-icon.swal2-question {
+    border-color: var(--color-accent) !important;
+    color: var(--color-accent) !important;
+}
+
 /* Dark mode override solo para contenido admin */
 @media (prefers-color-scheme: dark) {
     .admin-container,
@@ -277,15 +308,26 @@
                             {% endif %}
                         </td>
                         <td>
-                            {% if product.destacado %}
-                                <span class="badge badge-warning">Destacado</span><br>
+                            {% if product.is_active %}
+                                <span class="badge badge-success">✅ Activo</span>
+                            {% else %}
+                                <span class="badge badge-secondary">🔒 Inactivo</span>
                             {% endif %}
-                            <span class="badge badge-success">{{ product.estatus.name|default:"Activo" }}</span>
+                            <br>
+                            {% if product.destacado %}
+                                <span class="badge badge-warning">⭐ Destacado</span><br>
+                            {% endif %}
+                            <span class="badge badge-info">{{ product.estatus.name|default:"Sin estatus" }}</span>
                         </td>
                         <td>
                             <div class="action-buttons">
                                 <a href="{% url 'productos:product_detail' product.slug %}" class="btn btn-sm btn-info" title="Ver">👁️</a>
                                 <a href="{% url 'productos:edit_product' product.pk %}" class="btn btn-sm btn-warning" title="Editar">✏️</a>
+                                {% if product.is_active %}
+                                    <button class="btn btn-sm btn-secondary" title="Desactivar" data-product-id="{{ product.pk }}" data-product-name="{{ product.name }}" onclick="toggleProductStatus(this.dataset.productId, this.dataset.productName, false)">🔒</button>
+                                {% else %}
+                                    <button class="btn btn-sm btn-success" title="Activar" data-product-id="{{ product.pk }}" data-product-name="{{ product.name }}" onclick="toggleProductStatus(this.dataset.productId, this.dataset.productName, true)">✅</button>
+                                {% endif %}
                                 <button class="btn btn-sm btn-danger" title="Eliminar" data-product-id="{{ product.pk }}" data-product-name="{{ product.name }}" onclick="deleteProduct(this.dataset.productId, this.dataset.productName)">🗑️</button>
                             </div>
                         </td>
@@ -354,16 +396,27 @@
                     <div class="mobile-card-field">
                         <strong>Estado</strong>
                         <span>
-                            {% if product.destacado %}
-                                <span class="badge badge-warning">Destacado</span><br>
+                            {% if product.is_active %}
+                                <span class="badge badge-success">✅ Activo</span>
+                            {% else %}
+                                <span class="badge badge-secondary">🔒 Inactivo</span>
                             {% endif %}
-                            <span class="badge badge-success">{{ product.estatus.name|default:"Activo" }}</span>
+                            <br>
+                            {% if product.destacado %}
+                                <span class="badge badge-warning">⭐ Destacado</span><br>
+                            {% endif %}
+                            <span class="badge badge-info">{{ product.estatus.name|default:"Sin estatus" }}</span>
                         </span>
                     </div>
                 </div>
                 <div class="mobile-card-actions">
                     <a href="{% url 'productos:product_detail' product.slug %}" class="btn btn-sm btn-info">👁️ Ver</a>
                     <a href="{% url 'productos:edit_product' product.pk %}" class="btn btn-sm btn-warning">✏️ Editar</a>
+                    {% if product.is_active %}
+                        <button class="btn btn-sm btn-secondary" data-product-id="{{ product.pk }}" data-product-name="{{ product.name }}" onclick="toggleProductStatus(this.dataset.productId, this.dataset.productName, false)">🔒 Desactivar</button>
+                    {% else %}
+                        <button class="btn btn-sm btn-success" data-product-id="{{ product.pk }}" data-product-name="{{ product.name }}" onclick="toggleProductStatus(this.dataset.productId, this.dataset.productName, true)">✅ Activar</button>
+                    {% endif %}
                     <button class="btn btn-sm btn-danger" data-product-id="{{ product.pk }}" data-product-name="{{ product.name }}" onclick="deleteProduct(this.dataset.productId, this.dataset.productName)">🗑️ Eliminar</button>
                 </div>
             </div>
@@ -558,6 +611,8 @@
 {% endblock %}
 
 {% block extra_js %}
+<!-- SweetAlert2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
 function showAddProductForm() {
     document.getElementById('addProductModal').style.display = 'block';
@@ -568,9 +623,69 @@ function hideAddProductForm() {
 }
 
 function deleteProduct(productId, productName) {
-    document.getElementById('deleteProductName').textContent = productName;
-    document.getElementById('deleteForm').action = '/productos/admin/productos/delete/' + productId + '/';
-    document.getElementById('deleteModal').style.display = 'block';
+    Swal.fire({
+        title: '¿Eliminar producto?',
+        html: `¿Estás seguro de que quieres eliminar el producto<br><strong>"${productName}"</strong>?`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#dc3545',
+        cancelButtonColor: '#6c757d',
+        confirmButtonText: '🗑️ Sí, eliminar',
+        cancelButtonText: 'Cancelar',
+        reverseButtons: true,
+        customClass: {
+            popup: 'swal-custom-popup',
+            title: 'swal-custom-title',
+            confirmButton: 'btn btn-danger',
+            cancelButton: 'btn btn-secondary'
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Create and submit form
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '/productos/admin/productos/delete/' + productId + '/';
+            
+            const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+            const csrfInput = document.createElement('input');
+            csrfInput.type = 'hidden';
+            csrfInput.name = 'csrfmiddlewaretoken';
+            csrfInput.value = csrfToken;
+            form.appendChild(csrfInput);
+            
+            document.body.appendChild(form);
+            form.submit();
+        }
+    });
+}
+
+function toggleProductStatus(productId, productName, activate) {
+    const action = activate ? 'activar' : 'desactivar';
+    const actionCapitalized = activate ? 'Activar' : 'Desactivar';
+    const emoji = activate ? '✅' : '🔒';
+    const color = activate ? '#28a745' : '#6c757d';
+    
+    Swal.fire({
+        title: `${emoji} ${actionCapitalized} producto`,
+        html: `¿Estás seguro de que quieres ${action} el producto<br><strong>"${productName}"</strong>?`,
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: color,
+        cancelButtonColor: '#6c757d',
+        confirmButtonText: `${emoji} Sí, ${action}`,
+        cancelButtonText: 'Cancelar',
+        reverseButtons: true,
+        customClass: {
+            popup: 'swal-custom-popup',
+            title: 'swal-custom-title',
+            confirmButton: activate ? 'btn btn-success' : 'btn btn-secondary',
+            cancelButton: 'btn btn-secondary'
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            window.location.href = '/productos/admin/productos/toggle-status/' + productId + '/';
+        }
+    });
 }
 
 function hideDeleteModal() {

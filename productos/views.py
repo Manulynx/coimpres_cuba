@@ -672,6 +672,24 @@ def delete_product(request, pk):
     
     return redirect('productos:admin_panel')
 
+@require_staff_login
+def toggle_product_status(request, pk):
+    """Vista para cambiar el estado activo/inactivo de un producto"""
+    from django.shortcuts import get_object_or_404
+    product = get_object_or_404(Product, pk=pk)
+    
+    try:
+        # Alternar el estado
+        product.is_active = not product.is_active
+        product.save()
+        
+        status_text = "activado" if product.is_active else "desactivado"
+        messages.success(request, f'Producto "{product.name}" {status_text} exitosamente.')
+    except Exception as e:
+        messages.error(request, f'Error al cambiar el estado del producto: {str(e)}')
+    
+    return redirect('productos:admin_panel')
+
 # =================== VISTAS DE AUTENTICACIÓN ===================
 
 def secret_login_view(request):
