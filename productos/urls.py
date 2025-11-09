@@ -44,6 +44,7 @@ urlpatterns = [
     # URLs para gestionar productos
     path('admin/productos/edit/<int:pk>/', views.edit_product, name='edit_product'),
     path('admin/productos/delete/<int:pk>/', views.delete_product, name='delete_product'),
+    path('admin/productos/toggle-status/<int:pk>/', views.toggle_product_status, name='toggle_product_status'),
     
     # URLs para gestionar imágenes de productos
     path('admin/producto-imagen/add/<int:product_pk>/', views.add_product_image, name='add_product_image'),

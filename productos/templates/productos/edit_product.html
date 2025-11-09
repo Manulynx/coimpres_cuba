@@ -321,6 +321,18 @@ select.form-control option:checked {
                 </div>
                 
                 <div class="form-group">
+                    <label for="image">Imagen Principal del Producto</label>
+                    {% if product.image %}
+                        <div style="margin-bottom: 10px;">
+                            <img src="{{ product.image.url }}" alt="{{ product.name }}" style="max-width: 200px; max-height: 200px; border-radius: var(--border-radius-sm); border: 2px solid var(--color-accent);">
+                            <p style="margin-top: 5px; color: var(--color-accent); font-weight: 600;">📸 Imagen actual</p>
+                        </div>
+                    {% endif %}
+                    <input type="file" id="image" name="image" accept="image/*" class="form-control">
+                    <small class="form-text text-muted">Esta imagen se mostrará como portada del producto en las listas y tarjetas</small>
+                </div>
+                
+                <div class="form-group">
                     <label for="ficha_tecnica">Ficha Técnica (PDF)</label>
                     <input type="file" id="ficha_tecnica" name="ficha_tecnica" accept=".pdf" class="form-control">
                     {% if product.ficha_tecnica %}
