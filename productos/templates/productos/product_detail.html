@@ -204,7 +204,7 @@
                 <button onclick="openMultipleWhatsApp()" class="btn btn-whatsapp btn-lg">
                     <i class="bi bi-whatsapp"></i> Contactar Equipo Completo
                     <small class="d-block mt-1" style="font-size: 0.75em; opacity: 0.9;">
-                        Abre ambos números de contacto
+                        ✅ Abre ambos números automáticamente
                     </small>
                 </button>
             </div>
@@ -441,25 +441,27 @@ function openMultipleWhatsApp() {
         }
     }
     
-    // Mostrar confirmación inicial
-    const confirmMessage = `¿Contactar con el equipo completo?\n\n🏢 Ventas Cuba: ${contacts[0].number}\n🎧 Soporte Cuba: ${contacts[1].number}\n\nSe abrirán ambos números de WhatsApp.`;
+    // Mostrar confirmación inicial (una sola vez)
+    const confirmMessage = `¿Contactar con el equipo completo?\n\n🏢 Ventas Cuba: ${contacts[0].number}\n🎧 Soporte Cuba: ${contacts[1].number}\n\n✅ Se abrirán AMBOS números automáticamente.`;
     
     if (confirm(confirmMessage)) {
         // Abrir primer contacto inmediatamente
         openWhatsApp(contacts[0], 0);
         
-        // Abrir segundo contacto después de 2 segundos con confirmación
+        // Abrir segundo contacto automáticamente después de 1.5 segundos
         setTimeout(() => {
-            const secondConfirm = confirm(`¿Abrir también ${contacts[1].icon} ${contacts[1].name}?\n\n(Se abrirá en una nueva pestaña)`);
-            if (secondConfirm) {
-                openWhatsApp(contacts[1], 1);
-                
-                // Mostrar mensaje final
-                setTimeout(() => {
-                    showNotification('✅ ¡Ambos contactos de WhatsApp están listos!', 'success');
-                }, 500);
-            }
-        }, 2000);
+            openWhatsApp(contacts[1], 1);
+            
+            // Mostrar mensaje final
+            setTimeout(() => {
+                showNotification('✅ ¡Ambos contactos de WhatsApp están abiertos!', 'success');
+            }, 500);
+        }, 1500);
+        
+        // Notificación informativa
+        setTimeout(() => {
+            showNotification('📱 Abriendo segundo contacto...', 'info');
+        }, 1000);
     }
 }
 
