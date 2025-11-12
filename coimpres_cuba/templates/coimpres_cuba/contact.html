@@ -1,134 +1,392 @@
 {% extends "coimpres_cuba/base.html" %}
 {% load static %}
 
-{% block title %}Contacto | Coimpres Cuba{% endblock %}
+{% block title %}Pedidos Exclusivos | Coimpres Cuba{% endblock %}
 
 {% block content %}
-<div class="contact-hero py-5 text-white">
+<div class="exclusive-hero py-5 text-white">
     <div class="container">
         <div class="row align-items-center">
-            <div class="col-lg-6">
-                <h1 class="display-4 fw-bold mb-3">{{ i18n.contact_us|default:"Contáctenos" }}</h1>
-                <p class="lead mb-0">{{ i18n.contact_subtitle|default:"Estamos aquí para ayudarte con tus necesidades de importación de productos italianos" }}</p>
+            <div class="col-lg-8">
+                <div class="hero-content">
+                    <h1 class="display-4 fw-bold mb-3">
+                        <i class="bi bi-star-fill text-warning me-3"></i>
+                        Pedidos Exclusivos
+                    </h1>
+                    <p class="lead mb-4">
+                        ¿Buscas productos específicos que no encuentras en nuestros catálogos? 
+                        <br><strong>¡Podemos conseguirlos directamente desde Italia!</strong>
+                    </p>
+                    <div class="hero-features">
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <div class="feature-item d-flex align-items-center">
+                                    <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                    <span>Importación directa</span>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="feature-item d-flex align-items-center">
+                                    <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                    <span>Productos auténticos</span>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="feature-item d-flex align-items-center">
+                                    <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                    <span>Precios competitivos</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="col-lg-6 text-end d-none d-lg-block">
-                <i class="bi bi-envelope-paper display-1 opacity-50"></i>
+            <div class="col-lg-4 text-center">
+                <div class="hero-illustration">
+                    <i class="bi bi-boxes display-1 opacity-75"></i>
+                    <div class="mt-3">
+                        <i class="bi bi-arrow-down-circle display-4 text-warning animate-bounce"></i>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
 <div class="container py-5">
-    <div class="row g-4">
-        <!-- Información de Contacto -->
-        <div class="col-lg-4">
-            <div class="contact-info bg-white p-4 rounded-3 shadow-sm h-100">
-                <h3 class="h4 mb-4">{{ i18n.contact_info|default:"Información de Contacto" }}</h3>
+    <!-- Sección principal de WhatsApp -->
+    <div class="row justify-content-center mb-5">
+        <div class="col-lg-8 text-center">
+            <div class="whatsapp-cta bg-white p-5 rounded-3 shadow-sm">
+                <div class="whatsapp-icon mb-4">
+                    <i class="bi bi-whatsapp display-1 text-success"></i>
+                </div>
+                <h2 class="h3 mb-3">¡Contáctanos por WhatsApp!</h2>
+                <p class="lead text-muted mb-4">
+                    La forma más rápida y directa de hacer tu pedido exclusivo. 
+                    Nuestro equipo te ayudará a encontrar exactamente lo que necesitas.
+                </p>
+                <a href="https://wa.me/55513196?text=Hola%2C%20estoy%20interesado%20en%20hacer%20un%20pedido%20exclusivo%20de%20productos%20de%20Coimpre." 
+                   target="_blank" 
+                   class="btn btn-whatsapp btn-lg px-5 py-3">
+                    <i class="bi bi-whatsapp me-2"></i>
+                    Iniciar Chat en WhatsApp
+                </a>
                 
-                <div class="mb-4">
-                    <h4 class="h6 text-primary"><i class="bi bi-geo-alt-fill me-2"></i>{{ i18n.address|default:"Dirección" }}</h4>
-                    <p class="mb-0 ms-4">La Habana, Cuba</p>
-                </div>
+            </div>
+        </div>
+    </div>
 
-                <div class="mb-4">
-                    <h4 class="h6 text-primary"><i class="bi bi-telephone-fill me-2"></i>{{ i18n.phone|default:"Teléfono" }}</h4>
-                    <p class="mb-0 ms-4">+53 5555-5555</p>
-                </div>
+    <div class="row g-4">
+        <!-- Proceso de Pedido -->
+        <div class="col-lg-6">
+            <div class="process-card bg-white p-4 rounded-3 shadow-sm h-100">
+                <h3 class="h4 mb-4">
+                    <i class="bi bi-list-check text-success me-2"></i>
+                    ¿Cómo hacer tu pedido?
+                </h3>
+                
+                <div class="process-steps">
+                    <div class="step-item d-flex align-items-start mb-4">
+                        <div class="step-number bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px; flex-shrink: 0;">
+                            1
+                        </div>
+                        <div>
+                            <h5 class="h6 mb-2">Envíanos la información del producto</h5>
+                            <p class="text-muted small mb-0">Nombre, marca, modelo, o cualquier detalle que tengas del producto que buscas.</p>
+                        </div>
+                    </div>
 
-                <div class="mb-4">
-                    <h4 class="h6 text-primary"><i class="bi bi-envelope-fill me-2"></i>{{ i18n.email|default:"Correo" }}</h4>
-                    <p class="mb-0 ms-4">info@importadoraitaliana.com</p>
-                </div>
+                    <div class="step-item d-flex align-items-start mb-4">
+                        <div class="step-number bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px; flex-shrink: 0;">
+                            2
+                        </div>
+                        <div>
+                            <h5 class="h6 mb-2">Recibe cotización personalizada</h5>
+                            <p class="text-muted small mb-0">En 24-48 horas te enviaremos precio, disponibilidad y tiempo de entrega.</p>
+                        </div>
+                    </div>
 
-                <div class="mb-4">
-                    <h4 class="h6 text-primary"><i class="bi bi-clock-fill me-2"></i>{{ i18n.hours|default:"Horario" }}</h4>
-                    <p class="mb-0 ms-4">
-                        {{ i18n.weekdays|default:"Lunes a Viernes" }}: 9:00 AM - 6:00 PM<br>
-                        {{ i18n.weekends|default:"Sábados" }}: 9:00 AM - 1:00 PM
+                    <div class="step-item d-flex align-items-start mb-4">
+                        <div class="step-number bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px; flex-shrink: 0;">
+                            3
+                        </div>
+                        <div>
+                            <h5 class="h6 mb-2">Confirma tu pedido</h5>
+                            <p class="text-muted small mb-0">Una vez aprobada la cotización, procesamos tu pedido directamente con Italia.</p>
+                        </div>
+                    </div>
+
+                    <div class="step-item d-flex align-items-start">
+                        <div class="step-number bg-success text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px; flex-shrink: 0;">
+                            4
+                        </div>
+                        <div>
+                            <h5 class="h6 mb-2">Recibe tu producto</h5>
+                            <p class="text-muted small mb-0">Te notificaremos cuando tu pedido llegue a La Habana para coordinar la entrega.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Información de Contacto -->
+        <div class="col-lg-6">
+            <div class="contact-info bg-white p-4 rounded-3 shadow-sm h-100">
+                <h3 class="h4 mb-4">
+                    <i class="bi bi-info-circle text-primary me-2"></i>
+                    Información Importante
+                </h3>
+                
+                <div class="info-item mb-4">
+                    <h5 class="h6 text-success">
+                        <i class="bi bi-clock me-2"></i>Tiempo de Respuesta
+                    </h5>
+                    <p class="text-muted small ms-4 mb-0">
+                        Respondemos consultas de lunes a viernes de 9:00 AM a 6:00 PM.
+                        Los fines de semana revisamos mensajes urgentes.
                     </p>
                 </div>
 
-                <div class="social-links mt-4">
-                    <h4 class="h6 text-primary mb-3"><i class="bi bi-share-fill me-2"></i>{{ i18n.social_media|default:"Redes Sociales" }}</h4>
-                    <div class="d-flex gap-3 ms-4">
-                        <a href="#" class="text-primary fs-4"><i class="bi bi-facebook"></i></a>
-                        <a href="#" class="text-primary fs-4"><i class="bi bi-instagram"></i></a>
-                        <a href="#" class="text-primary fs-4"><i class="bi bi-whatsapp"></i></a>
+                <div class="info-item mb-4">
+                    <h5 class="h6 text-success">
+                        <i class="bi bi-truck me-2"></i>Tiempo de Entrega
+                    </h5>
+                    <p class="text-muted small ms-4 mb-0">
+                        Los pedidos exclusivos toman entre 15-30 días desde Italia hasta La Habana,
+                        dependiendo de la disponibilidad del producto.
+                    </p>
+                </div>
+
+                <div class="info-item mb-4">
+                    <h5 class="h6 text-success">
+                        <i class="bi bi-shield-check me-2"></i>Garantía de Autenticidad
+                    </h5>
+                    <p class="text-muted small ms-4 mb-0">
+                        Todos nuestros productos son 100% auténticos, importados directamente
+                        desde distribuidores autorizados en Italia.
+                    </p>
+                </div>
+
+                <div class="info-item mb-4">
+                    <h5 class="h6 text-success">
+                        <i class="bi bi-credit-card me-2"></i>Métodos de Pago
+                    </h5>
+                    <p class="text-muted small ms-4 mb-0">
+                        Aceptamos múltiples formas de pago. Te informaremos las opciones
+                        disponibles al momento de confirmar tu pedido.
+                    </p>
+                </div>
+
+                <div class="contact-methods mt-4 p-3 bg-light rounded">
+                    <h6 class="mb-3">Otros métodos de contacto:</h6>
+                    <div class="d-flex align-items-center mb-2">
+                        <i class="bi bi-telephone-fill text-primary me-2"></i>
+                        <span class="small">+53 5-551-31-96</span>
+                    </div>
+                    <div class="d-flex align-items-center mb-2">
+                        <i class="bi bi-envelope-fill text-primary me-2"></i>
+                        <span class="small">pedidos@coimprescuba.com</span>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-geo-alt-fill text-primary me-2"></i>
+                        <span class="small">La Habana, Cuba</span>
                     </div>
                 </div>
             </div>
         </div>
-
-        <!-- Formulario de Contacto -->
-        <div class="col-lg-8">
-            <div class="contact-form bg-white p-4 rounded-3 shadow-sm">
-                <h3 class="h4 mb-4">{{ i18n.send_message|default:"Envíenos un Mensaje" }}</h3>
-                
-                <form method="post" class="needs-validation" novalidate>
-                    {% csrf_token %}
-                    <div class="row g-3">
-                        <div class="col-md-6">
-                            <label for="name" class="form-label">{{ i18n.name|default:"Nombre" }} *</label>
-                            <input type="text" class="form-control" id="name" name="name" required>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="email" class="form-label">{{ i18n.email|default:"Correo" }} *</label>
-                            <input type="email" class="form-control" id="email" name="email" required>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="phone" class="form-label">{{ i18n.phone|default:"Teléfono" }}</label>
-                            <input type="tel" class="form-control" id="phone" name="phone">
-                        </div>
-                        <div class="col-md-6">
-                            <label for="subject" class="form-label">{{ i18n.subject|default:"Asunto" }} *</label>
-                            <input type="text" class="form-control" id="subject" name="subject" required>
-                        </div>
-                        <div class="col-12">
-                            <label for="message" class="form-label">{{ i18n.message|default:"Mensaje" }} *</label>
-                            <textarea class="form-control" id="message" name="message" rows="5" required></textarea>
-                        </div>
-                        <div class="col-12">
-                            <button type="submit" class="btn btn-primary px-4">
-                                <i class="bi bi-send me-2"></i>{{ i18n.send|default:"Enviar Mensaje" }}
-                            </button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
     </div>
 
-    <!-- Mapa o Imagen de Ubicación -->
+    <!-- Productos Populares para Pedidos Exclusivos -->
     <div class="row mt-5">
         <div class="col-12">
-            <div class="map-container rounded-3 shadow-sm overflow-hidden">
-                <!-- Aquí puedes integrar un mapa de Google Maps o una imagen estática -->
-                <img src="{% static 'img/map-placeholder.jpg' %}" alt="Ubicación" class="w-100">
+            <div class="popular-requests bg-light p-5 rounded-3">
+                <div class="text-center mb-4">
+                    <h3 class="h4">
+                        <i class="bi bi-star text-warning me-2"></i>
+                        Productos más solicitados
+                    </h3>
+                    <p class="text-muted">Estos son algunos de los productos que nuestros clientes suelen pedir</p>
+                </div>
+                
+                <div class="row g-4">
+                    <div class="col-md-3 col-6">
+                        <div class="popular-item text-center p-3 bg-white rounded shadow-sm">
+                            <i class="bi bi-cpu display-4 text-primary mb-2"></i>
+                            <h6 class="mb-1">Electrónicos</h6>
+                            <small class="text-muted">Gadgets, componentes</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-6">
+                        <div class="popular-item text-center p-3 bg-white rounded shadow-sm">
+                            <i class="bi bi-palette display-4 text-success mb-2"></i>
+                            <h6 class="mb-1">Arte & Diseño</h6>
+                            <small class="text-muted">Decoración, artesanías</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-6">
+                        <div class="popular-item text-center p-3 bg-white rounded shadow-sm">
+                            <i class="bi bi-tools display-4 text-warning mb-2"></i>
+                            <h6 class="mb-1">Herramientas</h6>
+                            <small class="text-muted">Profesionales, hogar</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-6">
+                        <div class="popular-item text-center p-3 bg-white rounded shadow-sm">
+                            <i class="bi bi-heart display-4 text-danger mb-2"></i>
+                            <h6 class="mb-1">Salud & Belleza</h6>
+                            <small class="text-muted">Cosméticos, cuidado</small>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="text-center mt-4">
+                    <p class="mb-3"><strong>¿No encuentras lo que buscas?</strong></p>
+                    <a href="https://wa.me/5355513196?text=Hola%2C%20busco%20un%20producto%20específico%20que%20no%20está%20en%20el%20catálogo." 
+                       target="_blank" 
+                       class="btn btn-outline-success">
+                        <i class="bi bi-search me-2"></i>
+                        Consultar Producto Específico
+                    </a>
+                </div>
             </div>
         </div>
     </div>
+
+    <!-- Testimonios -->
+    
 </div>
 {% endblock %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/contact.css' %}">
+<style>
+    .exclusive-hero {
+        background: linear-gradient(135deg, var(--color-primary, #2C2A28), #3a3835);
+        position: relative;
+    }
+    
+    .exclusive-hero::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 3px;
+        background: var(--color-accent, #9fa322);
+    }
+    
+    .animate-bounce {
+        animation: bounce 2s infinite;
+    }
+    
+    @keyframes bounce {
+        0%, 20%, 50%, 80%, 100% {
+            transform: translateY(0);
+        }
+        40% {
+            transform: translateY(-10px);
+        }
+        60% {
+            transform: translateY(-5px);
+        }
+    }
+    
+    .btn-whatsapp {
+        background: linear-gradient(135deg, #25D366, #128C7E);
+        color: white;
+        border: none;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
+    }
+    
+    .btn-whatsapp:hover {
+        background: linear-gradient(135deg, #128C7E, #075E54);
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4);
+    }
+    
+    .step-number {
+        font-size: 0.9rem;
+        font-weight: bold;
+    }
+    
+    .whatsapp-cta:hover {
+        transform: translateY(-5px);
+        transition: all 0.3s ease;
+    }
+    
+    .popular-item:hover {
+        transform: translateY(-3px);
+        transition: all 0.3s ease;
+    }
+    
+    .testimonial-card:hover {
+        transform: translateY(-3px);
+        transition: all 0.3s ease;
+    }
+    
+    .feature-item {
+        font-size: 0.95rem;
+    }
+    
+    .hero-illustration i {
+        filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
+    }
+</style>
 {% endblock %}
 
 {% block extra_js %}
 <script>
-// Validación del formulario
-(function () {
-    'use strict'
-    var forms = document.querySelectorAll('.needs-validation')
-    Array.prototype.slice.call(forms).forEach(function (form) {
-        form.addEventListener('submit', function (event) {
-            if (!form.checkValidity()) {
-                event.preventDefault()
-                event.stopPropagation()
+document.addEventListener('DOMContentLoaded', function() {
+    // Efecto de hover para las tarjetas
+    const cards = document.querySelectorAll('.whatsapp-cta, .popular-item, .testimonial-card');
+    
+    cards.forEach(card => {
+        card.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-5px)';
+        });
+        
+        card.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0)';
+        });
+    });
+    
+    // Tracking de clicks en WhatsApp
+    const whatsappButtons = document.querySelectorAll('a[href*="wa.me"]');
+    
+    whatsappButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            // Aquí puedes agregar tracking analytics si lo necesitas
+            console.log('Click en botón de WhatsApp:', this.textContent.trim());
+        });
+    });
+    
+    // Animación de entrada para los elementos
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+    
+    const observer = new IntersectionObserver(function(entries) {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
             }
-            form.classList.add('was-validated')
-        }, false)
-    })
-})()
+        });
+    }, observerOptions);
+    
+    // Observar elementos para animación
+    const animatedElements = document.querySelectorAll('.process-card, .contact-info, .popular-requests, .testimonials-section');
+    
+    animatedElements.forEach(el => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(20px)';
+        el.style.transition = 'all 0.6s ease';
+        observer.observe(el);
+    });
+});
 </script>
 {% endblock %}

@@ -146,6 +146,75 @@ class ProductDetailView(DetailView):
             
         return context
 
+# =================== VISTAS PÚBLICAS DE PROVEEDORES ===================
+
+class ProveedorListView(ListView):
+    """Vista para mostrar todos los proveedores con sus productos"""
+    model = Proveedor
+    template_name = 'productos/proveedor_list.html'
+    context_object_name = 'proveedores'
+    
+    def get_queryset(self):
+        # Solo mostrar proveedores que tienen productos activos
+        return Proveedor.objects.prefetch_related(
+            'product_set'
+        ).filter(
+            product__is_active=True
+        ).distinct().order_by('name')
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        
+        # Agregar conteo de productos por proveedor
+        proveedores_con_productos = []
+        for proveedor in context['proveedores']:
+            productos_count = proveedor.productos_asociados.count()
+            proveedores_con_productos.append({
+                'proveedor': proveedor,
+                'productos_count': productos_count
+            })
+        
+        context['proveedores_con_productos'] = proveedores_con_productos
+        return context
+
+class ProveedorDetailView(DetailView):
+    """Vista detallada de un proveedor con sus productos"""
+    model = Proveedor
+    template_name = 'productos/proveedor_detail.html'
+    context_object_name = 'proveedor'
+    
+    def get_queryset(self):
+        return Proveedor.objects.prefetch_related('product_set')
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        proveedor = self.get_object()
+        
+        # Obtener productos activos del proveedor
+        productos = proveedor.productos_asociados.select_related(
+            'category', 'subcategory'
+        ).prefetch_related('images')
+        
+        # Filtrar por categoría si está presente en la URL
+        category_slug = self.request.GET.get('category')
+        if category_slug:
+            productos = productos.filter(category__slug=category_slug)
+        
+        context['productos'] = productos
+        context['productos_count'] = productos.count()
+        
+        # Obtener categorías de los productos de este proveedor
+        categorias = Category.objects.filter(
+            product__proveedor=proveedor,
+            product__is_active=True
+        ).distinct()
+        context['categorias'] = categorias
+        
+        # Contar productos totales (sin filtro de categoría)
+        context['total_productos_count'] = proveedor.productos_asociados.count()
+        
+        return context
+
 # =================== VISTAS DE ADMINISTRACIÓN (PROTEGIDAS) ===================
 
 @require_staff_login

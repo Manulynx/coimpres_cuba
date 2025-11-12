@@ -133,10 +133,14 @@
                                     <i class="bi bi-box-seam"></i> {{ i18n.products|default:"Productos" }}
                                 </a>
                             </li>
-                            
+                            <li class="nav-item">
+                                <a class="nav-link {% if '/productos/proveedores/' in request.path %}active{% endif %}" href="{% url 'productos:proveedor_list' %}">
+                                    <i class="bi bi-building"></i> {{ i18n.suppliers|default:"Proveedores" }}
+                                </a>
+                            </li>
                             <li class="nav-item">
                                 <a class="nav-link {% if request.path == '/contact/' %}active{% endif %}" href="/contact/">
-                                    <i class="bi bi-envelope"></i> {{ i18n.contact|default:"Contacto" }}
+                                    <i class="bi bi-star"></i> {{ i18n.exclusive_orders|default:"Pedidos Exclusivos" }}
                                 </a>
                             </li>
                         </ul>
@@ -185,7 +189,8 @@
                     <ul class="list-unstyled">
                         <li class="mb-2"><a href="/" class="text-white text-decoration-none"><i class="bi bi-chevron-right"></i> {{ i18n.home|default:"Inicio" }}</a></li>
                         <li class="mb-2"><a href="{% url 'productos:product_list' %}" class="text-white text-decoration-none"><i class="bi bi-chevron-right"></i> {{ i18n.products|default:"Productos" }}</a></li>
-                        <li><a href="/contact/" class="text-white text-decoration-none"><i class="bi bi-chevron-right"></i> {{ i18n.contact|default:"Contacto" }}</a></li>
+                        <li class="mb-2"><a href="{% url 'productos:proveedor_list' %}" class="text-white text-decoration-none"><i class="bi bi-chevron-right"></i> {{ i18n.suppliers|default:"Proveedores" }}</a></li>
+                        <li><a href="/contact/" class="text-white text-decoration-none"><i class="bi bi-chevron-right"></i> {{ i18n.exclusive_orders|default:"Pedidos Exclusivos" }}</a></li>
                     </ul>
                 </div>
 

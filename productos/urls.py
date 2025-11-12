@@ -7,6 +7,10 @@ app_name = 'productos'
 urlpatterns = [
     path('', views.ProductListView.as_view(), name='product_list'),
     
+    # URLs públicas de proveedores
+    path('proveedores/', views.ProveedorListView.as_view(), name='proveedor_list'),
+    path('proveedores/<slug:slug>/', views.ProveedorDetailView.as_view(), name='proveedor_detail'),
+    
     # URLs de autenticación (secretas) - DEBEN IR ANTES que el slug genérico
     path('secret-admin-login/', views.secret_login_view, name='secret_login'),
     path('admin/logout/', views.admin_logout_view, name='admin_logout'),
