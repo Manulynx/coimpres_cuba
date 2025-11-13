@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Coimpre SRL{% endblock %}</title>
+    <title>{% block title %}COIMPRE S.r.l. - Productos Made in Italy{% endblock %}</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap Icons -->
@@ -45,8 +45,8 @@
                                     <i class="bi bi-geo-alt-fill"></i>
                                 </div>
                                 <div class="contact-text">
-                                    <span class="contact-label">Ubicación</span>
-                                    <span class="contact-value">La Habana, Cuba</span>
+                                    <span class="contact-label">{{ i18n.office_cuba|default:"Oficina Cuba" }}</span>
+                                    <span class="contact-value">{{ i18n.miramar_havana|default:"Miramar, La Habana" }}</span>
                                 </div>
                             </div>
                             <div class="contact-info-item">
@@ -54,8 +54,8 @@
                                     <i class="bi bi-telephone-fill"></i>
                                 </div>
                                 <div class="contact-text">
-                                    <span class="contact-label">Contacto</span>
-                                    <span class="contact-value">+53 5555-5555</span>
+                                    <span class="contact-label">{{ i18n.contact|default:"Contacto" }}</span>
+                                    <span class="contact-value">+53 72141480</span>
                                 </div>
                             </div>
                         </div>
@@ -95,7 +95,7 @@
                     <!-- Location Badge (Mobile Only) -->
                     <div class="location-badge d-flex d-md-none align-items-center">
                         <i class="bi bi-geo-alt-fill me-1"></i>
-                        <span class="font-bold">La Habana, Cuba</span>
+                        <span class="font-bold">Miramar, La Habana</span>
                     </div>
                     
                     <!-- Full Location (Desktop Only) -->
@@ -104,7 +104,7 @@
                             <i class="bi bi-geo-alt-fill text-accent me-2"></i>
                         </div>
                         <div>
-                            <span class="location-text">Importación Directa Italia - La Habana, Cuba</span>
+                            <span class="location-text">{{ i18n.company_tagline|default:"COIMPRE S.r.l. - Productos Made in Italy desde 2014" }}</span>
                         </div>
                     </div>
                     
@@ -175,7 +175,7 @@
         <div class="container">
             <div class="row py-3">
                 <div class="col-lg-4 col-md-6 mb-4 mb-md-0">
-                    <h5 class="text-uppercase mb-3">Coimpre SRL, La Habana, Cuba</h5>
+                    <h5 class="text-uppercase mb-3">{{ i18n.office_cuba|default:"Oficina Cuba" }}</h5>
                     <p class="mb-3">{{ i18n.footer_description|default:"Importador oficial de productos italianos de alta calidad en Cuba, ofreciendo lo mejor de Italia para tu hogar y negocio." }}</p>
                     <div class="d-flex social-icons">
                         <a href="#" class="me-3 text-white"><i class="bi bi-facebook fs-5"></i></a>
@@ -196,15 +196,15 @@
 
                 <div class="col-lg-4 col-md-6">
                     <h5 class="text-uppercase mb-3">{{ i18n.contact|default:"Contacto" }}</h5>
-                    <p class="mb-2"><i class="bi bi-geo-alt-fill me-2"></i> {{ i18n.address|default:"La Habana, Cuba" }}</p>
-                    <p class="mb-2"><i class="bi bi-telephone-fill me-2"></i> +53 5555-5555</p>
-                    <p class="mb-2"><i class="bi bi-envelope-fill me-2"></i> info@importadoraitaliana.com</p>
+                    <p class="mb-2"><i class="bi bi-geo-alt-fill me-2"></i> {{ i18n.miramar_havana|default:"Miramar, La Habana" }}</p>
+                    <p class="mb-2"><i class="bi bi-telephone-fill me-2"></i> +53 72141480</p>
+                    <p class="mb-2"><i class="bi bi-envelope-fill me-2"></i> coimpresrl@gmail.com</p>
                 </div>
             </div>
 
             <div class="row pt-3 border-top border-secondary">
                 <div class="col-md-6">
-                    <p class="mb-0">&copy; 2025 Coimpre SRL. {{ i18n.rights|default:"Todos los derechos reservados" }}</p>
+                    <p class="mb-0">&copy; 2025 COIMPRE S.r.l. {{ i18n.rights|default:"Todos los derechos reservados" }}</p>
                 </div>
                 <div class="col-md-6 text-md-end">
                     <p class="mb-0">
