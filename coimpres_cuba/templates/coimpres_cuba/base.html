@@ -67,9 +67,9 @@
                             <!-- Language Selector with Italian flair -->
                             <div class="language-selector me-3">
                                 <div class="btn-group" role="group">
-                                    <a href="?lang=es" class="lang-btn {% if lang == 'es' %}active{% endif %}">ES</a>
-                                    <a href="?lang=en" class="lang-btn {% if lang == 'en' %}active{% endif %}">EN</a>
-                                    <a href="?lang=it" class="lang-btn {% if lang == 'it' %}active{% endif %}">IT</a>
+                                    <a href="{% url 'change_language' %}?lang=es" class="lang-btn {% if lang == 'es' %}active{% endif %}">ES</a>
+                                    <a href="{% url 'change_language' %}?lang=en" class="lang-btn {% if lang == 'en' %}active{% endif %}">EN</a>
+                                    <a href="{% url 'change_language' %}?lang=it" class="lang-btn {% if lang == 'it' %}active{% endif %}">IT</a>
                                 </div>
                             </div>
                             

@@ -26,6 +26,7 @@ urlpatterns = [
     path('', views.home_view, name='home'),
     path('productos/', include('productos.urls')),
     path('contact/', views.ContactView.as_view(), name='contact'),
+    path('change-language/', views.change_language, name='change_language'),
 ]
 
 # Servir archivos media y static en desarrollo Y producción

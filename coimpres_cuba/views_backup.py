@@ -35,38 +35,3 @@ class ContactView(TemplateView):
         # Aquí puedes implementar el envío de correo
         messages.success(request, 'Mensaje enviado correctamente')
         return self.get(request, *args, **kwargs)
-
-def change_language(request):
-    """Vista para cambiar idioma y redirigir a la página anterior"""
-    from django.shortcuts import redirect
-    from django.urls import reverse
-    
-    # Obtener el idioma solicitado
-    lang = request.GET.get('lang', 'es')
-    
-    # Validar que sea un idioma válido
-    if lang in ['es', 'en', 'it']:
-        request.session['selected_language'] = lang
-    
-    # Obtener la URL de referencia (página anterior)
-    referer = request.META.get('HTTP_REFERER')
-    
-    if referer:
-        # Si hay referencia, redirigimos allí pero sin el parámetro lang en la URL
-        # para que use el idioma de la sesión
-        from urllib.parse import urlparse, parse_qs, urlencode, urlunparse
-        parsed_url = urlparse(referer)
-        query_params = parse_qs(parsed_url.query)
-        
-        # Remover el parámetro lang de la URL para evitar conflictos
-        if 'lang' in query_params:
-            del query_params['lang']
-        
-        # Reconstruir la URL sin el parámetro lang
-        new_query = urlencode({k: v[0] if len(v) == 1 else v for k, v in query_params.items()}, doseq=True)
-        new_url = urlunparse((parsed_url.scheme, parsed_url.netloc, parsed_url.path, parsed_url.params, new_query, parsed_url.fragment))
-        
-        return redirect(new_url)
-    else:
-        # Si no hay referencia, ir al inicio
-        return redirect('/')

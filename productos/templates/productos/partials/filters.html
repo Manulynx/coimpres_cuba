@@ -1,14 +1,14 @@
 {% load static %}
 <div class="filter-panel mb-4">
   <div class="filter-panel-header d-flex justify-content-between align-items-center">
-    <h6 class="m-0 text-uppercase fw-bold">Filtros</h6>
+    <h6 class="m-0 text-uppercase fw-bold">{{ i18n.filters|default:"Filtros" }}</h6>
     <button type="button"
             class="btn btn-sm btn-toggle-filters d-lg-none"
             data-bs-toggle="collapse"
             data-bs-target="#filterBody"
             aria-controls="filterBody"
             aria-expanded="false">
-      <span>Mostrar</span>
+      <span>{{ i18n.show_filters|default:"Mostrar" }}</span>
     </button>
   </div>
   <div id="filterBody" class="collapse d-lg-block filter-panel-body">
@@ -16,16 +16,16 @@
 
       <!-- Búsqueda -->
       <div class="filter-group">
-        <label class="form-label fw-semibold small text-accent">Buscar</label>
-        <input type="text" name="q" value="{{ request.GET.q }}" class="form-control form-control-sm" placeholder="Nombre o descripción">
+        <label class="form-label fw-semibold small text-accent">{{ i18n.search|default:"Buscar" }}</label>
+        <input type="text" name="q" value="{{ request.GET.q }}" class="form-control form-control-sm" placeholder="{{ i18n.search_products|default:'Nombre o descripción' }}">
       </div>
 
       <!-- Categoría -->
       {% if categories %}
       <div class="filter-group">
-        <label class="form-label fw-semibold small text-accent">Categoría</label>
+        <label class="form-label fw-semibold small text-accent">{{ i18n.category|default:"Categoría" }}</label>
         <select name="category" class="form-select form-select-sm">
-          <option value="">Todas</option>
+          <option value="">{{ i18n.all_categories|default:"Todas" }}</option>
           {% for cat in categories %}
             <option value="{{ cat.slug }}" {% if request.GET.category == cat.slug %}selected{% endif %}>{{ cat.name }}</option>
           {% endfor %}
@@ -36,9 +36,9 @@
       <!-- Subcategoría (solo si hay selección de categoría o hay subcategorías globales) -->
       {% if subcategories %}
       <div class="filter-group">
-        <label class="form-label fw-semibold small text-accent">Subcategoría</label>
+        <label class="form-label fw-semibold small text-accent">{{ i18n.subcategory|default:"Subcategoría" }}</label>
         <select name="subcategory" class="form-select form-select-sm">
-          <option value="">Todas</option>
+          <option value="">{{ i18n.all_subcategories|default:"Todas" }}</option>
           {% for sub in subcategories %}
             <option value="{{ sub.slug }}" {% if request.GET.subcategory == sub.slug %}selected{% endif %}>{{ sub.name }}</option>
           {% endfor %}
@@ -49,9 +49,9 @@
       <!-- Proveedor -->
       {% if proveedores %}
       <div class="filter-group">
-        <label class="form-label fw-semibold small text-accent">Proveedor</label>
+        <label class="form-label fw-semibold small text-accent">{{ i18n.supplier|default:"Proveedor" }}</label>
         <select name="proveedor" class="form-select form-select-sm">
-          <option value="">Todos</option>
+          <option value="">{{ i18n.all_suppliers|default:"Todos" }}</option>
           {% for prov in proveedores %}
             <option value="{{ prov.slug }}" {% if request.GET.proveedor == prov.slug %}selected{% endif %}>{{ prov.name }}</option>
           {% endfor %}
@@ -62,9 +62,9 @@
       <!-- Estado procedencia -->
       {% if status_list %}
       <div class="filter-group">
-        <label class="form-label fw-semibold small text-accent">Estado</label>
+        <label class="form-label fw-semibold small text-accent">{{ i18n.status|default:"Estado" }}</label>
         <select name="status" class="form-select form-select-sm">
-          <option value="">Todos</option>
+          <option value="">{{ i18n.all_status|default:"Todos" }}</option>
           {% for st in status_list %}
             <option value="{{ st.id }}" {% if request.GET.status == st.id|stringformat:'s' %}selected{% endif %}>
               {{ st.name }}
@@ -75,8 +75,8 @@
       {% endif %}
 
       <div class="d-flex gap-2 mt-3">
-        <button type="submit" class="btn btn-primary btn-sm px-3">Aplicar</button>
-        <a href="." class="btn btn-outline-secondary btn-sm">Limpiar</a>
+        <button type="submit" class="btn btn-primary btn-sm px-3">{{ i18n.apply|default:"Aplicar" }}</button>
+        <a href="." class="btn btn-outline-secondary btn-sm">{{ i18n.clear|default:"Limpiar" }}</a>
       </div>
     </form>
   </div>

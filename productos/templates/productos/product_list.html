@@ -1,7 +1,7 @@
 {% extends "coimpres_cuba/base.html" %}
 {% load static %}
 
-{% block title %}Productos | Coimpres Cuba{% endblock %}
+{% block title %}Productos - Coimpre S.r.l.{% endblock %}
 
 {% block content %}
 <div class="container py-5">
@@ -11,26 +11,26 @@
     </aside>
     <div class="col-lg-9">
       <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1>Catálogo de Productos</h1>
+        <h1>{{ i18n.product_catalog|default:"Catálogo de Productos" }}</h1>
         <form action="." method="get" class="d-flex">
-            <input type="text" name="q" class="form-control me-2" placeholder="Buscar productos..." value="{{ request.GET.q|default:'' }}">
+            <input type="text" name="q" class="form-control me-2" placeholder="{{ i18n.search_products|default:'Buscar productos...' }}" value="{{ request.GET.q|default:'' }}">
             {% if request.GET.category %}<input type="hidden" name="category" value="{{ request.GET.category }}">{% endif %}
             {% if request.GET.subcategory %}<input type="hidden" name="subcategory" value="{{ request.GET.subcategory }}">{% endif %}
             {% if request.GET.proveedor %}<input type="hidden" name="proveedor" value="{{ request.GET.proveedor }}">{% endif %}
             {% if request.GET.estatus %}<input type="hidden" name="estatus" value="{{ request.GET.estatus }}">{% endif %}
-            <button type="submit" class="btn btn-primary">Buscar</button>
+            <button type="submit" class="btn btn-primary">{{ i18n.search|default:"Buscar" }}</button>
         </form>
       </div>
 
       {% if request.GET.category or request.GET.subcategory or request.GET.proveedor or request.GET.estatus or request.GET.q %}
       <div class="alert alert-info mb-3">
-          <h6 class="mb-2">Filtros aplicados:</h6>
+          <h6 class="mb-2">{{ i18n.applied_filters|default:"Filtros aplicados:" }}</h6>
           <div class="d-flex flex-wrap gap-2">
-              {% if request.GET.q %}<span class="badge bg-primary">Búsqueda: "{{ request.GET.q }}"</span>{% endif %}
-              {% if selected_category %}<span class="badge bg-primary">Categoría: {{ selected_category.name }}</span>{% endif %}
-              {% if request.GET.subcategory %}<span class="badge bg-primary">Subcategoría: {{ request.GET.subcategory }}</span>{% endif %}
-              {% if request.GET.proveedor %}<span class="badge bg-success">Proveedor: {{ request.GET.proveedor }}</span>{% endif %}
-              {% if request.GET.estatus %}<span class="badge bg-warning text-dark">Estatus: {{ request.GET.estatus }}</span>{% endif %}
+              {% if request.GET.q %}<span class="badge bg-primary">{{ i18n.search_term|default:"Búsqueda" }}: "{{ request.GET.q }}"</span>{% endif %}
+              {% if selected_category %}<span class="badge bg-primary">{{ i18n.category|default:"Categoría" }}: {{ selected_category.name }}</span>{% endif %}
+              {% if request.GET.subcategory %}<span class="badge bg-primary">{{ i18n.subcategory|default:"Subcategoría" }}: {{ request.GET.subcategory }}</span>{% endif %}
+              {% if request.GET.proveedor %}<span class="badge bg-success">{{ i18n.supplier|default:"Proveedor" }}: {{ request.GET.proveedor }}</span>{% endif %}
+              {% if request.GET.estatus %}<span class="badge bg-warning text-dark">{{ i18n.status|default:"Estatus" }}: {{ request.GET.estatus }}</span>{% endif %}
           </div>
       </div>
       {% endif %}
@@ -38,9 +38,9 @@
       <div class="d-flex justify-content-between align-items-center mb-3">
           <p class="mb-0 text-muted">
               {% if object_list %}
-                  Mostrando {{ object_list|length }} de {{ paginator.count }} productos
+                  {{ i18n.showing_results|default:"Mostrando" }} {{ object_list|length }} {{ i18n.of_total|default:"de" }} {{ paginator.count }} {{ i18n.products_found|default:"productos" }}
               {% else %}
-                  No se encontraron productos
+                  {{ i18n.no_products|default:"No se encontraron productos" }}
               {% endif %}
           </p>
       </div>
@@ -95,7 +95,7 @@
                 <div class="mt-auto">
                   {% if product.price %}<p class="card-text fw-bold text-success mb-2">${{ product.price }}</p>{% endif %}
                   {% if product.sku %}<small class="text-muted d-block mb-2">SKU: {{ product.sku }}</small>{% endif %}
-                  <a href="{% url 'productos:product_detail' product.slug %}" class="btn btn-primary w-100">Ver detalle</a>
+                  <a href="{% url 'productos:product_detail' product.slug %}" class="btn btn-primary w-100">{{ i18n.view_details|default:"Ver detalle" }}</a>
                 </div>
               </div>
             </div>
@@ -103,23 +103,23 @@
           {% endfor %}
         {% else %}
           <div class="col-12">
-            <div class="alert alert-info">No hay productos disponibles en este momento.</div>
+            <div class="alert alert-info">{{ i18n.no_products_available|default:"No hay productos disponibles en este momento." }}</div>
           </div>
         {% endif %}
       </div>
 
       {% if is_paginated %}
-      <nav aria-label="Navegación de páginas" class="mt-5">
+      <nav aria-label="{{ i18n.page_navigation|default:'Navegación de páginas' }}" class="mt-5">
           <ul class="pagination justify-content-center">
               {% if page_obj.has_previous %}
                   <li class="page-item">
-                      <a class="page-link" href="?page=1{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}{% if request.GET.subcategory %}&subcategory={{ request.GET.subcategory }}{% endif %}{% if request.GET.proveedor %}&proveedor={{ request.GET.proveedor }}{% endif %}{% if request.GET.estatus %}&estatus={{ request.GET.estatus }}{% endif %}" title="Primera página">
-                          <i class="bi bi-chevron-double-left"></i> <span>Primera</span>
+                      <a class="page-link" href="?page=1{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}{% if request.GET.subcategory %}&subcategory={{ request.GET.subcategory }}{% endif %}{% if request.GET.proveedor %}&proveedor={{ request.GET.proveedor }}{% endif %}{% if request.GET.estatus %}&estatus={{ request.GET.estatus }}{% endif %}" title="{{ i18n.first_page|default:'Primera página' }}">
+                          <i class="bi bi-chevron-double-left"></i> <span>{{ i18n.first_page|default:"Primera" }}</span>
                       </a>
                   </li>
                   <li class="page-item">
-                      <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}{% if request.GET.subcategory %}&subcategory={{ request.GET.subcategory }}{% endif %}{% if request.GET.proveedor %}&proveedor={{ request.GET.proveedor }}{% endif %}{% if request.GET.estatus %}&estatus={{ request.GET.estatus }}{% endif %}" title="Página anterior">
-                          <i class="bi bi-chevron-left"></i> <span>Anterior</span>
+                      <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}{% if request.GET.subcategory %}&subcategory={{ request.GET.subcategory }}{% endif %}{% if request.GET.proveedor %}&proveedor={{ request.GET.proveedor }}{% endif %}{% if request.GET.estatus %}&estatus={{ request.GET.estatus }}{% endif %}" title="{{ i18n.previous_page|default:'Página anterior' }}">
+                          <i class="bi bi-chevron-left"></i> <span>{{ i18n.previous_page|default:"Anterior" }}</span>
                       </a>
                   </li>
               {% endif %}
@@ -128,7 +128,7 @@
                   {% if page_obj.number == num %}
                       <li class="page-item active">
                           <span class="page-link">
-                              {{ num }} <span class="visually-hidden">(página actual)</span>
+                              {{ num }} <span class="visually-hidden">{{ i18n.current_page|default:"(página actual)" }}</span>
                           </span>
                       </li>
                   {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
@@ -140,13 +140,13 @@
 
               {% if page_obj.has_next %}
                   <li class="page-item">
-                      <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}{% if request.GET.subcategory %}&subcategory={{ request.GET.subcategory }}{% endif %}{% if request.GET.proveedor %}&proveedor={{ request.GET.proveedor }}{% endif %}{% if request.GET.estatus %}&estatus={{ request.GET.estatus }}{% endif %}" title="Página siguiente">
-                          <span>Siguiente</span> <i class="bi bi-chevron-right"></i>
+                      <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}{% if request.GET.subcategory %}&subcategory={{ request.GET.subcategory }}{% endif %}{% if request.GET.proveedor %}&proveedor={{ request.GET.proveedor }}{% endif %}{% if request.GET.estatus %}&estatus={{ request.GET.estatus }}{% endif %}" title="{{ i18n.next_page|default:'Página siguiente' }}">
+                          <span>{{ i18n.next_page|default:"Siguiente" }}</span> <i class="bi bi-chevron-right"></i>
                       </a>
                   </li>
                   <li class="page-item">
-                      <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}{% if request.GET.subcategory %}&subcategory={{ request.GET.subcategory }}{% endif %}{% if request.GET.proveedor %}&proveedor={{ request.GET.proveedor }}{% endif %}{% if request.GET.estatus %}&estatus={{ request.GET.estatus }}{% endif %}" title="Última página">
-                          <span>Última</span> <i class="bi bi-chevron-double-right"></i>
+                      <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}{% if request.GET.subcategory %}&subcategory={{ request.GET.subcategory }}{% endif %}{% if request.GET.proveedor %}&proveedor={{ request.GET.proveedor }}{% endif %}{% if request.GET.estatus %}&estatus={{ request.GET.estatus }}{% endif %}" title="{{ i18n.last_page|default:'Última página' }}">
+                          <span>{{ i18n.last_page|default:"Última" }}</span> <i class="bi bi-chevron-double-right"></i>
                       </a>
                   </li>
               {% endif %}
@@ -155,8 +155,8 @@
           <div class="text-center mt-3">
               <small class="text-muted">
                   <i class="bi bi-info-circle me-1" style="color: var(--color-accent);"></i>
-                  Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }} 
-                  ({{ paginator.count }} productos en total)
+                  {{ i18n.page_info|default:"Página" }} {{ page_obj.number }} {{ i18n.of_total|default:"de" }} {{ page_obj.paginator.num_pages }} 
+                  ({{ paginator.count }} {{ i18n.total_products|default:"productos en total" }})
               </small>
           </div>
       </nav>

@@ -107,11 +107,10 @@
             <div class="col-lg-8">
                 <div class="italian-accent">
                     <h1 class="hero-title animate__animated animate__fadeInUp">
-                        <i class="bi bi-building me-3"></i>Nuestros Proveedores
+                        <i class="bi bi-building me-3"></i>{{ i18n.our_suppliers|default:"Nuestros Proveedores" }}
                     </h1>
                     <p class="hero-subtitle animate__animated animate__fadeInUp animate__delay-1s">
-                        Productos de alta calidad directamente desde Italia. 
-                        Conoce a nuestros socios comerciales y explora sus catálogos especializados.
+                        {{ i18n.suppliers_subtitle|default:"Productos de alta calidad directamente desde Italia. Conoce a nuestros socios comerciales y explora sus catálogos especializados." }}
                     </p>
                 </div>
             </div>
@@ -152,7 +151,7 @@
                                     
                                     <div class="productos-count">
                                         <i class="bi bi-box-seam me-1"></i>
-                                        {{ item.productos_count }} producto{% if item.productos_count != 1 %}s{% endif %}
+                                        {{ item.productos_count }} {% if item.productos_count == 1 %}{{ i18n.products_count|default:"producto" }}{% else %}{{ i18n.products_count_plural|default:"productos" }}{% endif %}
                                     </div>
                                     
                                     
@@ -165,7 +164,7 @@
                                         <a href="{% url 'productos:proveedor_detail' item.proveedor.slug %}" 
                                            class="btn btn-outline-primary btn-sm">
                                             <i class="bi bi-eye me-1"></i>
-                                            Ver Productos
+                                            {{ i18n.view_products|default:"Ver Productos" }}
                                         </a>
                                         
                                         <!-- Botón Catálogo PDF -->
@@ -174,12 +173,12 @@
                                                target="_blank" 
                                                class="catalog-btn btn-sm">
                                                 <i class="bi bi-file-earmark-pdf"></i>
-                                                Descargar Catálogo
+                                                {{ i18n.download_catalog|default:"Descargar Catálogo" }}
                                             </a>
                                         {% else %}
                                             <span class="text-muted small">
                                                 <i class="bi bi-info-circle me-1"></i>
-                                                Catálogo no disponible
+                                                {{ i18n.catalog_not_available|default:"Catálogo no disponible" }}
                                             </span>
                                         {% endif %}
                                     </div>
@@ -195,14 +194,13 @@
                 <div class="mb-4">
                     <i class="bi bi-building" style="font-size: 4rem; color: #6c757d; opacity: 0.5;"></i>
                 </div>
-                <h3 class="text-muted mb-3">No hay proveedores disponibles</h3>
+                <h3 class="text-muted mb-3">{{ i18n.no_suppliers|default:"No hay proveedores disponibles" }}</h3>
                 <p class="text-muted">
-                    Actualmente no tenemos proveedores con productos activos en nuestro catálogo.
-                    <br>Vuelve pronto para ver nuestras nuevas incorporaciones.
+                    {{ i18n.no_suppliers_message|default:"Actualmente no tenemos proveedores con productos activos en nuestro catálogo.<br>Vuelve pronto para ver nuestras nuevas incorporaciones." }}
                 </p>
                 <a href="{% url 'productos:product_list' %}" class="btn btn-primary mt-3">
                     <i class="bi bi-box-seam me-2"></i>
-                    Ver Todos los Productos
+                    {{ i18n.all_products|default:"Ver Todos los Productos" }}
                 </a>
             </div>
         {% endif %}
@@ -216,13 +214,10 @@
             <div class="col-lg-8 mx-auto text-center">
                 <h3 class="mb-4">
                     <i class="bi bi-patch-check-fill text-success me-2"></i>
-                    Calidad Garantizada
+                    {{ i18n.guaranteed_quality|default:"Calidad Garantizada" }}
                 </h3>
                 <p class="text-muted">
-                    Todos nuestros proveedores son cuidadosamente seleccionados para asegurar 
-                    la más alta calidad en productos italianos. Cada catálogo contiene 
-                    información detallada sobre especificaciones técnicas, certificaciones 
-                    y garantías de calidad.
+                    {{ i18n.quality_message|default:"Todos nuestros proveedores son cuidadosamente seleccionados para asegurar la más alta calidad en productos italianos. Cada catálogo contiene información detallada sobre especificaciones técnicas, certificaciones y garantías de calidad." }}
                 </p>
             </div>
         </div>

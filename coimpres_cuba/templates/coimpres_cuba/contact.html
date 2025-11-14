@@ -11,30 +11,30 @@
                 <div class="hero-content">
                     <h1 class="display-4 fw-bold mb-3">
                         <i class="bi bi-star-fill text-warning me-3"></i>
-                        Pedidos Exclusivos
+                        {{ i18n.exclusive_orders_title|default:"Pedidos Exclusivos" }}
                     </h1>
                     <p class="lead mb-4">
-                        ¿Buscas productos específicos que no encuentras en nuestros catálogos? 
-                        <br><strong>Con más de 1000 productos disponibles, podemos conseguir lo que necesites desde Italia!</strong>
+                        {{ i18n.exclusive_orders_subtitle|default:"¿Buscas productos específicos que no encuentras en nuestros catálogos?" }} 
+                        <br><strong>{{ i18n.exclusive_orders_description|default:"¡Con más de 1000 productos disponibles, podemos conseguir lo que necesites desde Italia!" }}</strong>
                     </p>
                     <div class="hero-features">
                         <div class="row g-3">
                             <div class="col-md-4">
                                 <div class="feature-item d-flex align-items-center">
                                     <i class="bi bi-check-circle-fill text-success me-2"></i>
-                                    <span>Importación directa</span>
+                                    <span>{{ i18n.direct_import|default:"Importación directa" }}</span>
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="feature-item d-flex align-items-center">
                                     <i class="bi bi-check-circle-fill text-success me-2"></i>
-                                    <span>Productos auténticos</span>
+                                    <span>{{ i18n.authentic_products|default:"Productos auténticos" }}</span>
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="feature-item d-flex align-items-center">
                                     <i class="bi bi-check-circle-fill text-success me-2"></i>
-                                    <span>Precios competitivos</span>
+                                    <span>{{ i18n.competitive_prices|default:"Precios competitivos" }}</span>
                                 </div>
                             </div>
                         </div>
@@ -61,16 +61,15 @@
                 <div class="whatsapp-icon mb-4">
                     <i class="bi bi-whatsapp display-1 text-success"></i>
                 </div>
-                <h2 class="h3 mb-3">¡Contáctanos por WhatsApp!</h2>
+                <h2 class="h3 mb-3">{{ i18n.contact_whatsapp|default:"¡Contáctanos por WhatsApp!" }}</h2>
                 <p class="lead text-muted mb-4">
-                    La forma más rápida y directa de hacer tu pedido exclusivo. 
-                    Nuestro equipo te ayudará a encontrar exactamente lo que necesitas.
+                    {{ i18n.whatsapp_description|default:"La forma más rápida y directa de hacer tu pedido exclusivo. Nuestro equipo te ayudará a encontrar exactamente lo que necesitas." }}
                 </p>
                 <a href="https://wa.me/55513196?text=Hola%2C%20estoy%20interesado%20en%20hacer%20un%20pedido%20exclusivo%20de%20productos%20de%20Coimpre." 
                    target="_blank" 
                    class="btn btn-whatsapp btn-lg px-5 py-3">
                     <i class="bi bi-whatsapp me-2"></i>
-                    Iniciar Chat en WhatsApp
+                    {{ i18n.start_whatsapp|default:"Iniciar Chat en WhatsApp" }}
                 </a>
                 
             </div>
@@ -83,7 +82,7 @@
             <div class="process-card bg-white p-4 rounded-3 shadow-sm h-100">
                 <h3 class="h4 mb-4">
                     <i class="bi bi-list-check text-success me-2"></i>
-                    ¿Cómo hacer tu pedido?
+                    {{ i18n.how_to_order|default:"¿Cómo hacer tu pedido?" }}
                 </h3>
                 
                 <div class="process-steps">
@@ -92,8 +91,8 @@
                             1
                         </div>
                         <div>
-                            <h5 class="h6 mb-2">Envíanos la información del producto</h5>
-                            <p class="text-muted small mb-0">Nombre, marca, modelo, o cualquier detalle que tengas del producto que buscas.</p>
+                            <h5 class="h6 mb-2">{{ i18n.order_step_1|default:"Envíanos la información del producto" }}</h5>
+                            <p class="text-muted small mb-0">{{ i18n.order_step_1_desc|default:"Nombre, marca, modelo, o cualquier detalle que tengas del producto que buscas." }}</p>
                         </div>
                     </div>
 
@@ -102,8 +101,8 @@
                             2
                         </div>
                         <div>
-                            <h5 class="h6 mb-2">Recibe cotización personalizada</h5>
-                            <p class="text-muted small mb-0">En 24-48 horas te enviaremos precio, disponibilidad y tiempo de entrega.</p>
+                            <h5 class="h6 mb-2">{{ i18n.order_step_2|default:"Recibe cotización personalizada" }}</h5>
+                            <p class="text-muted small mb-0">{{ i18n.order_step_2_desc|default:"En 24-48 horas te enviaremos precio, disponibilidad y tiempo de entrega." }}</p>
                         </div>
                     </div>
 
@@ -112,8 +111,8 @@
                             3
                         </div>
                         <div>
-                            <h5 class="h6 mb-2">Confirma tu pedido</h5>
-                            <p class="text-muted small mb-0">Una vez aprobada la cotización, procesamos tu pedido directamente con Italia.</p>
+                            <h5 class="h6 mb-2">{{ i18n.order_step_3|default:"Confirma tu pedido" }}</h5>
+                            <p class="text-muted small mb-0">{{ i18n.order_step_3_desc|default:"Una vez aprobada la cotización, procesamos tu pedido directamente con Italia." }}</p>
                         </div>
                     </div>
 
@@ -122,8 +121,8 @@
                             4
                         </div>
                         <div>
-                            <h5 class="h6 mb-2">Recibe tu producto</h5>
-                            <p class="text-muted small mb-0">Te notificaremos cuando tu pedido llegue a La Habana para coordinar la entrega.</p>
+                            <h5 class="h6 mb-2">{{ i18n.order_step_4|default:"Recibe tu producto" }}</h5>
+                            <p class="text-muted small mb-0">{{ i18n.order_step_4_desc|default:"Te notificaremos cuando tu pedido llegue a La Habana para coordinar la entrega." }}</p>
                         </div>
                     </div>
                 </div>
@@ -135,51 +134,47 @@
             <div class="contact-info bg-white p-4 rounded-3 shadow-sm h-100">
                 <h3 class="h4 mb-4">
                     <i class="bi bi-info-circle text-primary me-2"></i>
-                    Información Importante
+                    {{ i18n.important_info|default:"Información Importante" }}
                 </h3>
                 
                 <div class="info-item mb-4">
                     <h5 class="h6 text-success">
-                        <i class="bi bi-clock me-2"></i>Tiempo de Respuesta
+                        <i class="bi bi-clock me-2"></i>{{ i18n.response_time|default:"Tiempo de Respuesta" }}
                     </h5>
                     <p class="text-muted small ms-4 mb-0">
-                        Respondemos consultas de lunes a viernes de 9:00 AM a 6:00 PM.
-                        Los fines de semana revisamos mensajes urgentes.
+                        {{ i18n.response_time_desc|default:"Respondemos consultas de lunes a viernes de 9:00 AM a 6:00 PM. Los fines de semana revisamos mensajes urgentes." }}
                     </p>
                 </div>
 
                 <div class="info-item mb-4">
                     <h5 class="h6 text-success">
-                        <i class="bi bi-truck me-2"></i>Tiempo de Entrega
+                        <i class="bi bi-truck me-2"></i>{{ i18n.delivery_time|default:"Tiempo de Entrega" }}
                     </h5>
                     <p class="text-muted small ms-4 mb-0">
-                        Los pedidos exclusivos toman entre 15-30 días desde Italia hasta La Habana,
-                        dependiendo de la disponibilidad del producto.
+                        {{ i18n.delivery_time_desc|default:"Los pedidos exclusivos toman entre 15-30 días desde Italia hasta La Habana, dependiendo de la disponibilidad del producto." }}
                     </p>
                 </div>
 
                 <div class="info-item mb-4">
                     <h5 class="h6 text-success">
-                        <i class="bi bi-shield-check me-2"></i>Garantía de Autenticidad
+                        <i class="bi bi-shield-check me-2"></i>{{ i18n.authenticity_guarantee|default:"Garantía de Autenticidad" }}
                     </h5>
                     <p class="text-muted small ms-4 mb-0">
-                        Todos nuestros productos son 100% auténticos, importados directamente
-                        desde distribuidores autorizados en Italia.
+                        {{ i18n.authenticity_desc|default:"Todos nuestros productos son 100% auténticos, importados directamente desde distribuidores autorizados en Italia." }}
                     </p>
                 </div>
 
                 <div class="info-item mb-4">
                     <h5 class="h6 text-success">
-                        <i class="bi bi-credit-card me-2"></i>Métodos de Pago
+                        <i class="bi bi-credit-card me-2"></i>{{ i18n.payment_methods|default:"Métodos de Pago" }}
                     </h5>
                     <p class="text-muted small ms-4 mb-0">
-                        Aceptamos múltiples formas de pago. Te informaremos las opciones
-                        disponibles al momento de confirmar tu pedido.
+                        {{ i18n.payment_desc|default:"Aceptamos múltiples formas de pago. Te informaremos las opciones disponibles al momento de confirmar tu pedido." }}
                     </p>
                 </div>
 
                 <div class="contact-methods mt-4 p-3 bg-light rounded">
-                    <h6 class="mb-3">Otros métodos de contacto:</h6>
+                    <h6 class="mb-3">{{ i18n.other_contact|default:"Otros métodos de contacto:" }}</h6>
                     <div class="d-flex align-items-center mb-2">
                         <i class="bi bi-telephone-fill text-primary me-2"></i>
                         <span class="small">+53 72141480 / +53 55513196</span>
@@ -208,49 +203,49 @@
                 <div class="text-center mb-4">
                     <h3 class="h4">
                         <i class="bi bi-star text-warning me-2"></i>
-                        Productos más solicitados
+                        {{ i18n.most_requested|default:"Productos más solicitados" }}
                     </h3>
-                    <p class="text-muted">Estos son algunos de los productos que nuestros clientes suelen pedir</p>
+                    <p class="text-muted">{{ i18n.popular_products_desc|default:"Estos son algunos de los productos que nuestros clientes suelen pedir" }}</p>
                 </div>
                 
                 <div class="row g-4">
                     <div class="col-md-3 col-6">
                         <div class="popular-item text-center p-3 bg-white rounded shadow-sm">
                             <i class="bi bi-cpu display-4 text-primary mb-2"></i>
-                            <h6 class="mb-1">Electrónicos</h6>
-                            <small class="text-muted">Gadgets, componentes</small>
+                            <h6 class="mb-1">{{ i18n.electronics|default:"Electrónicos" }}</h6>
+                            <small class="text-muted">{{ i18n.electronics_desc|default:"Gadgets, componentes" }}</small>
                         </div>
                     </div>
                     <div class="col-md-3 col-6">
                         <div class="popular-item text-center p-3 bg-white rounded shadow-sm">
                             <i class="bi bi-palette display-4 text-success mb-2"></i>
-                            <h6 class="mb-1">Arte & Diseño</h6>
-                            <small class="text-muted">Decoración, artesanías</small>
+                            <h6 class="mb-1">{{ i18n.art_design|default:"Arte & Diseño" }}</h6>
+                            <small class="text-muted">{{ i18n.art_design_desc|default:"Decoración, artesanías" }}</small>
                         </div>
                     </div>
                     <div class="col-md-3 col-6">
                         <div class="popular-item text-center p-3 bg-white rounded shadow-sm">
                             <i class="bi bi-tools display-4 text-warning mb-2"></i>
-                            <h6 class="mb-1">Herramientas</h6>
-                            <small class="text-muted">Profesionales, hogar</small>
+                            <h6 class="mb-1">{{ i18n.tools|default:"Herramientas" }}</h6>
+                            <small class="text-muted">{{ i18n.tools_desc|default:"Profesionales, hogar" }}</small>
                         </div>
                     </div>
                     <div class="col-md-3 col-6">
                         <div class="popular-item text-center p-3 bg-white rounded shadow-sm">
                             <i class="bi bi-heart display-4 text-danger mb-2"></i>
-                            <h6 class="mb-1">Salud & Belleza</h6>
-                            <small class="text-muted">Cosméticos, cuidado</small>
+                            <h6 class="mb-1">{{ i18n.health_beauty|default:"Salud & Belleza" }}</h6>
+                            <small class="text-muted">{{ i18n.health_beauty_desc|default:"Cosméticos, cuidado" }}</small>
                         </div>
                     </div>
                 </div>
                 
                 <div class="text-center mt-4">
-                    <p class="mb-3"><strong>¿No encuentras lo que buscas?</strong></p>
+                    <p class="mb-3"><strong>{{ i18n.not_found_question|default:"¿No encuentras lo que buscas?" }}</strong></p>
                     <a href="https://wa.me/5355513196?text=Hola%2C%20busco%20un%20producto%20espec%c3%adfico%20que%20no%20est%c3%a1%20en%20el%20cat%c3%a1logo." 
                        target="_blank" 
                        class="btn btn-outline-success">
                         <i class="bi bi-search me-2"></i>
-                        Consultar Producto Específico
+                        {{ i18n.consult_specific|default:"Consultar Producto Específico" }}
                     </a>
                 </div>
             </div>
