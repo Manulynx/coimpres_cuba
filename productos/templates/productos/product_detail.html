@@ -199,14 +199,12 @@
                 {% endif %}
             </div>
             
-            <!-- Botón WhatsApp para múltiples números -->
+            <!-- Botones WhatsApp separados con rotación automática -->
             <div class="mb-4">
-                <button onclick="openMultipleWhatsApp()" class="btn btn-whatsapp btn-lg">
-                    <i class="bi bi-whatsapp"></i> Contactar Equipo Completo
-                    <small class="d-block mt-1" style="font-size: 0.75em; opacity: 0.9;">
-                        ✅ Abre ambos números automáticamente
-                    </small>
-                </button>
+                <h5 class="mb-3">Contactar por WhatsApp:</h5>
+                <div id="whatsappButtons" class="d-flex flex-column gap-2">
+                    <!-- Los botones se generarán dinámicamente con JavaScript -->
+                </div>                
             </div>
         </div>
     </div>
@@ -332,13 +330,16 @@
 <link rel="stylesheet" href="{% static 'css/product-gallery.css' %}">
 <link rel="stylesheet" href="{% static 'css/related-carousel.css' %}">
 <style>
-    /* Estilos para botón WhatsApp múltiple */
+    /* Estilos para botones WhatsApp separados */
     .btn-whatsapp {
         background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
         border: none;
         transition: all 0.3s ease;
         position: relative;
         overflow: hidden;
+        width: 100%;
+        padding: 12px 20px;
+        margin-bottom: 8px;
     }
     
     .btn-whatsapp:hover {
@@ -369,6 +370,37 @@
     .btn-whatsapp small {
         font-weight: 400;
         letter-spacing: 0.3px;
+        opacity: 0.9;
+    }
+    
+    /* Botón primario (recomendado) */
+    .btn-whatsapp.primary {
+        background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+        border: 2px solid #25D366;
+        position: relative;
+    }
+    
+    .btn-whatsapp.primary::after {
+        
+        position: absolute;
+        top: -8px;
+        right: 10px;
+        background: #FF6B35;
+        color: white;
+        font-size: 10px;
+        padding: 2px 8px;
+        border-radius: 12px;
+        font-weight: bold;
+    }
+    
+    /* Botón secundario */
+    .btn-whatsapp.secondary {
+        background: linear-gradient(135deg, #128C7E 0%, #0D6E5F 100%);
+        border: 2px solid #128C7E;
+    }
+    
+    .btn-whatsapp.secondary:hover {
+        background: linear-gradient(135deg, #0F7A6B 0%, #0A5A4D 100%);
     }
     
     /* Animación de pulso sutil */
@@ -391,9 +423,14 @@
     /* Responsive para móviles */
     @media (max-width: 768px) {
         .btn-whatsapp {
-            width: 100%;
-            padding: 15px;
-            font-size: 16px;
+            font-size: 14px;
+            padding: 15px 20px;
+        }
+        
+        .btn-whatsapp.primary::after {
+            right: 8px;
+            font-size: 9px;
+            padding: 1px 6px;
         }
     }
 </style>
@@ -406,111 +443,275 @@
 <script src="{% static 'js/related-carousel.js' %}"></script>
 
 <script>
-function openMultipleWhatsApp() {
-    // Preparar el mensaje con el nombre del producto
-    const productName = `{{ object.name|escapejs }}`;
-    const message = encodeURIComponent(`Hola, estoy interesado en el producto: ${productName}`);
+// Sistema de rotación de contactos WhatsApp
+class WhatsAppRotationSystem {
+    constructor() {
+        this.originalContacts = [
+            {
+                number: '+5355513196',
+                name: 'Ventas Cuba ',
+                department: 'Ventas y Cotizaciones',
+                icon: '🏢',
+                specialty: 'Pedidos y precios'
+            },
+            {
+                number: '+5358270033', 
+                name: 'Ventas Cuba ',
+                department: 'Ventas y Cotizaciones',
+                icon: '🏢',
+                specialty: 'Pedidos y precios'
+            }
+        ];
+        
+        // Inicializar con copia del orden original
+        this.contacts = [...this.originalContacts];
+        
+        this.productName = `{{ object.name|escapejs }}`;
+        this.rotationKey = 'whatsapp_rotation_timestamp';
+        this.rotationOrderKey = 'whatsapp_rotation_order';
+        this.rotationInterval = 1 * 60 * 1000; // 1 minuto en milisegundos
+        
+        this.initializeRotation();
+        this.renderButtons();
+        this.startAutoRotation();
+    }
     
-    // Configurar los números de contacto
-    const contacts = [
-        {
-            number: '+5355513196',
-            name: 'Ventas Cuba',
-            icon: '🏢'
-        },
-        {
-            number: '+5358270033', 
-            name: 'Soporte Cuba',
-            icon: '🎧'
+    // Inicializar sistema de rotación
+    initializeRotation() {
+        const now = Date.now();
+        const lastRotation = localStorage.getItem(this.rotationKey);
+        const savedOrder = localStorage.getItem(this.rotationOrderKey);
+        
+        // Restaurar orden guardado si existe
+        if (savedOrder) {
+            try {
+                const orderData = JSON.parse(savedOrder);
+                // Verificar que el orden guardado sea válido
+                if (orderData.length === this.originalContacts.length) {
+                    this.contacts = orderData;
+                }
+            } catch (e) {
+                this.contacts = [...this.originalContacts];
+            }
         }
-    ];
+        
+        // Verificar si necesita rotación automática
+        if (!lastRotation || (now - parseInt(lastRotation)) > this.rotationInterval) {
+            this.rotateContacts();
+            localStorage.setItem(this.rotationKey, now.toString());
+        } else {
+            const timeLeft = Math.ceil((this.rotationInterval - (now - parseInt(lastRotation))) / 1000);
+        }
+    }
     
-    // Función para abrir WhatsApp con efectos visuales
-    function openWhatsApp(contact, index) {
-        const url = `https://wa.me/${contact.number}?text=${message}`;
+    // Rotar el orden de los contactos
+    rotateContacts() {
+        const beforeOrder = this.contacts.map(c => c.name).join(' → ');
+        
+        // Rotar sistemáticamente (alternar orden)
+        this.contacts.reverse();
+        
+        const afterOrder = this.contacts.map(c => c.name).join(' → ');
+        
+        
+        
+        // Guardar el nuevo orden en localStorage
+        localStorage.setItem(this.rotationOrderKey, JSON.stringify(this.contacts));
+        
+        // Actualizar botones inmediatamente
+        this.renderButtons();
         
         // Mostrar notificación visual
-        showNotification(`${contact.icon} Abriendo ${contact.name}...`, 'info');
+    }
+    
+    // Iniciar rotación automática
+    startAutoRotation() {
+        // Limpiar cualquier timer existente
+        if (this.autoRotationTimer) {
+            clearInterval(this.autoRotationTimer);
+        }
+        
+        // Configurar timer para rotación automática
+        this.autoRotationTimer = setInterval(() => {
+            const now = Date.now();
+            const lastRotation = localStorage.getItem(this.rotationKey);
+            
+            if (!lastRotation || (now - parseInt(lastRotation)) > this.rotationInterval) {
+                this.rotateContacts();
+                localStorage.setItem(this.rotationKey, now.toString());
+            }
+        }, 10000); // Verificar cada 10 segundos
+        
+    }
+    
+    // Generar mensaje personalizado para WhatsApp
+    generateMessage(contact) {
+        return encodeURIComponent(
+            `Hola ${contact.name}! 👋\n\n` +
+            `Estoy interesado en el producto:\n📦 ${this.productName}\n\n` +
+            `¿Podrían proporcionarme más información?\n\n` +
+            `Gracias! 😊`
+        );
+    }
+    
+    // Abrir WhatsApp con efectos visuales
+    openWhatsApp(contact, isPrimary = false) {
+        const message = this.generateMessage(contact);
+        const url = `https://wa.me/${contact.number}?text=${message}`;
+        
+        // Mostrar notificación
+        this.showNotification(
+            `${contact.icon} Conectando con ${contact.name}...`, 
+            'info'
+        );
         
         // Abrir WhatsApp
         const whatsappWindow = window.open(url, '_blank');
         
         // Verificar si se abrió correctamente
         if (!whatsappWindow) {
-            showNotification('⚠️ Por favor, permite ventanas emergentes para contactar por WhatsApp', 'warning');
+            this.showNotification(
+                '⚠️ Por favor, permite ventanas emergentes para contactar por WhatsApp', 
+                'warning'
+            );
+        } else {
+            // Registrar interacción para analytics (opcional)
+            this.trackInteraction(contact, isPrimary);
         }
     }
     
-    // Mostrar confirmación inicial (una sola vez)
-    const confirmMessage = `¿Contactar con el equipo completo?\n\n🏢 Ventas Cuba: ${contacts[0].number}\n🎧 Soporte Cuba: ${contacts[1].number}\n\n✅ Se abrirán AMBOS números automáticamente.`;
-    
-    if (confirm(confirmMessage)) {
-        // Abrir primer contacto inmediatamente
-        openWhatsApp(contacts[0], 0);
+    // Registrar interacción (para futuras estadísticas)
+    trackInteraction(contact, isPrimary) {
+        const interactions = JSON.parse(localStorage.getItem('whatsapp_interactions') || '[]');
+        interactions.push({
+            contact: contact.name,
+            number: contact.number,
+            isPrimary: isPrimary,
+            timestamp: Date.now(),
+            product: this.productName
+        });
         
-        // Abrir segundo contacto automáticamente después de 1.5 segundos
-        setTimeout(() => {
-            openWhatsApp(contacts[1], 1);
+        // Mantener solo los últimos 100 registros
+        if (interactions.length > 100) {
+            interactions.splice(0, interactions.length - 100);
+        }
+        
+        localStorage.setItem('whatsapp_interactions', JSON.stringify(interactions));
+    }
+    
+    // Renderizar botones dinámicamente
+    renderButtons() {
+        const container = document.getElementById('whatsappButtons');
+        if (!container) return;
+        
+        container.innerHTML = '';
+        
+        this.contacts.forEach((contact, index) => {
+            const isPrimary = index === 0;
+            const button = document.createElement('button');
+            button.className = `btn btn-whatsapp ${isPrimary ? 'primary' : 'secondary'}`;
+            button.onclick = () => this.openWhatsApp(contact, isPrimary);
             
-            // Mostrar mensaje final
-            setTimeout(() => {
-                showNotification('✅ ¡Ambos contactos de WhatsApp están abiertos!', 'success');
-            }, 500);
-        }, 1500);
+            button.innerHTML = `
+                <div class="d-flex align-items-center justify-content-between">
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-whatsapp me-2"></i>
+                        <div class="text-start">
+                            <div class="fw-bold">${contact.icon} ${contact.name}</div>
+                            <small class="d-block opacity-90">${contact.department}</small>
+                        </div>
+                    </div>
+                    <div class="text-end d-none d-md-block">
+                        <small class="opacity-75">${contact.specialty}</small>
+                        <div class="small opacity-60">${contact.number}</div>
+                    </div>
+                </div>
+            `;
+            
+            // Agregar efectos hover
+            button.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-2px)';
+                this.style.boxShadow = '0 6px 20px rgba(37, 211, 102, 0.3)';
+            });
+            
+            button.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+                this.style.boxShadow = '';
+            });
+            
+            container.appendChild(button);
+        });
+    }
+    
+    // Mostrar notificaciones visuales
+    showNotification(message, type = 'info') {
+        // Remover notificaciones existentes
+        const existingNotifications = document.querySelectorAll('.whatsapp-notification');
+        existingNotifications.forEach(notif => notif.remove());
         
-        // Notificación informativa
+        // Crear nueva notificación
+        const notification = document.createElement('div');
+        notification.className = `alert alert-${type === 'info' ? 'primary' : type === 'warning' ? 'warning' : 'success'} alert-dismissible fade show position-fixed whatsapp-notification`;
+        notification.style.cssText = `
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            min-width: 300px;
+            max-width: 400px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border: none;
+            border-radius: 8px;
+            animation: slideInRight 0.3s ease-out;
+        `;
+        
+        notification.innerHTML = `
+            <strong>${message}</strong>
+            <button type="button" class="btn-close" onclick="this.parentElement.remove()"></button>
+        `;
+        
+        // Agregar al body
+        document.body.appendChild(notification);
+        
+        // Auto-remover después de 4 segundos
         setTimeout(() => {
-            showNotification('📱 Abriendo segundo contacto...', 'info');
-        }, 1000);
+            if (notification.parentNode) {
+                notification.style.animation = 'slideOutRight 0.3s ease-in';
+                setTimeout(() => notification.remove(), 300);
+            }
+        }, 4000);
     }
 }
 
-// Función para mostrar notificaciones visuales
-function showNotification(message, type = 'info') {
-    // Crear elemento de notificación
-    const notification = document.createElement('div');
-    notification.className = `alert alert-${type === 'info' ? 'primary' : type === 'warning' ? 'warning' : 'success'} alert-dismissible fade show position-fixed`;
-    notification.style.cssText = `
-        top: 20px;
-        right: 20px;
-        z-index: 9999;
-        min-width: 300px;
-        max-width: 400px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        border: none;
-        border-radius: 8px;
-    `;
-    
-    notification.innerHTML = `
-        <strong>${message}</strong>
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    `;
-    
-    // Agregar al body
-    document.body.appendChild(notification);
-    
-    // Auto-remover después de 4 segundos
-    setTimeout(() => {
-        if (notification.parentNode) {
-            notification.remove();
-        }
-    }, 4000);
-}
-
-// Mejorar la experiencia con hover en el botón
+// Inicializar sistema cuando el DOM esté listo
 document.addEventListener('DOMContentLoaded', function() {
-    const whatsappBtn = document.querySelector('button[onclick="openMultipleWhatsApp()"]');
-    if (whatsappBtn) {
-        whatsappBtn.addEventListener('mouseenter', function() {
-            this.style.transform = 'translateY(-2px)';
-            this.style.boxShadow = '0 6px 20px rgba(37, 211, 102, 0.3)';
-        });
+    const whatsappSystem = new WhatsAppRotationSystem();
+    
+    // Agregar estilos de animación
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
         
-        whatsappBtn.addEventListener('mouseleave', function() {
-            this.style.transform = 'translateY(0)';
-            this.style.boxShadow = '';
-        });
-    }
+        @keyframes slideOutRight {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
+    `;
+    document.head.appendChild(style);
 });
 </script>
 {% endblock %}
