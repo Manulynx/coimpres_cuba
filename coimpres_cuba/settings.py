@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sitemaps',  # Para SEO - Sitemaps
     'productos.apps.ProductosConfig',
     'django.contrib.humanize',
     "whitenoise.runserver_nostatic",
@@ -69,6 +70,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'coimpres_cuba.context_processors.i18n_context',  # Context processor para traducciones globales
+                'coimpres_cuba.seo_processors.seo_context',  # Context processor para SEO dinámico
             ],
         },
     },

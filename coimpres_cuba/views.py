@@ -3,6 +3,8 @@ from django.shortcuts import render
 from productos.models import Product
 from django.views.generic import TemplateView
 from django.contrib import messages
+from django.http import HttpResponse
+from django.views.decorators.http import require_GET
 
 def home_view(request):
     """Vista para la página de inicio - Simplificada usando context processor global"""
@@ -70,3 +72,17 @@ def change_language(request):
     else:
         # Si no hay referencia, ir al inicio
         return redirect('/')
+
+@require_GET
+def robots_txt(request):
+    """Vista para robots.txt - Importante para SEO"""
+    lines = [
+        "User-agent: *",
+        "Allow: /",
+        "Disallow: /admin/",
+        "Disallow: /productos/admin/",
+        "Disallow: /productos/secret-admin-login/",
+        "",
+        f"Sitemap: {request.build_absolute_uri('/sitemap.xml')}",
+    ]
+    return HttpResponse("\n".join(lines), content_type="text/plain")

@@ -1,7 +1,67 @@
 {% extends "coimpres_cuba/base.html" %}
 {% load static %}
 
-{% block title %}{{ object.name }} | Coimpres Cuba{% endblock %}
+{% block title %}{{ object.name }} | COIMPRE S.r.l. - Productos Made in Italy{% endblock %}
+
+{% block description %}{{ object.short_description|default:object.name }} - Producto italiano de alta calidad disponible en Cuba. {{ object.proveedor.name|default:"" }}{% endblock %}
+
+{% block keywords %}{{ object.name }}, {{ object.category.name|default:"" }}, productos italianos, made in Italy, {{ object.proveedor.name|default:"" }}, COIMPRE, Cuba{% endblock %}
+
+{% block og_title %}{{ object.name }} - Producto Made in Italy{% endblock %}
+{% block og_description %}{{ object.short_description|default:object.name }} - Disponible en Cuba a través de COIMPRE S.r.l.{% endblock %}
+{% block og_type %}product{% endblock %}
+{% block og_image %}{% if object.image %}{{ request.scheme }}://{{ request.get_host }}{{ object.image.url }}{% else %}{{ request.scheme }}://{{ request.get_host }}{% static 'img/logo_3.png' %}{% endif %}{% endblock %}
+
+{% block canonical %}{{ request.scheme }}://{{ request.get_host }}{% url 'productos:product_detail' object.slug %}{% endblock %}
+
+{% block extra_structured_data %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": "{{ object.name }}",
+    "image": [
+        {% if object.image %}"{{ request.scheme }}://{{ request.get_host }}{{ object.image.url }}"{% endif %}
+        {% for image in gallery_images %}{% if forloop.first and object.image %},{% endif %}"{{ request.scheme }}://{{ request.get_host }}{{ image.image.url }}"{% if not forloop.last %},{% endif %}{% endfor %}
+    ],
+    "description": "{{ object.short_description|default:object.name }}",
+    "sku": "{{ object.sku|default:'' }}",
+    "brand": {
+        "@type": "Brand",
+        "name": "{{ object.proveedor.name|default:'Made in Italy' }}"
+    },
+    "manufacturer": {
+        "@type": "Organization",
+        "name": "{{ object.proveedor.name|default:'Italia' }}"
+    },
+    {% if object.price %}
+    "offers": {
+        "@type": "Offer",
+        "url": "{{ request.scheme }}://{{ request.get_host }}{% url 'productos:product_detail' object.slug %}",
+        "priceCurrency": "USD",
+        "price": "{{ object.price }}",
+        "availability": "{% if object.status_procedencia.name == 'En stock' %}https://schema.org/InStock{% elif object.status_procedencia.name == 'Por pedido' %}https://schema.org/PreOrder{% else %}https://schema.org/OutOfStock{% endif %}",
+        "seller": {
+            "@type": "Organization",
+            "name": "COIMPRE S.r.l."
+        }
+    },
+    {% endif %}
+    "category": "{{ object.category.name|default:'' }}",
+    {% if object.peso %}
+    "weight": {
+        "@type": "QuantitativeValue",
+        "value": "{{ object.peso }}",
+        "unitCode": "KGM"
+    },
+    {% endif %}
+    "countryOfOrigin": {
+        "@type": "Country",
+        "name": "{{ object.origen|default:'Italia' }}"
+    }
+}
+</script>
+{% endblock %}
 
 {% block content %}
 <div class="container my-5">

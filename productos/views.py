@@ -33,7 +33,7 @@ def require_staff_login(view_func):
 
 class ProductListView(ListView):
     model = Product
-    template_name = 'productos/product_list.html'
+    template_name = 'productos/product_list_seo.html'
     paginate_by = 10
     
     def get_queryset(self):

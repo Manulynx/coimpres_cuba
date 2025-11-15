@@ -19,7 +19,17 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from django.contrib.sitemaps.views import sitemap
+from productos.sitemaps import StaticViewSitemap, ProductSitemap, CategorySitemap, ProveedorSitemap
 from . import views
+
+# Configuración de sitemaps para SEO
+sitemaps = {
+    'static': StaticViewSitemap,
+    'products': ProductSitemap,
+    'categories': CategorySitemap,
+    'suppliers': ProveedorSitemap,
+}
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -27,6 +37,10 @@ urlpatterns = [
     path('productos/', include('productos.urls')),
     path('contact/', views.ContactView.as_view(), name='contact'),
     path('change-language/', views.change_language, name='change_language'),
+    
+    # SEO URLs
+    path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
+    path('robots.txt', views.robots_txt, name='robots_txt'),
 ]
 
 # Servir archivos media y static en desarrollo Y producción

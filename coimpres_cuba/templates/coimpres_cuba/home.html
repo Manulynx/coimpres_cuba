@@ -1,6 +1,74 @@
 {% extends 'coimpres_cuba/base.html' %}
 {% load static %}
 
+{% block title %}COIMPRE S.r.l. - Importador Oficial de Productos Italianos en Cuba{% endblock %}
+
+{% block description %}COIMPRE S.r.l. - Importador oficial de productos italianos de alta calidad en Cuba desde 2014. Productos Made in Italy para tu hogar y negocio en La Habana.{% endblock %}
+
+{% block keywords %}COIMPRE, productos italianos, made in Italy, importación Cuba, La Habana, Miramar, productos de calidad, Italia{% endblock %}
+
+{% block og_title %}COIMPRE S.r.l. - Lo Mejor de Italia en Cuba{% endblock %}
+{% block og_description %}Importador oficial de productos italianos de alta calidad en Cuba desde 2014. Descubre nuestra selección de productos Made in Italy.{% endblock %}
+
+{% block extra_structured_data %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": "COIMPRE S.r.l.",
+    "image": "{{ request.scheme }}://{{ request.get_host }}{% static 'img/logo_3.png' %}",
+    "description": "Importador oficial de productos italianos de alta calidad en Cuba desde 2014",
+    "url": "{{ request.scheme }}://{{ request.get_host }}",
+    "telephone": "+53-72141480",
+    "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Miramar",
+        "addressLocality": "La Habana",
+        "addressCountry": "CU"
+    },
+    "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 23.1136,
+        "longitude": -82.3666
+    },
+    "openingHoursSpecification": {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": [
+            "Monday",
+            "Tuesday", 
+            "Wednesday",
+            "Thursday",
+            "Friday",
+            "Saturday"
+        ],
+        "opens": "09:00",
+        "closes": "18:00"
+    },
+    "sameAs": [
+        "https://www.facebook.com/coimpre",
+        "https://www.instagram.com/coimpre"
+    ],
+    "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Productos Italianos",
+        "itemListElement": [
+            {
+                "@type": "Offer",
+                "itemOffered": {
+                    "@type": "Product",
+                    "name": "Productos Made in Italy"
+                }
+            }
+        ]
+    },
+    "areaServed": {
+        "@type": "Country",
+        "name": "Cuba"
+    }
+}
+</script>
+{% endblock %}
+
 {% block content %}
 <!-- Hero Section: Simplified Italian imports showcase -->
 <section class="hero-section hero-simplified position-relative overflow-hidden">

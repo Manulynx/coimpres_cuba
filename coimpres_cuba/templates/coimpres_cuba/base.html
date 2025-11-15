@@ -4,7 +4,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}COIMPRE S.r.l. - Productos Made in Italy{% endblock %}</title>
+    
+    <!-- SEO Meta Tags -->
+    <title>{% block title %}{{ seo_title|default:"COIMPRE S.r.l. - Productos Made in Italy" }}{% endblock %}</title>
+    <meta name="description" content="{% block description %}{{ seo_description|default:"COIMPRE S.r.l. - Importador oficial de productos italianos de alta calidad en Cuba desde 2014. Productos Made in Italy para tu hogar y negocio." }}{% endblock %}">
+    <meta name="keywords" content="{% block keywords %}{{ seo_keywords|default:"productos italianos, importación Cuba, made in Italy, COIMPRE, productos de calidad, Italia, La Habana" }}{% endblock %}">
+    <meta name="author" content="COIMPRE S.r.l.">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="{% block canonical %}{{ request.build_absolute_uri }}{% endblock %}">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="{% block og_title %}{{ seo_title|default:"COIMPRE S.r.l. - Productos Made in Italy" }}{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}{{ seo_description|default:"Importador oficial de productos italianos de alta calidad en Cuba desde 2014." }}{% endblock %}">
+    <meta property="og:type" content="{% block og_type %}website{% endblock %}">
+    <meta property="og:url" content="{{ request.build_absolute_uri }}">
+    <meta property="og:image" content="{% block og_image %}{{ request.scheme }}://{{ request.get_host }}{% static 'img/logo_3.png' %}{% endblock %}">
+    <meta property="og:site_name" content="COIMPRE S.r.l.">
+    <meta property="og:locale" content="{% if lang == 'es' %}es_ES{% elif lang == 'en' %}en_US{% elif lang == 'it' %}it_IT{% else %}es_ES{% endif %}">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{% block twitter_title %}{{ seo_title|default:"COIMPRE S.r.l. - Productos Made in Italy" }}{% endblock %}">
+    <meta name="twitter:description" content="{% block twitter_description %}{{ seo_description|default:"Importador oficial de productos italianos de alta calidad en Cuba desde 2014." }}{% endblock %}">
+    <meta name="twitter:image" content="{% block twitter_image %}{{ request.scheme }}://{{ request.get_host }}{% static 'img/logo_3.png' %}{% endblock %}">
+    
+    <!-- Hreflang Tags for Multilingual SEO -->
+    <link rel="alternate" hreflang="es" href="{{ request.scheme }}://{{ request.get_host }}{% url 'change_language' %}?lang=es&next={{ request.path }}">
+    <link rel="alternate" hreflang="en" href="{{ request.scheme }}://{{ request.get_host }}{% url 'change_language' %}?lang=en&next={{ request.path }}">
+    <link rel="alternate" hreflang="it" href="{{ request.scheme }}://{{ request.get_host }}{% url 'change_language' %}?lang=it&next={{ request.path }}">
+    <link rel="alternate" hreflang="x-default" href="{{ request.scheme }}://{{ request.get_host }}{{ request.path }}">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{% static 'img/logo_3.png' %}">
+    <link rel="apple-touch-icon" href="{% static 'img/logo_3.png' %}">
+    
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap Icons -->
@@ -16,6 +51,36 @@
     <link rel="stylesheet" href="{% static 'css/header.css' %}">
     <link rel="stylesheet" href="{% static 'css/components.css' %}">
     {% block extra_css %}{% endblock %}
+    
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "COIMPRE S.r.l.",
+        "url": "{{ request.scheme }}://{{ request.get_host }}",
+        "logo": "{{ request.scheme }}://{{ request.get_host }}{% static 'img/logo_3.png' %}",
+        "description": "Importador oficial de productos italianos de alta calidad en Cuba desde 2014",
+        "foundingDate": "2014",
+        "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Miramar",
+            "addressRegion": "La Habana",
+            "addressCountry": "CU"
+        },
+        "contactPoint": {
+            "@type": "ContactPoint",
+            "telephone": "+53-72141480",
+            "contactType": "customer service",
+            "availableLanguage": ["Spanish", "English", "Italian"]
+        },
+        "sameAs": [
+            "https://www.facebook.com/coimpre",
+            "https://www.instagram.com/coimpre"
+        ]
+    }
+    </script>
+    {% block extra_structured_data %}{% endblock %}
 </head>
 <body>
     <!-- Enhanced Header: Elegant premium look for Italian import company -->

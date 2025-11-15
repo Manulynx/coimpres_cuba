@@ -140,6 +140,11 @@ class Product(models.Model):
     def __str__(self):
         return self.name
     
+    def get_absolute_url(self):
+        """URL absoluta del producto - Importante para SEO"""
+        from django.urls import reverse
+        return reverse('productos:product_detail', args=[self.slug])
+    
     @property
     def is_featured(self):
         """Retorna True si el producto está destacado"""
@@ -213,6 +218,12 @@ class Product(models.Model):
         verbose_name = "Producto"
         verbose_name_plural = "Productos"
         ordering = ['-destacado', '-en_oferta', '-created_at']  # Destacados y ofertas primero
+        indexes = [
+            models.Index(fields=['slug']),
+            models.Index(fields=['is_active', 'destacado']),
+            models.Index(fields=['category', 'is_active']),
+            models.Index(fields=['proveedor', 'is_active']),
+        ]
 
 
 class ProductImage(models.Model):

@@ -1,7 +1,13 @@
 {% extends "coimpres_cuba/base.html" %}
 {% load static %}
 
-{% block title %}Productos - Coimpre S.r.l.{% endblock %}
+{% block title %}{% if selected_category %}{{ selected_category.name }} - {% endif %}{{ i18n.products|default:"Productos" }} | COIMPRE S.r.l.{% endblock %}
+
+{% block description %}{% if selected_category %}Productos de {{ selected_category.name }} - {% endif %}Catálogo completo de productos italianos de alta calidad disponibles en Cuba. Made in Italy desde 2014.{% endblock %}
+
+{% block keywords %}productos italianos, made in Italy, {% if selected_category %}{{ selected_category.name }}, {% endif %}COIMPRE, Cuba, importación, catálogo{% endblock %}
+
+{% block canonical %}{{ request.scheme }}://{{ request.get_host }}{% url 'productos:product_list' %}{% if request.GET.category %}?category={{ request.GET.category }}{% endif %}{% endblock %}
 
 {% block content %}
 <div class="container py-5">
