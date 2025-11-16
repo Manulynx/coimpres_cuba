@@ -8,18 +8,18 @@
     min-height: 360px;
 }
 
-/* Background collage grid - Tamaños iguales con más fotos */
+/* Background collage grid - Optimizado para hasta 28 fotos */
 .hero-collage {
     position: absolute;
     inset: 0;
     display: grid;
-    grid-template-columns: repeat(6, 1fr); /* Más columnas para más fotos */
-    grid-auto-rows: 18vh; /* Altura fija basada en viewport height */
-    gap: 6px; /* Gap más pequeño para acomodar más fotos */
-    opacity: 0.75; /* Un poco más transparente para mejor legibilidad */
+    grid-template-columns: repeat(7, 1fr); /* 7 columnas para optimizar 28 fotos (7x4 grid) */
+    grid-auto-rows: 15vh; /* Altura reducida para acomodar más filas */
+    gap: 4px; /* Gap más pequeño para mejor densidad */
+    opacity: 0.7; /* Más transparente para mejor legibilidad con más fotos */
     pointer-events: none;
     z-index: 0;
-    padding: 10px; /* Pequeño padding interno */
+    padding: 8px; /* Padding reducido */
 }
 
 .hero-collage .collage-item {
@@ -182,32 +182,33 @@
 /* Responsive adjustments para grid uniforme */
 @media (max-width: 1199.98px) {
   .hero-collage { 
-    grid-template-columns: repeat(10, 1fr); /* Menos columnas en tablets grandes */
-    grid-auto-rows: 7vh; 
+    grid-template-columns: repeat(6, 1fr); /* 6 columnas para tablets grandes (6x5 = 30 espacios) */
+    grid-auto-rows: 12vh; 
     gap: 3px; 
+    opacity: 0.65;
   }
   .hero-title { font-size: 2.1rem; }
 }
 
 @media (max-width: 991.98px) {
   .hero-collage { 
-    grid-template-columns: repeat(8, 1fr); /* 8 columnas en tablets */
-    grid-auto-rows: 6vh; 
+    grid-template-columns: repeat(5, 1fr); /* 5 columnas en tablets (5x6 = 30 espacios) */
+    grid-auto-rows: 10vh; 
     gap: 3px; 
-    opacity: 0.55; /* Un poco más transparente */
+    opacity: 0.55; /* Más transparente para mejor legibilidad */
   }
-  .hero-overlay { background: rgba(44,42,40,0.82); }
-  .hero-simplified { min-height: 340px; }
+  .hero-overlay { background: rgba(44,42,40,0.85); }
+  .hero-simplified { min-height: 360px; }
   .hero-title { font-size: 1.9rem; }
 }
 
 @media (max-width: 767.98px) {
   .hero-collage { 
-    grid-template-columns: repeat(6, 1fr); /* 6 columnas en móviles */
+    grid-template-columns: repeat(4, 1fr); /* 4 columnas en móviles (4x7 = 28 espacios exactos) */
     grid-auto-rows: 8vh; 
     gap: 2px; 
-    opacity: 0.45; /* Más transparente en móvil */
-    padding: 5px;
+    opacity: 0.4; /* Más transparente en móvil para mejor legibilidad */
+    padding: 4px;
   }
   .hero-collage .collage-item { 
     border-radius: 3px; 
@@ -231,17 +232,17 @@
 
 @media (max-width: 575.98px) {
   .hero-collage { 
-    grid-template-columns: repeat(4, 1fr); /* 4 columnas en móviles pequeños */
-    grid-auto-rows: 10vh; 
-    gap: 2px; 
-    opacity: 0.35; /* Muy transparente en móviles pequeños */
-    padding: 3px;
+    grid-template-columns: repeat(4, 1fr); /* 4 columnas para móviles pequeños (4x7 = 28 fotos perfectas) */
+    grid-auto-rows: 7vh; /* Altura reducida para acomodar 7 filas */
+    gap: 1.5px; 
+    opacity: 0.35; /* Muy transparente para máxima legibilidad */
+    padding: 2px;
   }
   .hero-collage .collage-item { 
     border-radius: 2px; 
   }
   
-  .hero-simplified { min-height: 320px; }
+  .hero-simplified { min-height: 340px; /* Altura aumentada para acomodar más filas */ }
   .hero-title { font-size: 1.6rem; }
   .hero-btn-primary, .hero-btn-secondary { width: 100%; margin-bottom: 0.5rem; padding: 0.7rem 1rem; }
   
