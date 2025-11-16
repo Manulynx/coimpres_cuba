@@ -82,7 +82,8 @@
                     <img id="mainMedia" src="{% if main_image %}{{ main_image.url }}{% elif object.image %}{{ object.image.url }}{% else %}{% static 'img/no-image.jpg' %}{% endif %}" 
                          class="img-fluid rounded shadow-lg" 
                          alt="{{ object.name }}" 
-                         style="width: 100%; height: 450px; object-fit: cover; border-radius: 12px;">
+                         loading="lazy"
+                         style="width: 100%; max-height: 450px; object-fit: scale-down; background-color: #f8f9fa; border-radius: 12px;">
                     
                     <!-- Overlay para identificar videos -->
                     <div id="videoOverlay" class="video-play-overlay d-none">
@@ -101,7 +102,7 @@
                             <!-- Imagen Principal del Producto (siempre primera) -->
                             {% if object.image %}
                             <div class="thumbnail-item active" data-type="image" data-src="{{ object.image.url }}" data-alt="{{ object.name }}">
-                                <img src="{{ object.image.url }}" alt="{{ object.name }}" class="thumbnail-img">
+                                <img src="{{ object.image.url }}" alt="{{ object.name }}" class="thumbnail-img" loading="lazy">
                                 <div class="thumbnail-overlay">
                                     <span class="thumbnail-label">Principal</span>
                                 </div>
@@ -112,7 +113,7 @@
                             {% for image in gallery_images %}
                                 {% if not image.is_main or not object.image %}
                                 <div class="thumbnail-item" data-type="image" data-src="{{ image.image.url }}" data-alt="{{ image.alt_text|default:object.name }}">
-                                    <img src="{{ image.image.url }}" alt="{{ image.alt_text|default:object.name }}" class="thumbnail-img">
+                                    <img src="{{ image.image.url }}" alt="{{ image.alt_text|default:object.name }}" class="thumbnail-img" loading="lazy">
                                     {% if image.is_main and not object.image %}
                                     <div class="thumbnail-overlay">
                                         <span class="thumbnail-label">Principal</span>
@@ -218,7 +219,7 @@
                 <h5>Proveedor:</h5>
                 <p>{{ object.proveedor.name }}</p>
                 {% if object.proveedor.logo %}
-                    <img src="{{ object.proveedor.logo.url }}" alt="{{ object.proveedor.name }}" class="img-fluid" style="max-height: 50px;">
+                    <img src="{{ object.proveedor.logo.url }}" alt="{{ object.proveedor.name }}" class="img-fluid" loading="lazy" style="max-height: 50px; object-fit: contain;">
                 {% endif %}
             </div>
             {% endif %}
@@ -390,6 +391,24 @@
 <link rel="stylesheet" href="{% static 'css/product-gallery.css' %}">
 <link rel="stylesheet" href="{% static 'css/related-carousel.css' %}">
 <style>
+    /* Forzar la visualización correcta de la imagen principal */
+    #mainMedia {
+        object-fit: scale-down !important;
+        max-height: 450px !important;
+        height: auto !important;
+        width: 100% !important;
+        background-color: #f8f9fa !important;
+    }
+    
+    /* Asegurar que el contenedor respete las proporciones */
+    .main-media-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 300px;
+        max-height: 450px;
+        background-color: #f8f9fa;
+    }
     /* Estilos para botones WhatsApp separados */
     .btn-whatsapp {
         background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);

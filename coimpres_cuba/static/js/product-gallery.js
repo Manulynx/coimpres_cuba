@@ -164,7 +164,7 @@ class ProductGallery {
             const video = document.createElement('video');
             video.className = 'img-fluid rounded shadow-lg';
             video.alt = mediaItem.alt;
-            video.style.cssText = 'width: 100%; height: 450px; object-fit: cover; border-radius: 12px;';
+            video.style.cssText = 'width: 100%; max-height: 450px; object-fit: contain; background-color: #000; border-radius: 12px;';
             video.id = 'mainMedia';
             video.controls = true;
             video.preload = 'metadata';
@@ -206,7 +206,7 @@ class ProductGallery {
             img.src = mediaItem.src;
             img.className = 'img-fluid rounded shadow-lg';
             img.alt = mediaItem.alt;
-            img.style.cssText = 'width: 100%; height: 450px; object-fit: cover; border-radius: 12px;';
+            img.style.cssText = 'width: 100%; max-height: 450px; object-fit: scale-down; background-color: #f8f9fa; border-radius: 12px;';
             img.id = 'mainMedia';
             
             // Agregar al contenedor antes del overlay
