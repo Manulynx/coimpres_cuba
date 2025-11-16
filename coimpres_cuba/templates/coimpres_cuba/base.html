@@ -85,17 +85,33 @@
     </script>
     {% block extra_structured_data %}{% endblock %}
     
-    <!-- Preloader Script - Solo primera visita -->
+    <!-- Preloader Script - Cada 12 horas por dispositivo -->
     <script>
-        // Solo cargar preloader en primera visita
-        if (!localStorage.getItem('coimpre_visited')) {
-            // Marcar como visitado inmediatamente
-            localStorage.setItem('coimpre_visited', 'true');
+        // Configuración: preloader cada 12 horas
+        const HOURS_TO_RESET = 12; // Cada 12 horas
+        const now = new Date().getTime();
+        const lastPreloaderShow = localStorage.getItem('coimpre_last_preloader');
+        const hoursInMs = HOURS_TO_RESET * 60 * 60 * 1000; // Convertir horas a milisegundos
+        
+        // Verificar si han pasado 12 horas desde la última vez
+        if (!lastPreloaderShow || (now - parseInt(lastPreloaderShow)) >= hoursInMs) {
+            // Guardar el timestamp actual
+            localStorage.setItem('coimpre_last_preloader', now.toString());
             // Permitir que el preloader.js se ejecute
             window.showPreloader = true;
+            
+            // Debug info (opcional - puedes remover en producción)
+            console.log('🎬 COIMPRE Preloader: Mostrando (cada 12 horas)');
         } else {
-            // No mostrar preloader en visitas subsecuentes
+            // Calcular tiempo restante hasta el próximo preloader
+            const timeRemaining = hoursInMs - (now - parseInt(lastPreloaderShow));
+            const hoursRemaining = Math.floor(timeRemaining / (1000 * 60 * 60));
+            const minutesRemaining = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+            
+            // No mostrar preloader
             window.showPreloader = false;
+            
+            // Debug info (opcional - puedes remover en producción)
         }
     </script>
 </head>
