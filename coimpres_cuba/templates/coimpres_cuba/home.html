@@ -75,13 +75,21 @@
     <!-- Simple accent stripe at the top -->
     <div class="italian-stripe"></div>
 
-    <!-- Background collage built from featured product images -->
+    <!-- Background collage built from featured product images - Más fotos con tamaños iguales -->
     <div class="hero-collage" aria-hidden="true">
-        {% for product in featured_products|slice:":8" %}
+        {% for product in featured_products|slice:":16" %}
             {% if product.image %}
                 <img src="{{ product.image.url }}" alt="" class="collage-item" loading="lazy" decoding="async">
             {% endif %}
         {% endfor %}
+        <!-- Si no hay suficientes productos, repetir algunas fotos para llenar el grid -->
+        {% if featured_products|length < 16 %}
+            {% for product in featured_products|slice:":8" %}
+                {% if product.image %}
+                    <img src="{{ product.image.url }}" alt="" class="collage-item" loading="lazy" decoding="async" style="opacity: 0.75;">
+                {% endif %}
+            {% endfor %}
+        {% endif %}
     </div>
 
     <!-- Dark overlay to ensure text readability over collage -->
