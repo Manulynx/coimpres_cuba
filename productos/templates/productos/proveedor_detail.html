@@ -80,8 +80,9 @@
     
     .product-image {
         height: 200px;
-        object-fit: cover;
+        object-fit: contain;
         width: 100%;
+        background-color: #f8f9fa;
     }
     
     .product-placeholder {
@@ -169,7 +170,8 @@
                 {% if proveedor.logo %}
                     <img src="{{ proveedor.logo.url }}" 
                          alt="Logo {{ proveedor.name }}" 
-                         class="proveedor-logo-large animate__animated animate__fadeInLeft">
+                         class="proveedor-logo-large animate__animated animate__fadeInLeft"
+                         loading="lazy">
                 {% else %}
                     <div class="proveedor-logo-large d-flex align-items-center justify-content-center animate__animated animate__fadeInLeft">
                         <i class="bi bi-building" style="font-size: 4rem; color: #6c757d;"></i>
@@ -256,7 +258,8 @@
                             {% if producto.get_main_image %}
                                 <img src="{{ producto.get_main_image.url }}" 
                                      alt="{{ producto.name }}" 
-                                     class="product-image">
+                                     class="product-image"
+                                     loading="lazy">
                             {% else %}
                                 <div class="product-placeholder">
                                     <i class="bi bi-image" style="font-size: 2rem;"></i>
