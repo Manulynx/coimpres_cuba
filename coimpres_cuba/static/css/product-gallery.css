@@ -16,6 +16,10 @@
 .main-media-container video {
     transition: transform 0.3s ease;
     cursor: zoom-in;
+    object-fit: scale-down !important;
+    max-height: 400px !important;
+    width: 100% !important;
+    background-color: #f8f9fa;
 }
 
 .main-media-container video {
@@ -212,7 +216,7 @@
     
     .main-media-container img,
     .main-media-container video {
-        height: 300px;
+        max-height: 300px;
     }
     
     .thumbnail-item {
@@ -238,7 +242,7 @@
 @media (max-width: 480px) {
     .main-media-container img,
     .main-media-container video {
-        height: 250px;
+        max-height: 250px;
         border-radius: 8px;
     }
     
