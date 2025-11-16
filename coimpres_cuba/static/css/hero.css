@@ -16,7 +16,7 @@
     grid-template-columns: repeat(8, 1fr);
     grid-auto-rows: 14vw; /* responsive height buckets relative to viewport width */
     gap: 6px;
-    opacity: 0.15; /* más transparente para mejor legibilidad */
+    opacity: 0.01; /* más transparente para mejor legibilidad */
     pointer-events: none;
     z-index: 0;
 }
