@@ -75,22 +75,20 @@
     <!-- Simple accent stripe at the top -->
     <div class="italian-stripe"></div>
 
-    <!-- Background collage built from featured product images - Hasta 28 fotos máximo -->
+    <!-- Background collage built from featured product images - Más fotos con tamaños iguales -->
     <div class="hero-collage" aria-hidden="true">
-        {% for product in featured_products|slice:":28" %}
+        {% for product in featured_products|slice:":16" %}
             {% if product.image %}
                 <img src="{{ product.image.url }}" alt="" class="collage-item" loading="lazy" decoding="async">
             {% endif %}
         {% endfor %}
-        <!-- Si no hay suficientes productos, repetir fotos para llenar hasta 28 máximo -->
-        {% if featured_products|length < 28 %}
-            {% with remaining=28|add:featured_products|length|make_list %}
-                {% for product in featured_products|slice:":14" %}
-                    {% if product.image and forloop.counter0 < remaining|length %}
-                        <img src="{{ product.image.url }}" alt="" class="collage-item" loading="lazy" decoding="async" style="opacity: 0.6;">
-                    {% endif %}
-                {% endfor %}
-            {% endwith %}
+        <!-- Si no hay suficientes productos, repetir algunas fotos para llenar el grid -->
+        {% if featured_products|length < 16 %}
+            {% for product in featured_products|slice:":8" %}
+                {% if product.image %}
+                    <img src="{{ product.image.url }}" alt="" class="collage-item" loading="lazy" decoding="async" style="opacity: 0.75;">
+                {% endif %}
+            {% endfor %}
         {% endif %}
     </div>
 
