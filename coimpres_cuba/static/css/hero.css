@@ -163,7 +163,7 @@
     grid-template-columns: repeat(8, 1fr); /* 8 columnas en tablets */
     grid-auto-rows: 6vh; 
     gap: 3px; 
-    opacity: 0.55; /* Un poco más transparente */
+    opacity: 0.75; /* Un poco más transparente */
   }
   .hero-overlay { background: rgba(44,42,40,0.82); }
   .hero-simplified { min-height: 340px; }
