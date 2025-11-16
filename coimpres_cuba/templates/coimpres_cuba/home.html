@@ -77,19 +77,19 @@
 
     <!-- Background collage built from featured product images - Más fotos con tamaños iguales -->
     <div class="hero-collage" aria-hidden="true">
-        {% for product in featured_products|slice:":16" %}
+        {% for product in featured_products %}
             {% if product.image %}
                 <img src="{{ product.image.url }}" alt="" class="collage-item" loading="lazy" decoding="async">
             {% endif %}
         {% endfor %}
-        <!-- Si no hay suficientes productos, repetir algunas fotos para llenar el grid -->
-        {% if featured_products|length < 16 %}
-            {% for product in featured_products|slice:":8" %}
+        <!-- Repetir todas las fotos múltiples veces para llenar completamente el grid en móvil -->
+        {% for repetition in "123456" %}
+            {% for product in featured_products %}
                 {% if product.image %}
-                    <img src="{{ product.image.url }}" alt="" class="collage-item" loading="lazy" decoding="async" style="opacity: 0.75;">
+                    <img src="{{ product.image.url }}" alt="" class="collage-item" loading="lazy" decoding="async" style="opacity: 0.7;">
                 {% endif %}
             {% endfor %}
-        {% endif %}
+        {% endfor %}
     </div>
 
     <!-- Dark overlay to ensure text readability over collage -->

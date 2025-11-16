@@ -9,11 +9,11 @@ from django.views.decorators.http import require_GET
 def home_view(request):
     """Vista para la página de inicio - Con más productos para collage ampliado"""
     # Obtener más productos para el hero collage (hasta 16 productos para el grid ampliado)
-    featured_products_query = Product.objects.filter(is_active=True, destacado=True).select_related('category', 'subcategory', 'proveedor', 'estatus')[:16]
+    featured_products_query = Product.objects.filter(is_active=True, destacado=True).select_related('category', 'subcategory', 'proveedor', 'estatus')[:28]
     
     # Si no hay suficientes productos destacados, completar con productos activos
-    if featured_products_query.count() < 16:
-        additional_products = Product.objects.filter(is_active=True).exclude(id__in=featured_products_query).select_related('category', 'subcategory', 'proveedor', 'estatus')[:16-featured_products_query.count()]
+    if featured_products_query.count() < 28:
+        additional_products = Product.objects.filter(is_active=True).exclude(id__in=featured_products_query).select_related('category', 'subcategory', 'proveedor', 'estatus')[:28-featured_products_query.count()]
         featured_products_list = list(featured_products_query) + list(additional_products)
     else:
         featured_products_list = list(featured_products_query)
