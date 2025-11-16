@@ -140,6 +140,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',  # Debe estar aquí
+    'coimpres_cuba.middleware.PerformanceMiddleware',  # Nuestro middleware de rendimiento
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -155,6 +156,22 @@ WHITENOISE_USE_FINDERS = True
 # Configuración para servir archivos de media en producción
 WHITENOISE_STATIC_PREFIX = '/static/'
 WHITENOISE_MEDIA_PREFIX = '/media/'
+
+# ===== OPTIMIZACIONES HTTP/2 Y RENDIMIENTO =====
+
+# Headers de seguridad para mejorar Lighthouse score
+SECURE_CONTENT_TYPE_NOSNIFF = True
+SECURE_BROWSER_XSS_FILTER = True
+X_FRAME_OPTIONS = 'DENY'
+SECURE_REFERRER_POLICY = 'strict-origin-when-cross-origin'
+
+# Cache settings para archivos estáticos
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# WhiteNoise optimizations para simular beneficios HTTP/2
+WHITENOISE_MAX_AGE = 31536000  # 1 año cache para archivos estáticos
+WHITENOISE_SKIP_COMPRESS_EXTENSIONS = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'zip', 'gz', 'tgz', 'bz2', 'tbz', 'xz', 'br']
+WHITENOISE_ADD_HEADERS_FUNCTION = 'coimpres_cuba.whitenoise_headers.add_headers'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
