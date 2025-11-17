@@ -1,11 +1,14 @@
 # coimpres_cuba/whitenoise_headers.py
-# Headers personalizados para optimizar rendimiento
+# ARCHIVO DESACTIVADO - Causaba errores en PythonAnywhere
+# Los headers de rendimiento se manejan ahora a través del PerformanceMiddleware
 
+# NOTA: Este archivo causaba el error "TypeError: 'str' object is not callable"
+# porque WhiteNoise no podía importar correctamente la función en producción.
+
+"""
 def add_headers(headers, path, url):
-    """
-    Función para agregar headers HTTP optimizados 
-    que simulan beneficios de HTTP/2 en HTTP/1.1
-    """
+    # Función para agregar headers HTTP optimizados 
+    # que simulan beneficios de HTTP/2 en HTTP/1.1
     
     # Headers de caché agresivo para assets estáticos
     if path.endswith(('.css', '.js', '.png', '.jpg', '.jpeg', '.gif', '.ico', '.svg', '.woff', '.woff2')):
@@ -39,3 +42,4 @@ def add_headers(headers, path, url):
         headers['X-Resource-Priority'] = 'low'
     
     return headers
+"""
