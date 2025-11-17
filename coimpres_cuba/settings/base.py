@@ -83,11 +83,14 @@ STATICFILES_DIRS = [
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+# Configuración de WhiteNoise CORREGIDA
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 WHITENOISE_USE_FINDERS = True
 WHITENOISE_MAX_AGE = 31536000
 WHITENOISE_SKIP_COMPRESS_EXTENSIONS = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'zip',
                                        'gz', 'tgz', 'bz2', 'tbz', 'xz', 'br']
+
+# CORRECCIÓN: La función debe ser un callable, no un string
 WHITENOISE_ADD_HEADERS_FUNCTION = 'coimpres_cuba.whitenoise_headers.add_headers'
 
 SECURE_CONTENT_TYPE_NOSNIFF = True
