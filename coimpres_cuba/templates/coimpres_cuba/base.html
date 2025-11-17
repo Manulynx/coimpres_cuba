@@ -141,7 +141,7 @@
             <div class="header-main py-3">
                 <div class="row align-items-center">
                     <!-- Logo container with enhanced styling -->
-                    <div class="col-lg-4 col-md-3 col-7">
+                    <div class="col-lg-4 col-md-3 col-4">
                         <a class="header-logo-container" href="{% url 'home' %}">
                             <div class="logo-wrapper">
                                 <img src="{% static 'img/logo_3.png' %}" alt="Coimpres Cuba Logo" class="logo-img" />
@@ -149,7 +149,7 @@
                         </a>
                     </div>
                     
-                    <!-- Contact & Business Info - Hidden on mobile -->
+                    <!-- Contact & Business Info - Desktop version with phone -->
                     <div class="col-lg-5 col-md-6 d-none d-md-block">
                         <div class="header-contact-info d-flex justify-content-center">
                             <div class="contact-info-item me-4">
@@ -175,26 +175,34 @@
                         </div>
                     </div>
                     
-                    <!-- Language & Social Media -->
-                    <div class="col-lg-3 col-md-3 col-5">
-                        <div class="header-actions d-flex align-items-center justify-content-end">
-                            <!-- Language Selector with Italian flair -->
-                            <div class="language-selector me-3">
-                                <div class="btn-group" role="group">
-                                    <a href="{% url 'change_language' %}?lang=es" class="lang-btn {% if lang == 'es' %}active{% endif %}">ES</a>
-                                    <a href="{% url 'change_language' %}?lang=en" class="lang-btn {% if lang == 'en' %}active{% endif %}">EN</a>
-                                    <a href="{% url 'change_language' %}?lang=it" class="lang-btn {% if lang == 'it' %}active{% endif %}">IT</a>
-                                </div>
-                            </div>
-                            
-                            <!-- Social Media Icons - Hidden on smaller screens -->
-                            <div class="header-social-icons d-none d-lg-flex">
+                    <!-- Right Column: Social + Contact + Language (exactly as diagram) -->
+                    <div class="col-lg-3 col-md-3 col-8">
+                        <div class="header-right-section">
+                            <!-- ROW 1: Social Media Icons (📱 Facebook 📷 Instagram) -->
+                            <div class="header-social-row">
                                 <a href="https://www.facebook.com/profile.php?id=61579235338321" class="social-icon-circle" aria-label="Facebook">
                                     <i class="bi bi-facebook"></i>
                                 </a>
                                 <a href="https://www.instagram.com/coimpresrl_cuba/" class="social-icon-circle" aria-label="Instagram">
                                     <i class="bi bi-instagram"></i>
                                 </a>
+                            </div>
+                            
+                            <!-- ROW 2: Contact Icons - Mobile only (📍 Location ✉️ Email) -->
+                            <div class="header-contact-row d-md-none">
+                                <a href="https://maps.app.goo.gl/QcutBjJryiW7rSKfA" target="_blank" rel="noopener noreferrer" class="contact-icon-mobile" aria-label="Ubicación">
+                                    <i class="bi bi-geo-alt-fill"></i>
+                                </a>
+                                <a href="mailto:coimpresrl@gmail.com" class="contact-icon-mobile" aria-label="Email">
+                                    <i class="bi bi-envelope-fill"></i>
+                                </a>
+                            </div>
+                            
+                            <!-- ROW 3: Language Selector (🌐 ES EN IT) -->
+                            <div class="header-language-row">
+                                <a href="{% url 'change_language' %}?lang=es" class="lang-btn {% if lang == 'es' %}active{% endif %}">ES</a>
+                                <a href="{% url 'change_language' %}?lang=en" class="lang-btn {% if lang == 'en' %}active{% endif %}">EN</a>
+                                <a href="{% url 'change_language' %}?lang=it" class="lang-btn {% if lang == 'it' %}active{% endif %}">IT</a>
                             </div>
                         </div>
                     </div>

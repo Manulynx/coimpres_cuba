@@ -93,7 +93,7 @@
 /* Language selector */
 .language-selector {
     display: flex;
-    align-items: center;
+    align-items: right;
 }
 
 .lang-btn {
@@ -661,6 +661,118 @@
 
 .language-selector .dropdown-item.active:hover {
     background: var(--color-accent);
+}
+
+/* RIGHT SECTION: Social + Contact + Language (as per diagram) */
+.header-right-section {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: center;
+    height: 80px;
+    gap: 6px;
+}
+
+/* ROW 1: Social Media Icons */
+.header-social-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+/* ROW 2: Contact Icons (Mobile only) */
+.header-contact-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.contact-icon-mobile {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: rgba(255,255,255,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-accent);
+    font-size: 0.85rem;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.contact-icon-mobile:hover {
+    background-color: var(--color-accent);
+    color: var(--color-white);
+    transform: scale(1.1);
+    border-color: rgba(255,255,255,0.2);
+}
+
+/* ROW 3: Language Selector */
+.header-language-row {
+    display: flex;
+    gap: 2px;
+    align-items: center;
+}
+
+/* Mobile responsive for right section (maintain diagram structure) */
+@media (max-width: 767.98px) {
+    .header-right-section {
+        align-items: center;
+        height: 75px;
+        gap: 5px;
+    }
+    
+    .header-social-row {
+        gap: 6px;
+    }
+    
+    .social-icon-circle {
+        width: 28px;
+        height: 28px;
+        font-size: 0.8rem;
+        margin-left: 0;
+    }
+    
+    .header-contact-row {
+        gap: 6px;
+        justify-content: center;
+    }
+    
+    .contact-icon-mobile {
+        width: 28px;
+        height: 28px;
+        font-size: 0.8rem;
+    }
+    
+    .header-language-row .lang-btn {
+        width: 26px;
+        height: 26px;
+        font-size: 0.7rem;
+    }
+}
+
+/* Extra small devices (maintain exact diagram structure) */
+@media (max-width: 575.98px) {
+    .header-right-section {
+        height: 70px;
+        gap: 4px;
+    }
+    
+    .social-icon-circle,
+    .contact-icon-mobile {
+        width: 26px;
+        height: 26px;
+        font-size: 0.75rem;
+    }
+    
+    .header-language-row .lang-btn {
+        width: 24px;
+        height: 24px;
+        font-size: 0.65rem;
+    }
 }
 
 /* Mobile adjustments for language selector */
