@@ -8,15 +8,24 @@ from django.views.decorators.http import require_GET
 
 def home_view(request):
     """Vista para la página de inicio - Con más productos para collage ampliado"""
-    # Obtener más productos para el hero collage (hasta 16 productos para el grid ampliado)
-    featured_products_query = Product.objects.filter(is_active=True, destacado=True).select_related('category', 'subcategory', 'proveedor', 'estatus')[:28]
+    # CORREGIDO: Obtener productos destacados sin LIMIT en subconsulta
+    featured_products_query = Product.objects.filter(is_active=True, destacado=True).select_related('category', 'subcategory', 'proveedor', 'estatus')
+    featured_products_list = list(featured_products_query[:28])  # Convertir a lista primero
     
     # Si no hay suficientes productos destacados, completar con productos activos
-    if featured_products_query.count() < 28:
-        additional_products = Product.objects.filter(is_active=True).exclude(id__in=featured_products_query).select_related('category', 'subcategory', 'proveedor', 'estatus')[:28-featured_products_query.count()]
-        featured_products_list = list(featured_products_query) + list(additional_products)
-    else:
-        featured_products_list = list(featured_products_query)
+    if len(featured_products_list) < 28:
+        # Obtener IDs de productos ya seleccionados para excluirlos
+        featured_ids = [p.id for p in featured_products_list]
+        needed_count = 28 - len(featured_products_list)
+        
+        # Consulta separada sin subconsulta problemática
+        additional_products = Product.objects.filter(
+            is_active=True
+        ).exclude(
+            id__in=featured_ids  # Usar lista de IDs en lugar de QuerySet
+        ).select_related('category', 'subcategory', 'proveedor', 'estatus')[:needed_count]
+        
+        featured_products_list.extend(list(additional_products))
     
     hero_image = "/static/img/hero-image.jpg"  # Default hero image path
     
