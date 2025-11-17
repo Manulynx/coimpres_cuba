@@ -7,7 +7,7 @@ DEBUG = False
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'Coimpre$nombrebase',
+        'NAME': 'Coimpre$default',
         'USER': 'Coimpre',
         'PASSWORD': 'Manuel.980317',
         'HOST': 'Coimpre.mysql.pythonanywhere-services.com',
