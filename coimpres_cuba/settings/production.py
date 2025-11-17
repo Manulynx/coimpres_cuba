@@ -4,7 +4,7 @@
 from .base import *
 
 # Configuración específica de producción
-DEBUG = False
+DEBUG = True
 
 # Base de datos MySQL para PythonAnywhere
 DATABASES = {
