@@ -24,40 +24,38 @@
       {% if categories %}
       <div class="filter-group">
         <label class="form-label fw-semibold small text-accent">{{ i18n.category|default:"Categoría" }}</label>
-        <select name="category" class="form-select form-select-sm">
+        <select name="category" class="form-select form-select-sm" id="category-filter">
           <option value="">{{ i18n.all_categories|default:"Todas" }}</option>
           {% for cat in categories %}
-            <option value="{{ cat.slug }}" {% if request.GET.category == cat.slug %}selected{% endif %}>{{ cat.name }}</option>
+            <option value="{{ cat.slug }}" {% if request.GET.category == cat.slug or selected_category_from_subcategory.slug == cat.slug %}selected{% endif %}>{{ cat.name }}</option>
           {% endfor %}
         </select>
       </div>
       {% endif %}
 
-      <!-- Subcategoría (solo si hay selección de categoría o hay subcategorías globales) -->
-      {% if subcategories %}
+      <!-- Subcategoría -->
+      {% if all_subcategories %}
       <div class="filter-group">
         <label class="form-label fw-semibold small text-accent">{{ i18n.subcategory|default:"Subcategoría" }}</label>
-        <select name="subcategory" class="form-select form-select-sm">
+        <select name="subcategory" class="form-select form-select-sm" id="subcategory-filter">
           <option value="">{{ i18n.all_subcategories|default:"Todas" }}</option>
-          {% for sub in subcategories %}
-            <option value="{{ sub.slug }}" {% if request.GET.subcategory == sub.slug %}selected{% endif %}>{{ sub.name }}</option>
+          {% for sub in all_subcategories %}
+            <option value="{{ sub.slug }}" data-category="{{ sub.category.slug }}" {% if request.GET.subcategory == sub.slug %}selected{% endif %}>{{ sub.name }}</option>
           {% endfor %}
         </select>
+        {% if request.GET.subcategory %}
+          {% for sub in all_subcategories %}
+            {% if sub.slug == request.GET.subcategory %}
+              <small class="form-text text-muted mt-1">
+                <i class="bi bi-folder"></i> {{ sub.category.name }}
+              </small>
+            {% endif %}
+          {% endfor %}
+        {% endif %}
       </div>
       {% endif %}
 
-      <!-- Proveedor -->
-      {% if proveedores %}
-      <div class="filter-group">
-        <label class="form-label fw-semibold small text-accent">{{ i18n.supplier|default:"Proveedor" }}</label>
-        <select name="proveedor" class="form-select form-select-sm">
-          <option value="">{{ i18n.all_suppliers|default:"Todos" }}</option>
-          {% for prov in proveedores %}
-            <option value="{{ prov.slug }}" {% if request.GET.proveedor == prov.slug %}selected{% endif %}>{{ prov.name }}</option>
-          {% endfor %}
-        </select>
-      </div>
-      {% endif %}
+
 
       <!-- Estado procedencia -->
       {% if status_list %}
@@ -81,3 +79,41 @@
     </form>
   </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const subcategorySelect = document.getElementById('subcategory-filter');
+    const categorySelect = document.getElementById('category-filter');
+    
+    if (subcategorySelect && categorySelect) {
+        // Cuando se selecciona una subcategoría, auto-seleccionar su categoría
+        subcategorySelect.addEventListener('change', function() {
+            const selectedOption = this.options[this.selectedIndex];
+            const categorySlug = selectedOption.getAttribute('data-category');
+            
+            if (categorySlug && this.value !== '') {
+                // Seleccionar la categoría correspondiente
+                for (let option of categorySelect.options) {
+                    if (option.value === categorySlug) {
+                        option.selected = true;
+                        break;
+                    }
+                }
+            } else {
+                // Si no hay subcategoría seleccionada, limpiar categoría
+                categorySelect.selectedIndex = 0;
+            }
+        });
+        
+        // Cuando se cambia la categoría, filtrar subcategorías disponibles
+        categorySelect.addEventListener('change', function() {
+            const selectedCategory = this.value;
+            
+            // Si se deselecciona la categoría, también deseleccionar subcategoría
+            if (selectedCategory === '') {
+                subcategorySelect.selectedIndex = 0;
+            }
+        });
+    }
+});
+</script>

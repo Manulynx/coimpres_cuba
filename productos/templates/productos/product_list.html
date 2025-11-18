@@ -22,20 +22,27 @@
             <input type="text" name="q" class="form-control me-2" placeholder="{{ i18n.search_products|default:'Buscar productos...' }}" value="{{ request.GET.q|default:'' }}">
             {% if request.GET.category %}<input type="hidden" name="category" value="{{ request.GET.category }}">{% endif %}
             {% if request.GET.subcategory %}<input type="hidden" name="subcategory" value="{{ request.GET.subcategory }}">{% endif %}
-            {% if request.GET.proveedor %}<input type="hidden" name="proveedor" value="{{ request.GET.proveedor }}">{% endif %}
+
             {% if request.GET.estatus %}<input type="hidden" name="estatus" value="{{ request.GET.estatus }}">{% endif %}
             <button type="submit" class="btn btn-primary">{{ i18n.search|default:"Buscar" }}</button>
         </form>
       </div>
 
-      {% if request.GET.category or request.GET.subcategory or request.GET.proveedor or request.GET.estatus or request.GET.q %}
+      {% if request.GET.category or request.GET.subcategory or request.GET.estatus or request.GET.q %}
       <div class="alert alert-info mb-3">
           <h6 class="mb-2">{{ i18n.applied_filters|default:"Filtros aplicados:" }}</h6>
           <div class="d-flex flex-wrap gap-2">
               {% if request.GET.q %}<span class="badge bg-primary">{{ i18n.search_term|default:"Búsqueda" }}: "{{ request.GET.q }}"</span>{% endif %}
               {% if selected_category %}<span class="badge bg-primary">{{ i18n.category|default:"Categoría" }}: {{ selected_category.name }}</span>{% endif %}
-              {% if request.GET.subcategory %}<span class="badge bg-primary">{{ i18n.subcategory|default:"Subcategoría" }}: {{ request.GET.subcategory }}</span>{% endif %}
-              {% if request.GET.proveedor %}<span class="badge bg-success">{{ i18n.supplier|default:"Proveedor" }}: {{ request.GET.proveedor }}</span>{% endif %}
+              {% if selected_category_from_subcategory %}<span class="badge bg-info">{{ i18n.category|default:"Categoría" }}: {{ selected_category_from_subcategory.name }}</span>{% endif %}
+              {% if request.GET.subcategory %}
+                {% for sub in all_subcategories %}
+                  {% if sub.slug == request.GET.subcategory %}
+                    <span class="badge bg-primary">{{ i18n.subcategory|default:"Subcategoría" }}: {{ sub.name }}</span>
+                  {% endif %}
+                {% endfor %}
+              {% endif %}
+
               {% if request.GET.estatus %}<span class="badge bg-warning text-dark">{{ i18n.status|default:"Estatus" }}: {{ request.GET.estatus }}</span>{% endif %}
           </div>
       </div>
@@ -119,12 +126,12 @@
           <ul class="pagination justify-content-center">
               {% if page_obj.has_previous %}
                   <li class="page-item">
-                      <a class="page-link" href="?page=1{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}{% if request.GET.subcategory %}&subcategory={{ request.GET.subcategory }}{% endif %}{% if request.GET.proveedor %}&proveedor={{ request.GET.proveedor }}{% endif %}{% if request.GET.estatus %}&estatus={{ request.GET.estatus }}{% endif %}" title="{{ i18n.first_page|default:'Primera página' }}">
+                      <a class="page-link" href="?page=1{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}{% if request.GET.subcategory %}&subcategory={{ request.GET.subcategory }}{% endif %}{% if request.GET.estatus %}&estatus={{ request.GET.estatus }}{% endif %}" title="{{ i18n.first_page|default:'Primera página' }}">
                           <i class="bi bi-chevron-double-left"></i> <span>{{ i18n.first_page|default:"Primera" }}</span>
                       </a>
                   </li>
                   <li class="page-item">
-                      <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}{% if request.GET.subcategory %}&subcategory={{ request.GET.subcategory }}{% endif %}{% if request.GET.proveedor %}&proveedor={{ request.GET.proveedor }}{% endif %}{% if request.GET.estatus %}&estatus={{ request.GET.estatus }}{% endif %}" title="{{ i18n.previous_page|default:'Página anterior' }}">
+                      <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}{% if request.GET.subcategory %}&subcategory={{ request.GET.subcategory }}{% endif %}{% if request.GET.estatus %}&estatus={{ request.GET.estatus }}{% endif %}" title="{{ i18n.previous_page|default:'Página anterior' }}">
                           <i class="bi bi-chevron-left"></i> <span>{{ i18n.previous_page|default:"Anterior" }}</span>
                       </a>
                   </li>
@@ -139,19 +146,19 @@
                       </li>
                   {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
                       <li class="page-item">
-                          <a class="page-link" href="?page={{ num }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}{% if request.GET.subcategory %}&subcategory={{ request.GET.subcategory }}{% endif %}{% if request.GET.proveedor %}&proveedor={{ request.GET.proveedor }}{% endif %}{% if request.GET.estatus %}&estatus={{ request.GET.estatus }}{% endif %}">{{ num }}</a>
+                          <a class="page-link" href="?page={{ num }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}{% if request.GET.subcategory %}&subcategory={{ request.GET.subcategory }}{% endif %}{% if request.GET.estatus %}&estatus={{ request.GET.estatus }}{% endif %}">{{ num }}</a>
                       </li>
                   {% endif %}
               {% endfor %}
 
               {% if page_obj.has_next %}
                   <li class="page-item">
-                      <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}{% if request.GET.subcategory %}&subcategory={{ request.GET.subcategory }}{% endif %}{% if request.GET.proveedor %}&proveedor={{ request.GET.proveedor }}{% endif %}{% if request.GET.estatus %}&estatus={{ request.GET.estatus }}{% endif %}" title="{{ i18n.next_page|default:'Página siguiente' }}">
+                      <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}{% if request.GET.subcategory %}&subcategory={{ request.GET.subcategory }}{% endif %}{% if request.GET.estatus %}&estatus={{ request.GET.estatus }}{% endif %}" title="{{ i18n.next_page|default:'Página siguiente' }}">
                           <span>{{ i18n.next_page|default:"Siguiente" }}</span> <i class="bi bi-chevron-right"></i>
                       </a>
                   </li>
                   <li class="page-item">
-                      <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}{% if request.GET.subcategory %}&subcategory={{ request.GET.subcategory }}{% endif %}{% if request.GET.proveedor %}&proveedor={{ request.GET.proveedor }}{% endif %}{% if request.GET.estatus %}&estatus={{ request.GET.estatus }}{% endif %}" title="{{ i18n.last_page|default:'Última página' }}">
+                      <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}{% if request.GET.subcategory %}&subcategory={{ request.GET.subcategory }}{% endif %}{% if request.GET.estatus %}&estatus={{ request.GET.estatus }}{% endif %}" title="{{ i18n.last_page|default:'Última página' }}">
                           <span>{{ i18n.last_page|default:"Última" }}</span> <i class="bi bi-chevron-double-right"></i>
                       </a>
                   </li>

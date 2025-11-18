@@ -41,13 +41,19 @@ class ProductListView(ListView):
         
         # Filtrar por categoría si está presente en la URL
         category_slug = self.request.GET.get('category')
+        subcategory_slug = self.request.GET.get('subcategory')
+        
         if category_slug:
             queryset = queryset.filter(category__slug=category_slug)
         
         # Filtrar por subcategoría si está presente en la URL
-        subcategory_slug = self.request.GET.get('subcategory')
         if subcategory_slug:
             queryset = queryset.filter(subcategory__slug=subcategory_slug)
+            # Automáticamente incluir la categoría padre si no está especificada
+            if not category_slug:
+                selected_subcategory = Subcategory.objects.select_related('category').filter(slug=subcategory_slug).first()
+                if selected_subcategory:
+                    queryset = queryset.filter(category=selected_subcategory.category)
         
         # Filtrar por proveedor si está presente en la URL
         proveedor_slug = self.request.GET.get('proveedor')
@@ -88,17 +94,23 @@ class ProductListView(ListView):
         # Añadir categorías al contexto
         context['categories'] = Category.objects.all()
         
-        # Añadir proveedores al contexto
-        context['proveedores'] = Proveedor.objects.all()
+        # Añadir todas las subcategorías al contexto
+        context['all_subcategories'] = Subcategory.objects.select_related('category').all()
         
         # Añadir estatus al contexto
         context['estatus_list'] = Estatus.objects.all()
         
-        # Obtener categoría seleccionada
+        # Obtener categoría seleccionada (directamente o por subcategoría)
         category_slug = self.request.GET.get('category')
+        subcategory_slug = self.request.GET.get('subcategory')
+        
         if category_slug:
             context['selected_category'] = Category.objects.filter(slug=category_slug).first()
-            context['subcategories'] = Subcategory.objects.filter(category__slug=category_slug)
+        elif subcategory_slug:
+            # Si hay subcategoría seleccionada, obtener su categoría padre
+            selected_subcategory = Subcategory.objects.select_related('category').filter(slug=subcategory_slug).first()
+            if selected_subcategory:
+                context['selected_category_from_subcategory'] = selected_subcategory.category
         
         return context
 
