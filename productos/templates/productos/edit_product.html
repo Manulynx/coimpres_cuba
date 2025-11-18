@@ -226,9 +226,15 @@ select.form-control option:checked {
                     </div>
                     <div class="form-group col-md-4">
                         <label for="sku">Código SKU</label>
-                        <input type="text" id="sku" name="sku" value="{{ product.sku|default:'' }}" class="form-control" placeholder="Código SKU (opcional)">
+                        <input type="text" id="sku" name="sku" value="{{ product.sku|default:'' }}" class="form-control" 
+                               {% if not product.sku %}placeholder="Se genera automáticamente" readonly style="background-color: #f8f9fa; color: #6c757d;"{% else %}placeholder="Código SKU actual"{% endif %}>
                         {% if product.sku %}
                             <small class="form-text text-muted">Valor actual: <strong>{{ product.sku }}</strong></small>
+                        {% else %}
+                            <small class="form-text text-muted">
+                                <i class="bi bi-info-circle"></i> <strong>El SKU se genera automáticamente</strong> al guardar. 
+                                Deja en blanco para generar código único.
+                            </small>
                         {% endif %}
                     </div>
                 </div>

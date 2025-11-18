@@ -247,22 +247,22 @@
                             {% endif %}
                             <li class="nav-item">
                                 <a class="nav-link {% if request.path == '/' %}active{% endif %}" href="/">
-                                    <i class="bi bi-house-door"></i> {{ i18n.home|default:"Inicio" }}
+                                     {{ i18n.home|default:"Inicio" }}
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link {% if request.path == '/productos/' %}active{% endif %}" href="/productos/">
-                                    <i class="bi bi-box-seam"></i> {{ i18n.products|default:"Productos" }}
+                                    {{ i18n.products|default:"Productos" }}
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link {% if '/productos/proveedores/' in request.path %}active{% endif %}" href="{% url 'productos:proveedor_list' %}">
-                                    <i class="bi bi-building"></i> {{ i18n.suppliers|default:"Proveedores" }}
+                                    {{ i18n.suppliers|default:"Proveedores" }}
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link {% if request.path == '/contact/' %}active{% endif %}" href="/contact/">
-                                    <i class="bi bi-star"></i> {{ i18n.exclusive_orders|default:"Pedidos Exclusivos" }}
+                                    {{ i18n.exclusive_orders|default:"Pedidos Exclusivos" }}
                                 </a>
                             </li>
                         </ul>
