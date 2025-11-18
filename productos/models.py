@@ -1,5 +1,7 @@
 from django.db import models
 from django.utils.text import slugify
+import uuid
+from datetime import datetime
 
 class Proveedor(models.Model):
     name = models.CharField(max_length=120, verbose_name="Nombre")
@@ -113,7 +115,7 @@ class Estatus(models.Model):
 class Product(models.Model):
     name = models.CharField(max_length=250, verbose_name="Nombre")
     slug = models.SlugField(unique=True, blank=True)
-    sku = models.CharField(max_length=50, verbose_name="Código SKU", blank=True)
+    sku = models.CharField(max_length=50, verbose_name="Código SKU", blank=True, unique=True)
     proveedor = models.ForeignKey(Proveedor, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Proveedor")
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, verbose_name="Categoría")
     subcategory = models.ForeignKey(Subcategory, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Subcategoría")
@@ -132,9 +134,48 @@ class Product(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de Creación")
     updated_at = models.DateTimeField(auto_now=True, verbose_name="Fecha de Actualización")
 
+    def generate_sku(self):
+        """Genera un SKU único para el producto"""
+        if self.proveedor:
+            # Usar las primeras 3 letras del proveedor
+            proveedor_code = self.proveedor.name[:3].upper().replace(' ', '')
+        else:
+            proveedor_code = 'GEN'  # General si no hay proveedor
+        
+        if self.category:
+            # Usar las primeras 2 letras de la categoría
+            category_code = self.category.name[:2].upper().replace(' ', '')
+        else:
+            category_code = 'XX'  # Default si no hay categoría
+        
+        # Fecha actual en formato YYMMDD
+        date_code = datetime.now().strftime('%y%m%d')
+        
+        # Número secuencial basado en la hora actual + últimos 4 dígitos del UUID
+        time_code = datetime.now().strftime('%H%M')
+        uuid_suffix = str(uuid.uuid4().hex)[-4:].upper()
+        
+        # Formato: PROV-CAT-YYMMDD-HHMM-UUID4
+        base_sku = f"{proveedor_code}-{category_code}-{date_code}-{time_code}-{uuid_suffix}"
+        
+        # Verificar que el SKU sea único
+        counter = 1
+        sku = base_sku
+        while Product.objects.filter(sku=sku).exclude(pk=self.pk).exists():
+            sku = f"{base_sku}-{counter:02d}"
+            counter += 1
+        
+        return sku
+
     def save(self, *args, **kwargs):
+        # Generar slug si no existe
         if not self.slug:
             self.slug = slugify(self.name)
+        
+        # Generar SKU automáticamente si no existe o está vacío
+        if not self.sku:
+            self.sku = self.generate_sku()
+        
         super().save(*args, **kwargs)
 
     def __str__(self):
