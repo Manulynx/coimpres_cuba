@@ -32,7 +32,10 @@ def add_headers(headers, path, url):
         
     # Headers para imágenes
     if path.endswith(('.png', '.jpg', '.jpeg', '.gif', '.webp')):
-        headers['Content-Type'] = f'image/{path.split(".")[-1]}'
+        file_ext = path.split(".")[-1]
+        if file_ext == 'jpg':
+            file_ext = 'jpeg'
+        headers['Content-Type'] = f'image/{file_ext}'
         headers['X-Resource-Priority'] = 'low'
     
     return headers
