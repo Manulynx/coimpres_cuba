@@ -154,7 +154,7 @@
                         <div class="header-contact-info d-flex justify-content-center">
                             <div class="contact-info-item me-4">
                                 <div class="contact-icon">
-                                    <a href="https://maps.app.goo.gl/QcutBjJryiW7rSKfA" target="_blank" rel="noopener noreferrer">
+                                    <a href="https://maps.app.goo.gl/QcutBjJryiW7rSKfA" 
                                         <i class="bi bi-geo-alt-fill"></i>
                                     </a>
                                 </div>
@@ -190,7 +190,7 @@
                             
                             <!-- ROW 2: Contact Icons - Mobile only (📍 Location ✉️ Email) -->
                             <div class="header-contact-row d-md-none">
-                                <a href="https://maps.app.goo.gl/QcutBjJryiW7rSKfA" target="_blank" rel="noopener noreferrer" class="contact-icon-mobile" aria-label="Ubicación">
+                                <a href="https://maps.app.goo.gl/QcutBjJryiW7rSKfA" 
                                     <i class="bi bi-geo-alt-fill"></i>
                                 </a>
                                 <a href="mailto:coimpresrl@gmail.com" class="contact-icon-mobile" aria-label="Email">
@@ -216,15 +216,16 @@
                 <div class="d-flex align-items-center justify-content-between py-2">
                     <!-- Location Badge (Mobile Only) -->
                     <div class="location-badge d-flex d-md-none align-items-center">
-                        <i class="bi bi-geo-alt-fill me-1"></i>
-                        <span class="font-bold">Miramar, La Habana</span>
+                        <a href="https://maps.app.goo.gl/QcutBjJryiW7rSKfA"> 
+                            <span class="font-bold">Miramar, La Habana</span>
                     </div>
                     
                     <!-- Full Location (Desktop Only) -->
                     <div class="location-full d-none d-md-flex align-items-center">
                         <div class="location-icon">
-                            <i class="bi bi-geo-alt-fill text-accent me-2"></i>
-                        </div>
+                                <i class="bi bi-geo-alt-fill text-accent me-2"></i>
+                             
+                            </div>
                         <div>
                             <span class="location-text">{{ i18n.company_tagline|default:"COIMPRE S.r.l. - Productos Made in Italy desde 2014" }}</span>
                         </div>
@@ -318,7 +319,9 @@
 
                 <div class="col-lg-4 col-md-6">
                     <h5 class="text-uppercase mb-3">{{ i18n.contact|default:"Contacto" }}</h5>
-                    <p class="mb-2"><i class="bi bi-geo-alt-fill me-2"></i> {{ i18n.miramar_havana|default:"Miramar, La Habana" }}</p>
+                    <p class="mb-2">
+                        <a href="https://maps.app.goo.gl/QcutBjJryiW7rSKfA">
+                            <i class="bi bi-geo-alt-fill me-2"></i> <a/>{{ i18n.miramar_havana|default:"Miramar, La Habana" }}</p>
                     <p class="mb-2"><i class="bi bi-telephone-fill me-2"></i> +53 72141480</p>
                     <p class="mb-2"><i class="bi bi-envelope-fill me-2"></i> coimpresrl@gmail.com</p>
                 </div>
