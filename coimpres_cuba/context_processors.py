@@ -64,6 +64,8 @@ def i18n_context(request):
             'value_customer_desc': 'We strive for excellence in products and services, maintaining high standards in everything we do',
             'featured_products': 'Featured Products',
             'featured_subtitle': 'Explore our selection of premium Italian products',
+            'our_location':'Our Location',
+            'location_desc':'Miramar Residence Building, located at 7th Avenue No. 1805, between 18th and 20th Streets, Apartment 109, Miramar, Playa, Havana, Cuba',
             
             # Productos
             'product_catalog': 'Product Catalog',
@@ -348,6 +350,8 @@ def i18n_context(request):
             'value_customer_desc': 'Cerchiamo l\'eccellenza nei prodotti e servizi, mantenendo alti standard in tutto ciò che facciamo',
             'featured_products': 'Prodotti in Evidenza',
             'featured_subtitle': 'Esplora la nostra selezione di prodotti italiani premium',
+            'our_location':'La nostra posizione',
+            'location_desc':"Edificio residenziale Miramar, situato in 7th Avenue n. 1805, tra la 18th e la 20th Street, Appartamento 109, Miramar, Playa, L'Avana, Cuba",
             
             # Productos
             'product_catalog': 'Catalogo Prodotti',
