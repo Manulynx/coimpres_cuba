@@ -311,11 +311,102 @@
         </div>
     </div>
 </section>
-
+ <!-- Mapa de Ubicación -->
+    <div class="row mt-5">
+        <div class="col-12">
+            <div class="map-section bg-white p-4 rounded-3 shadow-sm">
+                <div class="text-center mb-4">
+                    <h3 class="h4">
+                        <i class="bi bi-geo-alt-fill text-primary me-2"></i>
+                        {{ i18n.our_location|default:"Nuestra Ubicación" }}
+                    </h3>
+                    <p class="text-muted mb-0">{{ i18n.location_desc|default:"Edificio Residencia Miramar, Ave. 7ma. No. 1805, Apt. 109, Miramar, La Habana" }}</p>
+                </div>
+                
+                <div class="map-container">
+                    <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d2594.6268968681716!2d-82.4190960767334!3d23.12063926013867!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1ses!2sus!4v1763698410674!5m2!1ses!2sus" 
+                        width="100%" 
+                        height="400" 
+                        style="border:0; border-radius: 10px;" 
+                        allowfullscreen="" 
+                        loading="lazy" 
+                        referrerpolicy="no-referrer-when-downgrade"
+                        title="Ubicación de COIMPRE S.r.l. en Miramar, La Habana">
+                    </iframe>
+                </div>
+                
+                <div class="map-footer mt-3 text-center">
+                    <a href="https://www.google.com/maps/search/?api=1&query=23.120760,-82.418666" 
+                       target="_blank" 
+                       rel="noopener noreferrer" 
+                       class="btn btn-outline-primary">
+                        <i class="bi bi-arrow-up-right-square me-2"></i>
+                        {{ i18n.open_in_maps|default:"Abrir en Google Maps" }}
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
 <!-- Contact CTA: Clear call to action -->
 
 {% endblock %}
-
+<style>
+/* Estilos para la sección del mapa */
+    .map-section {
+        border: 1px solid #e9ecef;
+        transition: all 0.3s ease;
+    }
+    
+    .map-section:hover {
+        box-shadow: 0 8px 25px rgba(0,0,0,0.1) !important;
+        transform: translateY(-2px);
+    }
+    
+    .map-container {
+        position: relative;
+        overflow: hidden;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    
+    .map-container iframe {
+        transition: all 0.3s ease;
+    }
+    
+    .map-container:hover iframe {
+        transform: scale(1.02);
+    }
+    
+    .map-footer .btn {
+        transition: all 0.3s ease;
+        border-radius: 25px;
+        padding: 10px 20px;
+    }
+    
+    .map-footer .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(13, 110, 253, 0.3);
+    }
+    
+    /* Responsive del mapa */
+    @media (max-width: 768px) {
+        .map-container iframe {
+            height: 300px;
+        }
+        
+        .map-section {
+            padding: 1.5rem !important;
+        }
+    }
+    
+    @media (max-width: 576px) {
+        .map-container iframe {
+            height: 250px;
+        }
+    }
+</style>
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/carousel.css' %}">
 <link rel="stylesheet" href="{% static 'css/hero.css' %}">
