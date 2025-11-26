@@ -196,9 +196,10 @@
     {% if category.subcategory_set.all %}
     <div class="admin-section">
         <div class="section-header">
-            <h2>📁 Subcategorías Asociadas</h2>
+            <h2>📁 Subcategorías Asociadas ({{ category.subcategory_set.count }})</h2>
         </div>
         
+        <!-- Desktop Table View -->
         <div class="table-responsive">
             <table class="admin-table">
                 <thead>
@@ -206,7 +207,6 @@
                         <th>Nombre</th>
                         <th>Slug</th>
                         <th>Productos</th>
-                        <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -215,13 +215,33 @@
                         <td>{{ subcategory.name }}</td>
                         <td><code>{{ subcategory.slug }}</code></td>
                         <td>{{ subcategory.product_set.count }}</td>
-                        <td>
-                            <a href="{% url 'productos:edit_subcategory' subcategory.pk %}" class="btn btn-sm btn-warning" title="Editar">✏️</a>
-                        </td>
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
+        </div>
+        
+        <!-- Mobile Cards View -->
+        <div class="table-mobile-cards">
+            {% for subcategory in category.subcategory_set.all %}
+            <div class="mobile-card">
+                <div class="mobile-card-header">
+                    <div class="mobile-card-title">
+                        <h3>{{ subcategory.name }}</h3>
+                    </div>
+                </div>
+                <div class="mobile-card-body">
+                    <div class="mobile-card-field">
+                        <strong>Slug</strong>
+                        <span><code>{{ subcategory.slug }}</code></span>
+                    </div>
+                    <div class="mobile-card-field">
+                        <strong>Productos</strong>
+                        <span>{{ subcategory.product_set.count }}</span>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
         </div>
     </div>
     {% endif %}
@@ -230,9 +250,10 @@
     {% if category.product_set.all %}
     <div class="admin-section">
         <div class="section-header">
-            <h2>📦 Productos en esta Categoría</h2>
+            <h2>📦 Productos en esta Categoría ({{ category.product_set.count }})</h2>
         </div>
         
+        <!-- Desktop Table View -->
         <div class="table-responsive">
             <table class="admin-table">
                 <thead>
@@ -241,30 +262,58 @@
                         <th>Código</th>
                         <th>Subcategoría</th>
                         <th>Estatus</th>
-                        <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for product in category.product_set.all|slice:":10" %}
                     <tr>
                         <td>{{ product.name }}</td>
-                        <td><code>{{ product.sku }}</code></td>
+                        <td><code>{{ product.sku|default:"-" }}</code></td>
                         <td>{{ product.subcategory.name|default:"-" }}</td>
                         <td><span class="badge">{{ product.estatus.name|default:"Sin estatus" }}</span></td>
-                        <td>
-                            <a href="{% url 'productos:edit_product' product.pk %}" class="btn btn-sm btn-warning" title="Editar">✏️</a>
-                        </td>
                     </tr>
                     {% endfor %}
                     {% if category.product_set.count > 10 %}
                     <tr>
-                        <td colspan="5" class="text-center text-muted">
+                        <td colspan="4" class="text-center text-muted">
                             Y {{ category.product_set.count|add:"-10" }} productos más...
                         </td>
                     </tr>
                     {% endif %}
                 </tbody>
             </table>
+        </div>
+        
+        <!-- Mobile Cards View -->
+        <div class="table-mobile-cards">
+            {% for product in category.product_set.all|slice:":10" %}
+            <div class="mobile-card">
+                <div class="mobile-card-header">
+                    <div class="mobile-card-title">
+                        <h3>{{ product.name }}</h3>
+                    </div>
+                </div>
+                <div class="mobile-card-body">
+                    <div class="mobile-card-field">
+                        <strong>Código</strong>
+                        <span><code>{{ product.sku|default:"-" }}</code></span>
+                    </div>
+                    <div class="mobile-card-field">
+                        <strong>Subcategoría</strong>
+                        <span>{{ product.subcategory.name|default:"-" }}</span>
+                    </div>
+                    <div class="mobile-card-field">
+                        <strong>Estatus</strong>
+                        <span><span class="badge">{{ product.estatus.name|default:"Sin estatus" }}</span></span>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            {% if category.product_set.count > 10 %}
+            <div class="text-center text-muted" style="padding: 20px;">
+                Y {{ category.product_set.count|add:"-10" }} productos más...
+            </div>
+            {% endif %}
         </div>
     </div>
     {% endif %}

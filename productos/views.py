@@ -543,7 +543,17 @@ def delete_category(request, pk):
 @require_staff_login
 def manage_subcategories(request):
     """Vista para gestionar subcategorías"""
-    subcategories = Subcategory.objects.all().select_related('category').order_by('category__name', 'name')
+    # Obtener todas las subcategorías
+    subcategories = Subcategory.objects.all().select_related('category')
+    
+    # Filtrar por categoría si se proporciona
+    category_filter = request.GET.get('category')
+    if category_filter:
+        subcategories = subcategories.filter(category_id=category_filter)
+    
+    # Ordenar
+    subcategories = subcategories.order_by('category__name', 'name')
+    
     categories = Category.objects.all()
     context = {
         'subcategories': subcategories,

@@ -218,7 +218,6 @@
                         <th>Código</th>
                         <th>Proveedor</th>
                         <th>Estatus</th>
-                        <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -228,20 +227,47 @@
                         <td><code>{{ product.sku }}</code></td>
                         <td>{{ product.proveedor.name|default:"-" }}</td>
                         <td><span class="badge">{{ product.estatus.name|default:"Sin estatus" }}</span></td>
-                        <td>
-                            <a href="{% url 'productos:edit_product' product.pk %}" class="btn btn-sm btn-warning" title="Editar">✏️</a>
-                        </td>
                     </tr>
                     {% endfor %}
                     {% if subcategory.product_set.count > 10 %}
                     <tr>
-                        <td colspan="5" class="text-center text-muted">
+                        <td colspan="4" class="text-center text-muted">
                             Y {{ subcategory.product_set.count|add:"-10" }} productos más...
                         </td>
                     </tr>
                     {% endif %}
                 </tbody>
             </table>
+        </div>
+        
+        <!-- Mobile Cards View -->
+        <div class="table-mobile-cards">
+            {% for product in subcategory.product_set.all|slice:":10" %}
+            <div class="mobile-card">
+                <div class="mobile-card-row">
+                    <span class="mobile-label">Nombre:</span>
+                    <span class="mobile-value">{{ product.name }}</span>
+                </div>
+                <div class="mobile-card-row">
+                    <span class="mobile-label">Código:</span>
+                    <span class="mobile-value"><code>{{ product.sku }}</code></span>
+                </div>
+                <div class="mobile-card-row">
+                    <span class="mobile-label">Proveedor:</span>
+                    <span class="mobile-value">{{ product.proveedor.name|default:"-" }}</span>
+                </div>
+                <div class="mobile-card-row">
+                    <span class="mobile-label">Estatus:</span>
+                    <span class="mobile-value"><span class="badge">{{ product.estatus.name|default:"Sin estatus" }}</span></span>
+                </div>
+            </div>
+            {% endfor %}
+            
+            {% if subcategory.product_set.count > 10 %}
+            <div class="mobile-card text-center text-muted" style="justify-content: center;">
+                Y {{ subcategory.product_set.count|add:"-10" }} productos más...
+            </div>
+            {% endif %}
         </div>
     </div>
     {% endif %}

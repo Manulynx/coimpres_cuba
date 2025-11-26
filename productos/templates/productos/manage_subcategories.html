@@ -128,6 +128,37 @@
         background-color: var(--color-white) !important;
     }
 }
+
+/* Estilos para el select de filtro de categorías */
+#category_filter {
+    color: var(--color-primary) !important;
+    background-color: var(--color-white) !important;
+    border: 1px solid var(--color-border) !important;
+    font-weight: 500 !important;
+}
+
+#category_filter:focus {
+    color: var(--color-primary) !important;
+    background-color: var(--color-white) !important;
+    border-color: var(--color-accent) !important;
+    outline: none !important;
+    box-shadow: 0 0 0 0.2rem rgba(159, 163, 34, 0.25) !important;
+}
+
+#category_filter option {
+    color: var(--color-primary) !important;
+    background-color: var(--color-white) !important;
+    font-weight: 500 !important;
+}
+
+/* Mantener el estilo cuando hay una opción seleccionada */
+#category_filter:not([value=""]) {
+    color: var(--color-primary) !important;
+    background-color: #e8f4f8 !important;
+    border-color: var(--color-accent) !important;
+    font-weight: 600 !important;
+}
+
 </style>
 {% endblock %}
 
@@ -170,13 +201,35 @@
                     <select name="category" id="category_filter" class="form-control" onchange="this.form.submit()">
                         <option value="">Todas las categorías</option>
                         {% for cat in categories %}
-                            <option value="{{ cat.pk }}" {% if cat.pk|stringformat:"s" == request.GET.category %}selected{% endif %}>
+                            <option value="{{ cat.pk }}" {% if cat.pk == request.GET.category|add:0 %}selected{% endif %}>
                                 {{ cat.name }}
                             </option>
                         {% endfor %}
                     </select>
                 </div>
             </form>
+            
+            <!-- Active Filter Indicator -->
+            {% if request.GET.category %}
+            <div class="active-filter-badge" style="margin-top: 15px; padding: 12px 20px; background: linear-gradient(135deg, #9fa322, #b8bd2a) !important; border-radius: var(--border-radius-sm); display: flex; align-items: center; justify-content: space-between; box-shadow: var(--shadow-soft); flex-wrap: wrap; gap: 10px; width: 100%;">
+                <div style="display: flex; align-items: center; gap: 10px; flex: 1; min-width: 200px;">
+                    <span style="font-size: 20px;">🔍</span>
+                    <div style="flex: 1;">
+                        <div style="font-size: 12px; color: rgba(255,255,255,0.9) !important; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px;">Filtrando por:</div>
+                        <div style="font-size: 16px; color: white !important; font-weight: 700; margin-top: 2px;">
+                            {% for cat in categories %}
+                                {% if cat.pk == request.GET.category|add:0 %}
+                                    {{ cat.name }}
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <a href="{% url 'productos:manage_subcategories' %}" class="btn btn-light" style="background: white !important; color: var(--color-primary) !important; border: none; padding: 8px 16px; border-radius: 6px; font-weight: 600; box-shadow: 0 2px 4px rgba(0,0,0,0.1); transition: transform 0.2s ease; white-space: nowrap; text-decoration: none;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'" onfocus="this.style.transform='scale(1.05)'" onblur="this.style.transform='scale(1)'">
+                    ✖️ Limpiar filtro
+                </a>
+            </div>
+            {% endif %}
         </div>
         
         <div class="table-responsive">

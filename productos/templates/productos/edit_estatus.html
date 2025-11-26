@@ -191,9 +191,10 @@
     {% if estatus.product_set.all %}
     <div class="admin-section">
         <div class="section-header">
-            <h2>📦 Productos con este Estatus</h2>
+            <h2>📦 Productos con este Estatus ({{ estatus.product_set.count }})</h2>
         </div>
         
+        <!-- Desktop Table View -->
         <div class="table-responsive">
             <table class="admin-table">
                 <thead>
@@ -202,30 +203,58 @@
                         <th>Código</th>
                         <th>Categoría</th>
                         <th>Proveedor</th>
-                        <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for product in estatus.product_set.all|slice:":10" %}
                     <tr>
                         <td>{{ product.name }}</td>
-                        <td><code>{{ product.sku }}</code></td>
+                        <td><code>{{ product.sku|default:"-" }}</code></td>
                         <td>{{ product.category.name|default:"-" }}</td>
                         <td>{{ product.proveedor.name|default:"-" }}</td>
-                        <td>
-                            <a href="{% url 'productos:edit_product' product.pk %}" class="btn btn-sm btn-warning" title="Editar">✏️</a>
-                        </td>
                     </tr>
                     {% endfor %}
                     {% if estatus.product_set.count > 10 %}
                     <tr>
-                        <td colspan="5" class="text-center text-muted">
+                        <td colspan="4" class="text-center text-muted">
                             Y {{ estatus.product_set.count|add:"-10" }} productos más...
                         </td>
                     </tr>
                     {% endif %}
                 </tbody>
             </table>
+        </div>
+        
+        <!-- Mobile Cards View -->
+        <div class="table-mobile-cards">
+            {% for product in estatus.product_set.all|slice:":10" %}
+            <div class="mobile-card">
+                <div class="mobile-card-header">
+                    <div class="mobile-card-title">
+                        <h3>{{ product.name }}</h3>
+                    </div>
+                </div>
+                <div class="mobile-card-body">
+                    <div class="mobile-card-field">
+                        <strong>Código</strong>
+                        <span><code>{{ product.sku|default:"-" }}</code></span>
+                    </div>
+                    <div class="mobile-card-field">
+                        <strong>Categoría</strong>
+                        <span>{{ product.category.name|default:"-" }}</span>
+                    </div>
+                    <div class="mobile-card-field">
+                        <strong>Proveedor</strong>
+                        <span>{{ product.proveedor.name|default:"-" }}</span>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            {% if estatus.product_set.count > 10 %}
+            <div class="text-center text-muted" style="padding: 20px;">
+                Y {{ estatus.product_set.count|add:"-10" }} productos más...
+            </div>
+            {% endif %}
         </div>
     </div>
     {% endif %}
