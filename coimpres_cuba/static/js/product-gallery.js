@@ -73,10 +73,10 @@ class ProductGallery {
             this.nextBtn.addEventListener('click', () => this.navigateNext());
         }
         
-        // Click en imagen principal para abrir modal
-        if (this.mainMedia) {
-            this.mainMedia.addEventListener('click', () => this.openModal());
-        }
+        // Click en imagen principal para abrir modal - DESHABILITADO
+        // if (this.mainMedia) {
+        //     this.mainMedia.addEventListener('click', () => this.openModal());
+        // }
         
         // Touch events para móvil
         this.setupTouchEvents();
@@ -122,11 +122,12 @@ class ProductGallery {
                         e.preventDefault();
                         this.navigateNext();
                         break;
-                    case 'Enter':
-                    case ' ':
-                        e.preventDefault();
-                        this.openModal();
-                        break;
+                    // Enter y Space para abrir modal - DESHABILITADO
+                    // case 'Enter':
+                    // case ' ':
+                    //     e.preventDefault();
+                    //     this.openModal();
+                    //     break;
                 }
             }
         });
@@ -219,8 +220,8 @@ class ProductGallery {
             }
         }
         
-        // Re-agregar event listeners
-        this.mainMedia.addEventListener('click', () => this.openModal());
+        // Re-agregar event listeners - DESHABILITADO
+        // this.mainMedia.addEventListener('click', () => this.openModal());
     }
     
     navigatePrev() {

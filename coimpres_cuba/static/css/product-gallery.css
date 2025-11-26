@@ -15,7 +15,7 @@
 .main-media-container img,
 .main-media-container video {
     transition: transform 0.3s ease;
-    cursor: zoom-in;
+    cursor: default !important;
     object-fit: scale-down !important;
     max-height: 400px !important;
     width: 100% !important;
