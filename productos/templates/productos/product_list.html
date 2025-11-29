@@ -63,55 +63,61 @@
         {% if object_list %}
           {% for product in object_list %}
           <div class="col product-card-col">
-            <div class="card h-100 position-relative product-card-item">
-              {% if product.get_status_badges %}
-              <div class="position-absolute top-0 start-0 p-2" style="z-index:10;">
-                {% for badge in product.get_status_badges %}
-                  <span class="badge {{ badge.class }} me-1 mb-1">{{ badge.text }}</span>
-                {% endfor %}
-              </div>
-              {% endif %}
-
-              {% if product.image %}
-                <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}" style="height:190px;object-fit:contain;background-color:#f8f9fa;">
-              {% else %}
-                <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height:190px;">
-                  <i class="bi bi-image text-muted" style="font-size:3rem;"></i>
+            <a href="{% url 'productos:product_detail' product.slug %}" class="text-decoration-none">
+              <div class="card h-100 position-relative product-card-item product-card-clickable">
+                {% if product.get_status_badges %}
+                <div class="position-absolute top-0 start-0 p-2" style="z-index:10;">
+                  {% for badge in product.get_status_badges %}
+                    <span class="badge {{ badge.class }} me-1 mb-1">{{ badge.text }}</span>
+                  {% endfor %}
                 </div>
-              {% endif %}
+                {% endif %}
 
-              <div class="card-body d-flex flex-column">
-                <h5 class="card-title">{{ product.name }}</h5>
+                {% if product.image %}
+                  <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}" style="height:190px;object-fit:contain;background-color:#f8f9fa;">
+                {% else %}
+                  <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height:190px;">
+                    <i class="bi bi-image text-muted" style="font-size:3rem;"></i>
+                  </div>
+                {% endif %}
 
-                {% if product.proveedor %}
-                <div class="d-flex align-items-center mb-2">
-                  {% if product.proveedor.logo %}
-                  <img src="{{ product.proveedor.logo.url }}" alt="{{ product.proveedor.name }}" width="20" height="20" class="me-2" style="border-radius:3px;">
+                <div class="card-body d-flex flex-column">
+                  <h5 class="card-title text-dark">{{ product.name }}</h5>
+
+                  {% if product.proveedor %}
+                  <div class="d-flex align-items-center mb-2">
+                    {% if product.proveedor.logo %}
+                    <img src="{{ product.proveedor.logo.url }}" alt="{{ product.proveedor.name }}" width="20" height="20" class="me-2" style="border-radius:3px;">
+                    {% endif %}
+                    <small class="text-muted">{{ product.proveedor.name }}</small>
+                  </div>
                   {% endif %}
-                  <small class="text-muted">{{ product.proveedor.name }}</small>
-                </div>
-                {% endif %}
 
-                <div class="mb-2">
-                  {% if product.category %}<span class="badge bg-primary me-1">{{ product.category.name }}</span>{% endif %}
-                  {% if product.subcategory %}<span class="badge bg-secondary">{{ product.subcategory.name }}</span>{% endif %}
-                </div>
+                  <div class="mb-2">
+                    {% if product.category %}<span class="badge bg-primary me-1">{{ product.category.name }}</span>{% endif %}
+                    {% if product.subcategory %}<span class="badge bg-secondary">{{ product.subcategory.name }}</span>{% endif %}
+                  </div>
 
-                {% if product.estatus %}
-                <div class="mb-2">
-                  <span class="badge bg-warning text-dark">{{ product.estatus.name }}</span>
-                </div>
-                {% endif %}
+                  {% if product.estatus %}
+                  <div class="mb-2">
+                    <span class="badge bg-warning text-dark">{{ product.estatus.name }}</span>
+                  </div>
+                  {% endif %}
 
-                <p class="card-text flex-grow-1">{{ product.short_description|truncatechars:100 }}</p>
+                  <p class="card-text flex-grow-1 text-muted">{{ product.short_description|truncatechars:100 }}</p>
 
-                <div class="mt-auto">
-                  {% if product.price %}<p class="card-text fw-bold text-success mb-2">${{ product.price }}</p>{% endif %}
-                  {% if product.sku %}<small class="text-muted d-block mb-2">SKU: {{ product.sku }}</small>{% endif %}
-                  <a href="{% url 'productos:product_detail' product.slug %}" class="btn btn-primary w-100">{{ i18n.view_details|default:"Ver detalle" }}</a>
+                  <div class="mt-auto">
+                    {% if product.price %}<p class="card-text fw-bold text-success mb-2">${{ product.price }}</p>{% endif %}
+                    {% if product.sku %}<small class="text-muted d-block mb-2">SKU: {{ product.sku }}</small>{% endif %}
+                    <div class="text-center mt-3">
+                      <small class="text-primary fw-semibold">
+                        <i class="bi bi-eye me-1"></i>{{ i18n.view_details|default:"Ver detalle" }}
+                      </small>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
+            </a>
           </div>
           {% endfor %}
         {% else %}
@@ -180,5 +186,89 @@
 {% block extra_js %}
 {{ block.super }}
 <script src="{% static 'js/filters-panel.js' %}"></script>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+/* Estilos para tarjetas clickeables */
+.product-card-clickable {
+    transition: all 0.3s ease;
+    border: 1px solid #dee2e6;
+    cursor: pointer;
+}
+
+.product-card-clickable:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15) !important;
+    border-color: var(--color-accent, #9fa322);
+}
+
+.product-card-clickable:active {
+    transform: translateY(-2px);
+    transition: all 0.1s ease;
+}
+
+/* Asegurar que el enlace no tenga estilos de texto */
+.product-card-col a {
+    text-decoration: none !important;
+    color: inherit;
+}
+
+.product-card-col a:hover {
+    text-decoration: none !important;
+    color: inherit;
+}
+
+/* Estilos para el indicador de "Ver detalle" */
+.product-card-clickable .text-primary {
+    transition: all 0.3s ease;
+    opacity: 0.7;
+}
+
+.product-card-clickable:hover .text-primary {
+    opacity: 1;
+    color: var(--color-accent, #9fa322) !important;
+}
+
+/* Asegurar que los títulos mantengan su color */
+.product-card-clickable .card-title {
+    color: var(--color-primary, #2C2A28) !important;
+}
+
+.product-card-clickable:hover .card-title {
+    color: var(--color-accent, #9fa322) !important;
+}
+
+/* Mejorar la respuesta visual en móviles */
+@media (hover: none) {
+    .product-card-clickable:hover {
+        transform: none;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
+    }
+    
+    .product-card-clickable:active {
+        transform: scale(0.98);
+        box-shadow: 0 1px 2px rgba(0,0,0,0.1) !important;
+    }
+}
+
+/* Indicador visual adicional */
+.product-card-clickable::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: var(--color-accent, #9fa322);
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+    border-radius: 0.375rem 0.375rem 0 0;
+}
+
+.product-card-clickable:hover::before {
+    transform: scaleX(1);
+}
+</style>
 {% endblock %}
 {% endblock %}
