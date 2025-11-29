@@ -15,8 +15,8 @@
     --color-light-gray: #f8f9fa !important;
     --color-border: #e1e5e9 !important;
     --color-text-muted: #6c757d !important;
-    --color-success: #28a745 !important;
-    --color-danger: #dc3545 !important;
+    --color-success: #f8f9fa !important;
+    --color-danger: #f8f9fa !important;
     --color-warning: #ffc107 !important;
     --shadow-soft: 0 2px 10px rgba(44, 42, 40, 0.08) !important;
     --shadow-hover: 0 5px 15px rgba(44, 42, 40, 0.12) !important;
@@ -120,6 +120,36 @@
     border-radius: var(--border-radius-sm) !important;
 }
 
+/* Botones de acción con fondo gris excepto eliminar */
+.action-buttons .btn:not(.btn-danger),
+.mobile-card-actions .btn:not(.btn-danger) {
+    background-color: #f8f9fa !important;
+    color: var(--color-primary) !important;
+    border-color: #e1e5e9 !important;
+}
+
+.action-buttons .btn:not(.btn-danger):hover,
+.mobile-card-actions .btn:not(.btn-danger):hover {
+    background-color: #e9ecef !important;
+    color: var(--color-primary) !important;
+    border-color: #d6d9dc !important;
+}
+
+/* Mantener rojo para botones de eliminar */
+.action-buttons .btn-danger,
+.mobile-card-actions .btn-danger {
+    background-color: #dc3545 !important;
+    color: #ffffff !important;
+    border-color: #dc3545 !important;
+}
+
+.action-buttons .btn-danger:hover,
+.mobile-card-actions .btn-danger:hover {
+    background-color: #c82333 !important;
+    color: #ffffff !important;
+    border-color: #bd2130 !important;
+}
+
 /* Dark mode override solo para contenido admin */
 @media (prefers-color-scheme: dark) {
     .admin-container,
@@ -168,11 +198,11 @@
     
     <!-- Navigation Menu -->
     <div class="admin-nav">
-        <a href="{% url 'productos:admin_panel' %}" class="nav-link">📦 Productos</a>
-        <a href="{% url 'productos:manage_proveedores' %}" class="nav-link active">🏭 Proveedores</a>
-        <a href="{% url 'productos:manage_categories' %}" class="nav-link">📂 Categorías</a>
-        <a href="{% url 'productos:manage_subcategories' %}" class="nav-link">📁 Subcategorías</a>
-        <a href="{% url 'productos:manage_estatus' %}" class="nav-link">🏷️ Estatus</a>
+        <a href="{% url 'productos:admin_panel' %}" class="nav-link"> Productos</a>
+        <a href="{% url 'productos:manage_proveedores' %}" class="nav-link active"> Proveedores</a>
+        <a href="{% url 'productos:manage_categories' %}" class="nav-link"> Categorías</a>
+        <a href="{% url 'productos:manage_subcategories' %}" class="nav-link"> Subcategorías</a>
+        <a href="{% url 'productos:manage_estatus' %}" class="nav-link"> Estatus</a>
     </div>
     
     <!-- Mensajes de éxito/error -->
@@ -187,7 +217,7 @@
     <div class="admin-section">
         <div class="section-header">
             <h2>Lista de Proveedores</h2>
-            <button class="btn btn-primary" onclick="showAddForm()">➕ Agregar Proveedor</button>
+            <button class="btn btn-primary" onclick="showAddForm()"> Agregar Proveedor</button>
         </div>
         
         <div class="table-responsive">
@@ -274,6 +304,59 @@
             </div>
             {% endfor %}
         </div>
+        
+        <!-- Paginación -->
+        {% if is_paginated %}
+        <div class="admin-pagination mt-4">
+            <nav aria-label="Navegación de páginas del admin" class="d-flex justify-content-between align-items-center flex-wrap">
+                <div class="pagination-info mb-2 mb-md-0">
+                    <small class="text-muted">
+                        Mostrando {{ page_obj.start_index }} - {{ page_obj.end_index }} de {{ paginator.count }} proveedores
+                    </small>
+                </div>
+                
+                <ul class="pagination mb-0">
+                    {% if page_obj.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page=1" title="Primera página">
+                                ≪
+                            </a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}" title="Página anterior">
+                                ‹
+                            </a>
+                        </li>
+                    {% endif %}
+
+                    {% for num in page_obj.paginator.page_range %}
+                        {% if page_obj.number == num %}
+                            <li class="page-item active">
+                                <span class="page-link">{{ num }}</span>
+                            </li>
+                        {% elif num > page_obj.number|add:'-2' and num < page_obj.number|add:'2' %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if page_obj.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.next_page_number }}" title="Página siguiente">
+                                ›
+                            </a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}" title="Última página">
+                                ≫
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+        {% endif %}
     </div>
     
     <!-- Add Form Modal -->

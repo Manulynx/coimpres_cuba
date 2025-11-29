@@ -328,6 +328,8 @@ a:hover, a:focus {
     color: var(--color-accent);
 }
 
+/* ==================== TIPOGRAFÍA Y JERARQUÍA ELEGANTE ==================== */
+
 /* Typography - Lato font weights */
 .font-light {
     font-weight: 300;
@@ -343,6 +345,123 @@ a:hover, a:focus {
 
 .font-black {
     font-weight: 900;
+}
+
+/* Jerarquía de títulos mejorada */
+h1, .h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--color-primary);
+    line-height: 1.2;
+    margin-bottom: 1.5rem;
+    font-family: 'Lato', sans-serif;
+}
+
+h2, .h2 {
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--color-primary);
+    line-height: 1.3;
+    margin-bottom: 1.25rem;
+    font-family: 'Lato', sans-serif;
+}
+
+h3, .h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--color-primary);
+    line-height: 1.4;
+    margin-bottom: 1rem;
+    font-family: 'Lato', sans-serif;
+}
+
+h4, .h4 {
+    font-size: 1.25rem;
+    font-weight: 500;
+    color: var(--color-primary);
+    line-height: 1.4;
+    margin-bottom: 0.75rem;
+    font-family: 'Lato', sans-serif;
+}
+
+h5, .h5 {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: var(--color-primary);
+    line-height: 1.4;
+    margin-bottom: 0.5rem;
+    font-family: 'Lato', sans-serif;
+}
+
+h6, .h6 {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--color-primary);
+    line-height: 1.4;
+    margin-bottom: 0.5rem;
+    font-family: 'Lato', sans-serif;
+}
+
+/* Títulos con acento */
+.title-accent {
+    color: var(--color-accent);
+}
+
+.title-with-underline {
+    position: relative;
+    display: inline-block;
+}
+
+.title-with-underline::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 50px;
+    height: 3px;
+    background: var(--color-accent);
+    border-radius: 2px;
+}
+
+.title-with-underline.full-width::after {
+    width: 100%;
+}
+
+/* Responsive typography */
+@media (max-width: 768px) {
+    h1, .h1 {
+        font-size: 2rem;
+    }
+    
+    h2, .h2 {
+        font-size: 1.75rem;
+    }
+    
+    h3, .h3 {
+        font-size: 1.35rem;
+    }
+    
+    h4, .h4 {
+        font-size: 1.15rem;
+    }
+    
+    h5, .h5 {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 576px) {
+    h1, .h1 {
+        font-size: 1.75rem;
+    }
+    
+    h2, .h2 {
+        font-size: 1.5rem;
+    }
+    
+    h3, .h3 {
+        font-size: 1.25rem;
+    }
 }
 
 /* Clases adicionales para la nueva paleta de colores */

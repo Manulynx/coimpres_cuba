@@ -138,17 +138,17 @@
 {% block content %}
 <div class="admin-container">
     <div class="admin-header">
-        <h1>✏️ Editar Proveedor</h1>
+        <h1>Editar Proveedor</h1>
         <p>Modifica la información del proveedor</p>
     </div>
     
     <!-- Navigation Menu -->
     <div class="admin-nav">
-        <a href="{% url 'productos:admin_panel' %}" class="nav-link">📦 Productos</a>
-        <a href="{% url 'productos:manage_proveedores' %}" class="nav-link active">🏭 Proveedores</a>
-        <a href="{% url 'productos:manage_categories' %}" class="nav-link">📂 Categorías</a>
-        <a href="{% url 'productos:manage_subcategories' %}" class="nav-link">📁 Subcategorías</a>
-        <a href="{% url 'productos:manage_estatus' %}" class="nav-link">🏷️ Estatus</a>
+        <a href="{% url 'productos:admin_panel' %}" class="nav-link">Productos</a>
+        <a href="{% url 'productos:manage_proveedores' %}" class="nav-link active">Proveedores</a>
+        <a href="{% url 'productos:manage_categories' %}" class="nav-link">Categorías</a>
+        <a href="{% url 'productos:manage_subcategories' %}" class="nav-link">Subcategorías</a>
+        <a href="{% url 'productos:manage_estatus' %}" class="nav-link">Estatus</a>
     </div>
     
     <!-- Mensajes de éxito/error -->
@@ -163,7 +163,7 @@
     <div class="admin-section">
         <div class="section-header">
             <h2>Información del Proveedor</h2>
-            <a href="{% url 'productos:manage_proveedores' %}" class="btn btn-secondary">⬅️ Volver</a>
+            <a href="{% url 'productos:manage_proveedores' %}" class="btn btn-secondary">Volver</a>
         </div>
         
         <form method="post" enctype="multipart/form-data">
@@ -205,7 +205,7 @@
             
             <div class="form-actions">
                 <a href="{% url 'productos:manage_proveedores' %}" class="btn btn-secondary">Cancelar</a>
-                <button type="submit" class="btn btn-primary">💾 Guardar Cambios</button>
+                <button type="submit" class="btn btn-primary">Guardar Cambios</button>
             </div>
         </form>
     </div>

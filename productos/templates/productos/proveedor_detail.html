@@ -433,12 +433,10 @@
 <div class="container">
     <div class="category-filter">
         <h5 class="mb-3">
-            <i class="bi bi-funnel me-2"></i>
             Filtrar por Categoría
         </h5>
         <a href="{% url 'productos:proveedor_detail' proveedor.slug %}" 
            class="category-btn {% if not request.GET.category %}active{% endif %}">
-            <i class="bi bi-grid me-1"></i>
             Todas ({{ productos_count }})
         </a>
         {% for categoria in categorias %}
@@ -467,7 +465,7 @@
                                      loading="lazy">
                             {% else %}
                                 <div class="product-placeholder">
-                                    <i class="bi bi-image" style="font-size: 2rem;"></i>
+                                    Sin imagen
                                 </div>
                             {% endif %}
                             
@@ -527,7 +525,7 @@
         <!-- No hay productos -->
         <div class="text-center py-5">
             <div class="mb-4">
-                <i class="bi bi-box-seam" style="font-size: 4rem; color: #6c757d; opacity: 0.5;"></i>
+                <!-- No icon needed -->
             </div>
             <h4 class="text-muted mb-3">No hay productos disponibles</h4>
             <p class="text-muted">
@@ -536,7 +534,6 @@
             </p>
             {% if request.GET.category %}
                 <a href="{% url 'productos:proveedor_detail' proveedor.slug %}" class="btn btn-primary">
-                    <i class="bi bi-arrow-left me-2"></i>
                     Ver Todos los Productos
                 </a>
             {% endif %}
@@ -550,7 +547,6 @@
         <div class="row">
             <div class="col-lg-8 mx-auto text-center">
                 <h3 class="mb-4">
-                    <i class="bi bi-whatsapp text-success me-2"></i>
                     ¿Interesado en productos de {{ proveedor.name }}?
                 </h3>
                 <p class="text-muted mb-4">
@@ -561,11 +557,9 @@
                     <a href="https://wa.me/5355513196?text=Hola%2C%20estoy%20interesado%20en%20algunos%20productos%20del%20proveedor%20{{ proveedor.name|urlencode }}." 
                        target="_blank" 
                        class="btn btn-success">
-                        <i class="bi bi-whatsapp me-2"></i>
                         Contactar por WhatsApp
                     </a>
                     <a href="{% url 'productos:product_list' %}" class="btn btn-outline-secondary">
-                        <i class="bi bi-grid me-2"></i>
                         Ver Todos los Productos
                     </a>
                 </div>

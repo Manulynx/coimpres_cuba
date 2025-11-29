@@ -281,7 +281,7 @@
             <div class="col-lg-8">
                 <div class="italian-accent">
                     <h1 class="hero-title animate__animated animate__fadeInUp">
-                        <i class="bi bi-building me-3"></i>{{ i18n.our_suppliers|default:"Nuestros Proveedores" }}
+                        {{ i18n.our_suppliers|default:"Nuestros Proveedores" }}
                     </h1>
                     <p class="hero-subtitle animate__animated animate__fadeInUp animate__delay-1s">
                         {{ i18n.suppliers_subtitle|default:"Productos de alta calidad directamente desde Italia. Conoce a nuestros socios comerciales y explora sus catálogos especializados." }}
@@ -290,7 +290,7 @@
             </div>
             <div class="col-lg-4 text-center">
                 <div class="animate__animated animate__fadeInRight animate__delay-2s">
-                    <i class="bi bi-globe-europe-africa" style="font-size: 5rem; opacity: 0.3;"></i>
+                    <!-- Decoration removed for professional appearance -->
                 </div>
             </div>
         </div>
@@ -314,7 +314,7 @@
                                              class="proveedor-logo w-100">
                                     {% else %}
                                         <div class="proveedor-logo w-100 d-flex align-items-center justify-content-center bg-light">
-                                            <i class="bi bi-building" style="font-size: 3rem; color: #6c757d;"></i>
+                                            <span style="font-size: 1rem; color: #6c757d;">Sin logo</span>
                                         </div>
                                     {% endif %}
                                 </div>
@@ -324,7 +324,6 @@
                                     <h3 class="proveedor-name">{{ item.proveedor.name }}</h3>
                                     
                                     <div class="productos-count">
-                                        <i class="bi bi-box-seam me-1"></i>
                                         {{ item.productos_count }} {% if item.productos_count == 1 %}{{ i18n.products_count|default:"producto" }}{% else %}{{ i18n.products_count_plural|default:"productos" }}{% endif %}
                                     </div>
                                     
@@ -337,7 +336,6 @@
                                         <!-- Botón Ver Productos -->
                                         <a href="{% url 'productos:proveedor_detail' item.proveedor.slug %}" 
                                            class="btn btn-outline-primary btn-sm w-100">
-                                            <i class="bi bi-eye me-1"></i>
                                             {{ i18n.view_products|default:"Ver Productos" }}
                                         </a>
                                         
@@ -346,12 +344,10 @@
                                             <a href="{{ item.proveedor.catalogo.url }}" 
                                                target="_blank" 
                                                class="catalog-btn btn-sm w-100">
-                                                <i class="bi bi-file-earmark-pdf"></i>
                                                 {{ i18n.download_catalog|default:"Descargar Catálogo" }}
                                             </a>
                                         {% else %}
                                             <span class="text-muted small text-center d-block">
-                                                <i class="bi bi-info-circle me-1"></i>
                                                 {{ i18n.catalog_not_available|default:"Catálogo no disponible" }}
                                             </span>
                                         {% endif %}
@@ -366,14 +362,13 @@
             <!-- Estado Vacío -->
             <div class="text-center py-5">
                 <div class="mb-4">
-                    <i class="bi bi-building" style="font-size: 4rem; color: #6c757d; opacity: 0.5;"></i>
+                    <!-- No icon needed -->
                 </div>
                 <h3 class="text-muted mb-3">{{ i18n.no_suppliers|default:"No hay proveedores disponibles" }}</h3>
                 <p class="text-muted">
                     {{ i18n.no_suppliers_message|default:"Actualmente no tenemos proveedores con productos activos en nuestro catálogo.<br>Vuelve pronto para ver nuestras nuevas incorporaciones." }}
                 </p>
                 <a href="{% url 'productos:product_list' %}" class="btn btn-primary mt-3">
-                    <i class="bi bi-box-seam me-2"></i>
                     {{ i18n.all_products|default:"Ver Todos los Productos" }}
                 </a>
             </div>
@@ -387,7 +382,6 @@
         <div class="row">
             <div class="col-lg-8 mx-auto text-center">
                 <h3 class="mb-4">
-                    <i class="bi bi-patch-check-fill text-success me-2"></i>
                     {{ i18n.guaranteed_quality|default:"Calidad Garantizada" }}
                 </h3>
                 <p class="text-muted">

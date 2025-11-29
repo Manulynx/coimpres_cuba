@@ -196,6 +196,36 @@
     }
 }
 
+/* Botones de acción con fondo gris excepto eliminar */
+.action-buttons .btn:not(.btn-danger),
+.mobile-card-actions .btn:not(.btn-danger) {
+    background-color: #f8f9fa !important;
+    color: var(--color-primary) !important;
+    border-color: #e1e5e9 !important;
+}
+
+.action-buttons .btn:not(.btn-danger):hover,
+.mobile-card-actions .btn:not(.btn-danger):hover {
+    background-color: #e9ecef !important;
+    color: var(--color-primary) !important;
+    border-color: #d6d9dc !important;
+}
+
+/* Mantener rojo para botones de eliminar */
+.action-buttons .btn-danger,
+.mobile-card-actions .btn-danger {
+    background-color: #dc3545 !important;
+    color: #ffffff !important;
+    border-color: #dc3545 !important;
+}
+
+.action-buttons .btn-danger:hover,
+.mobile-card-actions .btn-danger:hover {
+    background-color: #c82333 !important;
+    color: #ffffff !important;
+    border-color: #bd2130 !important;
+}
+
 /* Mobile específico */
 @media (max-width: 768px) {
     .product-thumb {
@@ -214,7 +244,8 @@
         background: var(--color-light-gray) !important;
         border: 1px solid var(--color-border) !important;
         border-radius: var(--border-radius-sm) !important;
-        font-size: 14px !important;
+        font-size: 8px !important;
+        color: var(--color-text-muted) !important;
     }
 }
 </style>
@@ -227,11 +258,11 @@
     
     <!-- Navigation Menu -->
     <div class="admin-nav">
-        <a href="{% url 'productos:admin_panel' %}" class="nav-link active">📦 Productos</a>
-        <a href="{% url 'productos:manage_proveedores' %}" class="nav-link">🏭 Proveedores</a>
-        <a href="{% url 'productos:manage_categories' %}" class="nav-link">📂 Categorías</a>
-        <a href="{% url 'productos:manage_subcategories' %}" class="nav-link">📁 Subcategorías</a>
-        <a href="{% url 'productos:manage_estatus' %}" class="nav-link">🏷️ Estatus</a>
+        <a href="{% url 'productos:admin_panel' %}" class="nav-link active">Productos</a>
+        <a href="{% url 'productos:manage_proveedores' %}" class="nav-link">Proveedores</a>
+        <a href="{% url 'productos:manage_categories' %}" class="nav-link">Categorías</a>
+        <a href="{% url 'productos:manage_subcategories' %}" class="nav-link">Subcategorías</a>
+        <a href="{% url 'productos:manage_estatus' %}" class="nav-link">Estatus</a>
     </div>
     
     <!-- Mensajes de éxito/error -->
@@ -246,17 +277,17 @@
     <!-- Productos Section -->
     <div class="admin-section">
         <div class="section-header">
-            <h2>📦 Gestión de Productos</h2>
-            <button class="btn btn-primary" onclick="showAddProductForm()">➕ Agregar Producto</button>
+            <h2>Gestión de Productos</h2>
+            <button class="btn btn-primary" onclick="showAddProductForm()">Agregar Producto</button>
         </div>
         
         <!-- Search and filters -->
         <div class="admin-filters">
             <form method="get" class="search-form">
                 <input type="text" name="search" value="{{ search }}" placeholder="Buscar productos..." class="search-input">
-                <button type="submit" class="btn btn-outline-primary">🔍 Buscar</button>
+                <button type="submit" class="btn btn-outline-primary">Buscar</button>
                 {% if search %}
-                    <a href="{% url 'productos:admin_panel' %}" class="btn btn-outline-secondary">✕ Limpiar</a>
+                    <a href="{% url 'productos:admin_panel' %}" class="btn btn-outline-secondary">Limpiar</a>
                 {% endif %}
             </form>
         </div>
@@ -283,7 +314,7 @@
                             {% if product.image %}
                                 <img src="{{ product.image.url }}" alt="{{ product.name }}" class="product-thumb">
                             {% else %}
-                                <div class="no-image">📷</div>
+                                <div class="no-image">Sin imagen</div>
                             {% endif %}
                         </td>
                         <td>
@@ -309,26 +340,26 @@
                         </td>
                         <td>
                             {% if product.is_active %}
-                                <span class="badge badge-success">✅ Activo</span>
+                                <span class="badge badge-success">Activo</span>
                             {% else %}
-                                <span class="badge badge-secondary">🔒 Inactivo</span>
+                                <span class="badge badge-secondary">Inactivo</span>
                             {% endif %}
                             <br>
                             {% if product.destacado %}
-                                <span class="badge badge-warning">⭐ Destacado</span><br>
+                                <span class="badge badge-warning">Destacado</span><br>
                             {% endif %}
                             <span class="badge badge-info">{{ product.estatus.name|default:"Sin estatus" }}</span>
                         </td>
                         <td>
                             <div class="action-buttons">
-                                <a href="{% url 'productos:product_detail' product.slug %}" class="btn btn-sm btn-info" title="Ver">👁️</a>
-                                <a href="{% url 'productos:edit_product' product.pk %}" class="btn btn-sm btn-warning" title="Editar">✏️</a>
+                                <a href="{% url 'productos:product_detail' product.slug %}" class="btn btn-sm btn-info" title="Ver">Ver</a>
+                                <a href="{% url 'productos:edit_product' product.pk %}" class="btn btn-sm btn-warning" title="Editar">Editar</a>
                                 {% if product.is_active %}
-                                    <button class="btn btn-sm btn-secondary" title="Desactivar" data-product-id="{{ product.pk }}" data-product-name="{{ product.name }}" onclick="toggleProductStatus(this.dataset.productId, this.dataset.productName, false)">🔒</button>
+                                    <button class="btn btn-sm btn-secondary" title="Desactivar" data-product-id="{{ product.pk }}" data-product-name="{{ product.name }}" onclick="toggleProductStatus(this.dataset.productId, this.dataset.productName, false)">Desactivar</button>
                                 {% else %}
-                                    <button class="btn btn-sm btn-success" title="Activar" data-product-id="{{ product.pk }}" data-product-name="{{ product.name }}" onclick="toggleProductStatus(this.dataset.productId, this.dataset.productName, true)">✅</button>
+                                    <button class="btn btn-sm btn-success" title="Activar" data-product-id="{{ product.pk }}" data-product-name="{{ product.name }}" onclick="toggleProductStatus(this.dataset.productId, this.dataset.productName, true)">Activar</button>
                                 {% endif %}
-                                <button class="btn btn-sm btn-danger" title="Eliminar" data-product-id="{{ product.pk }}" data-product-name="{{ product.name }}" onclick="deleteProduct(this.dataset.productId, this.dataset.productName)">🗑️</button>
+                                <button class="btn btn-sm btn-danger" title="Eliminar" data-product-id="{{ product.pk }}" data-product-name="{{ product.name }}" onclick="deleteProduct(this.dataset.productId, this.dataset.productName)">Eliminar</button>
                             </div>
                         </td>
                     </tr>
@@ -355,7 +386,7 @@
                     {% if product.image %}
                         <img src="{{ product.image.url }}" alt="{{ product.name }}" class="mobile-card-thumb">
                     {% else %}
-                        <div class="no-image" style="width: 60px; height: 60px; font-size: 24px;">📷</div>
+                        <div class="no-image" style="width: 60px; height: 60px; font-size: 12px;">Sin imagen</div>
                     {% endif %}
                     <div class="mobile-card-title">
                         <h3>{{ product.name }}</h3>
@@ -397,27 +428,27 @@
                         <strong>Estado</strong>
                         <span>
                             {% if product.is_active %}
-                                <span class="badge badge-success">✅ Activo</span>
+                                <span class="badge badge-success">Activo</span>
                             {% else %}
-                                <span class="badge badge-secondary">🔒 Inactivo</span>
+                                <span class="badge badge-secondary">Inactivo</span>
                             {% endif %}
                             <br>
                             {% if product.destacado %}
-                                <span class="badge badge-warning">⭐ Destacado</span><br>
+                                <span class="badge badge-warning">Destacado</span><br>
                             {% endif %}
                             <span class="badge badge-info">{{ product.estatus.name|default:"Sin estatus" }}</span>
                         </span>
                     </div>
                 </div>
                 <div class="mobile-card-actions">
-                    <a href="{% url 'productos:product_detail' product.slug %}" class="btn btn-sm btn-info">👁️ Ver</a>
-                    <a href="{% url 'productos:edit_product' product.pk %}" class="btn btn-sm btn-warning">✏️ Editar</a>
+                    <a href="{% url 'productos:product_detail' product.slug %}" class="btn btn-sm btn-info">Ver</a>
+                    <a href="{% url 'productos:edit_product' product.pk %}" class="btn btn-sm btn-warning">Editar</a>
                     {% if product.is_active %}
-                        <button class="btn btn-sm btn-secondary" data-product-id="{{ product.pk }}" data-product-name="{{ product.name }}" onclick="toggleProductStatus(this.dataset.productId, this.dataset.productName, false)">🔒 Desactivar</button>
+                        <button class="btn btn-sm btn-secondary" data-product-id="{{ product.pk }}" data-product-name="{{ product.name }}" onclick="toggleProductStatus(this.dataset.productId, this.dataset.productName, false)">Desactivar</button>
                     {% else %}
-                        <button class="btn btn-sm btn-success" data-product-id="{{ product.pk }}" data-product-name="{{ product.name }}" onclick="toggleProductStatus(this.dataset.productId, this.dataset.productName, true)">✅ Activar</button>
+                        <button class="btn btn-sm btn-success" data-product-id="{{ product.pk }}" data-product-name="{{ product.name }}" onclick="toggleProductStatus(this.dataset.productId, this.dataset.productName, true)">Activar</button>
                     {% endif %}
-                    <button class="btn btn-sm btn-danger" data-product-id="{{ product.pk }}" data-product-name="{{ product.name }}" onclick="deleteProduct(this.dataset.productId, this.dataset.productName)">🗑️ Eliminar</button>
+                    <button class="btn btn-sm btn-danger" data-product-id="{{ product.pk }}" data-product-name="{{ product.name }}" onclick="deleteProduct(this.dataset.productId, this.dataset.productName)">Eliminar</button>
                 </div>
             </div>
             {% empty %}
@@ -437,7 +468,6 @@
             <nav aria-label="Navegación de páginas del admin" class="d-flex justify-content-between align-items-center flex-wrap">
                 <div class="pagination-info mb-2 mb-md-0">
                     <small class="text-muted">
-                        <i class="bi bi-info-circle"></i>
                         Mostrando {{ page_obj.start_index }} - {{ page_obj.end_index }} de {{ paginator.count }} productos
                     </small>
                 </div>
@@ -446,12 +476,12 @@
                     {% if page_obj.has_previous %}
                         <li class="page-item">
                             <a class="page-link" href="?page=1{% if search %}&search={{ search }}{% endif %}" title="Primera página">
-                                <i class="bi bi-chevron-double-left"></i>
+                                ≪
                             </a>
                         </li>
                         <li class="page-item">
                             <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if search %}&search={{ search }}{% endif %}" title="Página anterior">
-                                <i class="bi bi-chevron-left"></i>
+                                ‹
                             </a>
                         </li>
                     {% endif %}
@@ -471,12 +501,12 @@
                     {% if page_obj.has_next %}
                         <li class="page-item">
                             <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if search %}&search={{ search }}{% endif %}" title="Página siguiente">
-                                <i class="bi bi-chevron-right"></i>
+                                ›
                             </a>
                         </li>
                         <li class="page-item">
                             <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if search %}&search={{ search }}{% endif %}" title="Última página">
-                                <i class="bi bi-chevron-double-right"></i>
+                                ≫
                             </a>
                         </li>
                     {% endif %}
@@ -490,8 +520,8 @@
     <div id="addProductModal" class="modal" style="display: none;">
         <div class="modal-content">
             <div class="modal-header">
-                <h3>➕ Agregar Nuevo Producto</h3>
-                <button onclick="hideAddProductForm()" class="close-btn">✕</button>
+                <h3>Agregar Nuevo Producto</h3>
+                <button onclick="hideAddProductForm()" class="close-btn">×</button>
             </div>
             <form method="post" enctype="multipart/form-data" action="{% url 'productos:add_product' %}">
                 {% csrf_token %}
@@ -505,7 +535,7 @@
                         <label for="product_sku">Código SKU</label>
                         <input type="text" id="product_sku" name="sku" class="form-control" placeholder="Se genera automáticamente" readonly style="background-color: #f8f9fa; color: #6c757d;">
                         <small class="form-text text-muted">
-                            <i class="bi bi-info-circle"></i> <strong>El SKU se genera automáticamente</strong> cuando guardas el producto. 
+                            <strong>El SKU se genera automáticamente</strong> cuando guardas el producto. 
                             Deja este campo en blanco para generar un código único.
                         </small>
                     </div>
@@ -585,7 +615,7 @@
                 
                 <div class="modal-footer">
                     <button type="button" onclick="hideAddProductForm()" class="btn btn-secondary">Cancelar</button>
-                    <button type="submit" class="btn btn-primary">💾 Guardar Producto</button>
+                    <button type="submit" class="btn btn-primary">Guardar Producto</button>
                 </div>
             </form>
         </div>
@@ -595,7 +625,7 @@
     <div id="deleteModal" class="modal" style="display: none;">
         <div class="modal-content">
             <div class="modal-header">
-                <h3>🗑️ Confirmar Eliminación</h3>
+                <h3>Confirmar Eliminación</h3>
             </div>
             <div class="modal-body">
                 <p>¿Estás seguro de que quieres eliminar el producto <strong id="deleteProductName"></strong>?</p>
@@ -605,7 +635,7 @@
                 <button onclick="hideDeleteModal()" class="btn btn-secondary">Cancelar</button>
                 <form id="deleteForm" method="post" style="display: inline;">
                     {% csrf_token %}
-                    <button type="submit" class="btn btn-danger">🗑️ Eliminar</button>
+                    <button type="submit" class="btn btn-danger">Eliminar</button>
                 </form>
             </div>
         </div>
@@ -634,7 +664,7 @@ function deleteProduct(productId, productName) {
         showCancelButton: true,
         confirmButtonColor: '#dc3545',
         cancelButtonColor: '#6c757d',
-        confirmButtonText: '🗑️ Sí, eliminar',
+        confirmButtonText: 'Sí, eliminar',
         cancelButtonText: 'Cancelar',
         reverseButtons: true,
         customClass: {
@@ -666,17 +696,16 @@ function deleteProduct(productId, productName) {
 function toggleProductStatus(productId, productName, activate) {
     const action = activate ? 'activar' : 'desactivar';
     const actionCapitalized = activate ? 'Activar' : 'Desactivar';
-    const emoji = activate ? '✅' : '🔒';
     const color = activate ? '#28a745' : '#6c757d';
     
     Swal.fire({
-        title: `${emoji} ${actionCapitalized} producto`,
+        title: `${actionCapitalized} producto`,
         html: `¿Estás seguro de que quieres ${action} el producto<br><strong>"${productName}"</strong>?`,
         icon: 'question',
         showCancelButton: true,
         confirmButtonColor: color,
         cancelButtonColor: '#6c757d',
-        confirmButtonText: `${emoji} Sí, ${action}`,
+        confirmButtonText: `Sí, ${action}`,
         cancelButtonText: 'Cancelar',
         reverseButtons: true,
         customClass: {

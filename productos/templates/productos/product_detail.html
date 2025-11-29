@@ -74,16 +74,77 @@
     </nav>
 
     <div class="row">
+        <!-- Información del Producto -->
+        <div class="col-lg-5 col-md-6 mb-4 order-2 order-md-1">
+            <!-- Título principal del producto -->
+            <div class="product-title-section mb-4">
+                <h1 class="product-main-title">{{ object.name }}</h1>
+                {% if object.short_description %}
+                    <p class="product-subtitle text-muted">{{ object.short_description }}</p>
+                {% endif %}
+            </div>
+            
+            <!-- Información organizada en tarjetas -->
+            <div class="product-info-cards">
+                {% if object.proveedor %}
+                <div class="info-line mb-3">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="info-label">Proveedor:</span>
+                            <span class="info-value">{{ object.proveedor.name }}</span>
+                        </div>
+                        {% if object.proveedor.logo %}
+                            <img src="{{ object.proveedor.logo.url }}" alt="{{ object.proveedor.name }}" class="provider-logo">
+                        {% endif %}
+                    </div>
+                </div>
+                {% endif %}
+                
+                {% if object.price %}
+                <div class="info-line mb-3">
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="info-label">Precio:</span>
+                        <div class="price-display-inline">${{ object.price }}</div>
+                    </div>
+                </div>
+                {% endif %}
+                
+                <div class="info-line mb-3">
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="info-label">Categoría:</span>
+                        <span class="category-badge">{{ object.category }}</span>
+                    </div>
+                </div>
+                {% if object.subcategory %}
+                <div class="info-line mb-3">
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="info-label">Subcategoría:</span>
+                        <span class="badge bg-secondary">{{ object.subcategory.name }}</span>
+                    </div>
+                </div>
+                {% endif %}
+                {% if object.status_procedencia %}
+                <div class="info-line mb-3">
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="info-label">Disponibilidad:</span>
+                        <span class="badge {% if object.status_procedencia.name == 'En stock' %}bg-success{% elif object.status_procedencia.name == 'Por pedido' %}bg-warning text-dark{% else %}bg-info{% endif %}">
+                            {{ object.status_procedencia.name }}
+                        </span>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        
         <!-- Galería Profesional de Medios -->
-        <div class="col-md-6 mb-4">
+        <div class="col-lg-7 col-md-6 mb-4 order-1 order-md-2">
             <div class="product-gallery">
                 <!-- Imagen Principal Grande -->
                 <div class="main-media-container mb-3">
                     <img id="mainMedia" src="{% if main_image %}{{ main_image.url }}{% elif object.image %}{{ object.image.url }}{% else %}{% static 'img/no-image.jpg' %}{% endif %}" 
-                         class="img-fluid rounded shadow-lg" 
+                         class="shadow-lg" 
                          alt="{{ object.name }}" 
-                         loading="lazy"
-                         style="width: 100%; max-height: 450px; object-fit: scale-down; background-color: #f8f9fa; border-radius: 12px;">
+                         loading="lazy">
                     
                     <!-- Overlay para identificar videos -->
                     <div id="videoOverlay" class="video-play-overlay d-none">
@@ -210,64 +271,6 @@
                 
             </div>
         </div>
-        
-        <div class="col-md-6">
-            <h1 class="mb-3">{{ object.name }}</h1>
-            
-            {% if object.proveedor %}
-            <div class="mb-3">
-                <h5>Proveedor:</h5>
-                <p>{{ object.proveedor.name }}</p>
-                {% if object.proveedor.logo %}
-                    <img src="{{ object.proveedor.logo.url }}" alt="{{ object.proveedor.name }}" class="img-fluid" loading="lazy" style="max-height: 50px; object-fit: contain;">
-                {% endif %}
-            </div>
-            {% endif %}
-            
-            {% if object.price %}
-            <div class="mb-3">
-                <h3>Precio: ${{ object.price }}</h3>
-            </div>
-            {% endif %}
-            
-            {% if object.short_description %}
-            <div class="mb-3">
-                <h5>Descripción corta:</h5>
-                <p>{{ object.short_description }}</p>
-            </div>
-            {% endif %}
-            
-            {% if object.sku %}
-            <div class="mb-3">
-                <h5>Código SKU:</h5>
-                <p>{{ object.sku }}</p>
-            </div>
-            {% endif %}
-            
-            <div class="mb-3">
-                <h5>Categoría:</h5>
-                <p><span class="category-badge">{{ object.category }}</span></p>
-                {% if object.subcategory %}
-                    <h5>Subcategoría:</h5>
-                    <p><span class="badge bg-secondary">{{ object.subcategory.name }}</span></p>
-                {% endif %}
-                
-                {% if object.status_procedencia %}
-                <h5 class="mt-3">Disponibilidad:</h5>
-                <p><span class="badge {% if object.status_procedencia.name == 'En stock' %}bg-success{% elif object.status_procedencia.name == 'Por pedido' %}bg-warning text-dark{% else %}bg-info{% endif %}">
-                    {{ object.status_procedencia.name }}
-                </span></p>
-                {% endif %}
-            </div>
-            
-            <!-- Botones WhatsApp separados con rotación automática -->
-            <div class="mb-4">
-                <h5 class="mb-3">Contactar por WhatsApp:</h5>
-                <div id="whatsappButtons" class="d-flex flex-column gap-2">
-                    <!-- Los botones se generarán dinámicamente con JavaScript -->
-                </div>                
-            </div>
-        </div>
     </div>
     
     <div class="row mt-4">
@@ -326,11 +329,37 @@
         </div>
     </div>
     
+    <!-- Sección de contacto WhatsApp después del contenido principal -->
+    <div class="row mt-5">
+        <div class="col-12">
+            <div class="contact-section bg-light rounded p-4">
+                <div class="text-center mb-4">
+                    <h3 class="section-heading justify-content-center">
+                        <span class="heading-text">Contactar por WhatsApp</span>
+                    </h3>
+                    <p class="text-muted">¿Tienes preguntas sobre este producto? Contáctanos directamente</p>
+                </div>
+                <div class="row justify-content-center">
+                    <div class="col-md-8">
+                        <div id="whatsappButtons" class="d-flex flex-column gap-2">
+                            <!-- Los botones se generarán dinámicamente con JavaScript -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
     <!-- Productos relacionados en carrusel -->
     {% if related_products %}
     <div class="related-products-section mt-5">
+        <div class="section-header mb-4">
+            <h2 class="section-main-heading">
+                <span class="heading-text">Productos Relacionados</span>
+            </h2>
+            <p class="section-description text-muted">Otros productos que podrían interesarte de la misma categoría</p>
+        </div>
         <div class="d-flex justify-content-between align-items-center mb-3">
-            <h3 class="mb-0">Productos relacionados</h3>
             <div class="d-none d-md-flex gap-2">
                 <button class="btn btn-outline-secondary btn-sm related-prev" aria-label="Anterior">
                     <i class="bi bi-chevron-left"></i>
@@ -391,25 +420,38 @@
 <link rel="stylesheet" href="{% static 'css/product-gallery.css' %}">
 <link rel="stylesheet" href="{% static 'css/related-carousel.css' %}">
 <style>
-    /* Forzar la visualización correcta de la imagen principal */
+    /* Imagen principal con tamaño fijo y calidad optimizada */
     #mainMedia {
-        object-fit: scale-down !important;
-        max-height: 450px !important;
-        height: auto !important;
         width: 100% !important;
-        background-color: #f8f9fa !important;
+        height: 100% !important;
+        object-fit: contain !important;
+        object-position: center !important;
         cursor: default !important;
+        image-rendering: -webkit-optimize-contrast !important;
+        image-rendering: crisp-edges !important;
+        image-rendering: pixelated !important;
+        image-rendering: optimizeQuality !important;
     }
     
-    /* Asegurar que el contenedor respete las proporciones */
+    /* Contenedor de imagen con tamaño fijo y aspecto ratio */
     .main-media-container {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        min-height: 300px;
-        max-height: 450px;
+        position: relative;
+        width: 100%;
+        height: 0;
+        padding-bottom: 75%; /* Aspect ratio 4:3 */
         background-color: #f8f9fa;
         cursor: default !important;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .main-media-container img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
     }
     
     /* Estilos para botones WhatsApp separados */
@@ -455,34 +497,11 @@
         opacity: 0.9;
     }
     
-    /* Botón primario (recomendado) */
+    /* Botón único de WhatsApp */
     .btn-whatsapp.primary {
         background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
         border: 2px solid #25D366;
         position: relative;
-    }
-    
-    .btn-whatsapp.primary::after {
-        
-        position: absolute;
-        top: -8px;
-        right: 10px;
-        background: #FF6B35;
-        color: white;
-        font-size: 10px;
-        padding: 2px 8px;
-        border-radius: 12px;
-        font-weight: bold;
-    }
-    
-    /* Botón secundario */
-    .btn-whatsapp.secondary {
-        background: linear-gradient(135deg, #128C7E 0%, #0D6E5F 100%);
-        border: 2px solid #128C7E;
-    }
-    
-    .btn-whatsapp.secondary:hover {
-        background: linear-gradient(135deg, #0F7A6B 0%, #0A5A4D 100%);
     }
     
     /* Animación de pulso sutil */
@@ -502,18 +521,197 @@
         animation: whatsappPulse 1.5s infinite;
     }
     
+    /* ============ JERARQUÍA DE TÍTULOS ELEGANTE ============ */
+    
+    /* Título principal del producto */
+    .product-title-section {
+        border-bottom: 2px solid var(--color-accent, #9fa322);
+        padding-bottom: 1rem;
+        margin-bottom: 2rem;
+    }
+    
+    .product-main-title {
+        font-size: 2.25rem;
+        font-weight: 700;
+        color: var(--color-primary, #2C2A28);
+        line-height: 1.2;
+        margin-bottom: 0.5rem;
+        font-family: 'Lato', sans-serif;
+    }
+    
+    .product-subtitle {
+        font-size: 1.1rem;
+        font-weight: 400;
+        color: #6c757d;
+        line-height: 1.4;
+        margin-bottom: 0;
+    }
+    
+    /* Líneas de información simples */
+    .product-info-cards {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+    
+    .info-line {
+        padding: 1rem;
+        background: #f8f9fa;
+        border-radius: 8px;
+        border: 1px solid #e9ecef;
+        transition: all 0.2s ease;
+    }
+    
+    .info-line:hover {
+        background: #ffffff;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    
+    .info-label {
+        font-weight: 600;
+        color: var(--color-primary, #2C2A28);
+        min-width: 90px;
+    }
+    
+    .info-value {
+        font-weight: 500;
+        color: #495057;
+    }
+    
+
+    
+    .price-display-inline {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--color-accent, #9fa322);
+        font-family: 'Lato', sans-serif;
+    }
+    
+    .provider-logo {
+        max-height: 40px;
+        max-width: 80px;
+        object-fit: contain;
+    }
+    
+    /* Clasificación compacta */
+    .classification-compact {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .classification-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.25rem 0;
+    }
+    
+    @media (min-width: 992px) {
+        .classification-row {
+            justify-content: flex-start;
+            gap: 1rem;
+        }
+    }
+    
+    .info-value {
+        font-size: 1rem;
+        font-weight: 500;
+        color: var(--color-primary, #2C2A28);
+        margin-bottom: 0;
+    }
+    
+    /* Precio destacado */
+    .price-display {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--color-accent, #9fa322);
+        font-family: 'Lato', sans-serif;
+    }
+    
+
+    
+    .classification-label {
+        font-weight: 500;
+        color: #6c757d;
+        min-width: 100px;
+        flex-shrink: 0;
+    }
+    
+    /* Headers principales de sección */
+    .section-header {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+    
+    .section-main-heading {
+        font-size: 1.75rem;
+        font-weight: 600;
+        color: var(--color-primary, #2C2A28);
+        margin-bottom: 0.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+    }
+    
+    .section-description {
+        font-size: 1rem;
+        margin-bottom: 0;
+    }
+    
     /* Responsive para móviles */
     @media (max-width: 768px) {
+        .main-media-container {
+            padding-bottom: 85%; /* Aspect ratio más cuadrado en móvil */
+        }
+        
+        .product-main-title {
+            font-size: 1.75rem;
+        }
+        
+        .product-subtitle {
+            font-size: 1rem;
+        }
+        
+        .section-heading {
+            font-size: 1.1rem;
+        }
+        
+        .section-main-heading {
+            font-size: 1.5rem;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .price-display {
+            font-size: 1.75rem;
+        }
+        
+
+        
+        .classification-row {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.25rem;
+        }
+        
+        .provider-logo {
+            max-height: 35px;
+            max-width: 70px;
+        }
+        
+        .classification-label {
+            min-width: auto;
+            font-size: 0.9rem;
+        }
+        
         .btn-whatsapp {
             font-size: 14px;
             padding: 15px 20px;
         }
         
-        .btn-whatsapp.primary::after {
-            right: 8px;
-            font-size: 9px;
-            padding: 1px 6px;
-        }
+
     }
 </style>
 {% endblock %}
@@ -533,14 +731,14 @@ class WhatsAppRotationSystem {
                 number: '+5355513196',
                 name: 'Ventas Cuba ',
                 department: 'Ventas y Cotizaciones',
-                icon: '🏢',
+                
                 specialty: 'Pedidos y precios'
             },
             {
                 number: '+5358270033', 
                 name: 'Ventas Cuba ',
                 department: 'Ventas y Cotizaciones',
-                icon: '🏢',
+                
                 specialty: 'Pedidos y precios'
             }
         ];
@@ -643,7 +841,7 @@ class WhatsAppRotationSystem {
         
         // Mostrar notificación
         this.showNotification(
-            `${contact.icon} Conectando con ${contact.name}...`, 
+            `Conectando con ${contact.name}...`, 
             'info'
         );
         
@@ -681,48 +879,47 @@ class WhatsAppRotationSystem {
         localStorage.setItem('whatsapp_interactions', JSON.stringify(interactions));
     }
     
-    // Renderizar botones dinámicamente
+    // Renderizar un solo botón con rotación de contactos
     renderButtons() {
         const container = document.getElementById('whatsappButtons');
         if (!container) return;
         
         container.innerHTML = '';
         
-        this.contacts.forEach((contact, index) => {
-            const isPrimary = index === 0;
-            const button = document.createElement('button');
-            button.className = `btn btn-whatsapp ${isPrimary ? 'primary' : 'secondary'}`;
-            button.onclick = () => this.openWhatsApp(contact, isPrimary);
-            
-            button.innerHTML = `
-                <div class="d-flex align-items-center justify-content-between">
-                    <div class="d-flex align-items-center">
-                        <i class="bi bi-whatsapp me-2"></i>
-                        <div class="text-start">
-                            <div class="fw-bold">${contact.icon} ${contact.name}</div>
-                            <small class="d-block opacity-90">${contact.department}</small>
-                        </div>
-                    </div>
-                    <div class="text-end d-none d-md-block">
-                        <small class="opacity-75">${contact.specialty}</small>
-                        <div class="small opacity-60">${contact.number}</div>
+        // Solo mostrar el primer contacto (que rota automáticamente)
+        const contact = this.contacts[0];
+        const button = document.createElement('button');
+        button.className = 'btn btn-whatsapp primary';
+        button.onclick = () => this.openWhatsApp(contact, true);
+        
+        button.innerHTML = `
+            <div class="d-flex align-items-center justify-content-between">
+                <div class="d-flex align-items-center">
+                    <i class="bi bi-whatsapp me-2"></i>
+                    <div class="text-start">
+                        <div class="fw-bold">Contactar por WhatsApp</div>
+                        <small class="d-block opacity-90">Ventas y Cotizaciones</small>
                     </div>
                 </div>
-            `;
-            
-            // Agregar efectos hover
-            button.addEventListener('mouseenter', function() {
-                this.style.transform = 'translateY(-2px)';
-                this.style.boxShadow = '0 6px 20px rgba(37, 211, 102, 0.3)';
-            });
-            
-            button.addEventListener('mouseleave', function() {
-                this.style.transform = 'translateY(0)';
-                this.style.boxShadow = '';
-            });
-            
-            container.appendChild(button);
+                <div class="text-end d-none d-md-block">
+                    <small class="opacity-75">Pedidos y precios</small>
+                    <div class="small opacity-60">${contact.number}</div>
+                </div>
+            </div>
+        `;
+        
+        // Agregar efectos hover
+        button.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-2px)';
+            this.style.boxShadow = '0 6px 20px rgba(37, 211, 102, 0.3)';
         });
+        
+        button.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0)';
+            this.style.boxShadow = '';
+        });
+        
+        container.appendChild(button);
     }
     
     // Mostrar notificaciones visuales
