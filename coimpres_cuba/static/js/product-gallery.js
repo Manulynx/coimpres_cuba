@@ -52,6 +52,8 @@ class ProductGallery {
         if (this.mediaItems.length > 0) {
             this.setActiveItem(0);
         }
+        
+        console.log('Media items cargados:', this.mediaItems);
     }
     
     setupEventListeners() {
@@ -157,20 +159,27 @@ class ProductGallery {
         const isVideo = mediaItem.type === 'video';
         const container = this.mainMedia.parentNode;
         
+        console.log('Actualizando media:', isVideo ? 'VIDEO' : 'IMAGEN', mediaItem.src);
+        
         // Remover el elemento actual
         this.mainMedia.remove();
         
         if (isVideo) {
             // Crear elemento video
             const video = document.createElement('video');
-            video.className = 'img-fluid rounded shadow-lg';
+            video.className = 'shadow-lg';
             video.alt = mediaItem.alt;
-            video.style.cssText = 'width: 100%; max-height: 450px; object-fit: contain; background-color: #000; border-radius: 12px;';
+            video.style.cssText = 'position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; background-color: #000; border-radius: 12px; cursor: pointer;';
             video.id = 'mainMedia';
             video.controls = true;
-            video.preload = 'metadata';
+            video.preload = 'auto';
+            video.autoplay = false;
             video.muted = false;
+            video.loop = false;
             video.playsinline = true;
+            video.playsInline = true; // Duplicado para compatibilidad
+            video.setAttribute('controlsList', 'nodownload nofullscreen');
+            video.setAttribute('disablePictureInPicture', 'true');
             
             // Crear fuente de video
             const source = document.createElement('source');
@@ -181,33 +190,113 @@ class ProductGallery {
             // Texto de respaldo
             video.innerHTML += 'Tu navegador no soporta el elemento video.';
             
+            // Detectar si es dispositivo táctil
+            const isMobile = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+            
+            // Método específico para móvil usando touchend
+            if (isMobile) {
+                let touchStartTime = 0;
+                
+                video.addEventListener('touchstart', function(e) {
+                    touchStartTime = Date.now();
+                }, { passive: true });
+                
+                video.addEventListener('touchend', function(e) {
+                    const touchDuration = Date.now() - touchStartTime;
+                    
+                    // Solo si fue un tap rápido (no un scroll)
+                    if (touchDuration < 200) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        
+                        if (video.paused) {
+                            video.play().then(() => {
+                                console.log('▶️ Reproduciendo (móvil)');
+                            }).catch(err => {
+                                console.error('Error al reproducir:', err);
+                            });
+                        } else {
+                            video.pause();
+                            console.log('⏸️ Pausado (móvil)');
+                        }
+                    }
+                });
+                
+                console.log('📱 Controles táctiles activados');
+            } else {
+                // Para desktop usar click normal
+                video.onclick = function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    if (video.paused) {
+                        video.play();
+                        console.log('▶️ Reproduciendo (desktop)');
+                    } else {
+                        video.pause();
+                        console.log('⏸️ Pausado (desktop)');
+                    }
+                };
+            }
+            
+            // Forzar controles siempre visibles
+            video.addEventListener('play', function() {
+                this.controls = true;
+                this.setAttribute('controls', 'controls');
+                console.log('✅ Controles activados en play');
+            });
+            
+            video.addEventListener('pause', function() {
+                this.controls = true;
+                this.setAttribute('controls', 'controls');
+                console.log('✅ Controles activados en pause');
+            });
+            
+            video.addEventListener('loadeddata', function() {
+                this.controls = true;
+                this.setAttribute('controls', 'controls');
+                console.log('✅ Controles activados al cargar');
+            });
+            
             // Event listeners para debugging
             video.addEventListener('error', function(e) {
-                console.error('Error al cargar video:', e);
-                console.log('URL del video:', mediaItem.src);
+                console.error('❌ Error al cargar video:', e);
+                console.error('URL del video:', mediaItem.src);
+                console.error('Error code:', video.error ? video.error.code : 'unknown');
+                console.error('Error message:', video.error ? video.error.message : 'unknown');
             });
             
             video.addEventListener('loadedmetadata', function() {
-                console.log('Video cargado correctamente:', mediaItem.src);
+                console.log('✅ Video metadata cargada:', mediaItem.src);
+                console.log('Duración:', video.duration, 'segundos');
+                console.log('Dimensiones:', video.videoWidth, 'x', video.videoHeight);
+            });
+            
+            video.addEventListener('canplay', function() {
+                console.log('✅ Video listo para reproducir');
+            });
+            
+            video.addEventListener('loadstart', function() {
+                console.log('🔄 Iniciando carga del video...');
             });
             
             // Agregar al contenedor antes del overlay
             container.insertBefore(video, this.videoOverlay);
             this.mainMedia = video;
             
-            // Mostrar overlay de video
+            // Ocultar overlay de video cuando el video esté listo
             if (this.videoOverlay) {
-                this.videoOverlay.classList.remove('d-none');
+                this.videoOverlay.classList.add('d-none');
             }
             
-            console.log('Video actualizado:', video);
+            console.log('✅ Video insertado en el DOM:', video);
         } else {
             // Crear elemento imagen
             const img = document.createElement('img');
             img.src = mediaItem.src;
-            img.className = 'img-fluid rounded shadow-lg';
+            img.className = 'shadow-lg';
             img.alt = mediaItem.alt;
-            img.style.cssText = 'width: 100%; max-height: 450px; object-fit: scale-down; background-color: #f8f9fa; border-radius: 12px;';
+            img.style.cssText = 'position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; background-color: #f8f9fa; border-radius: 12px; cursor: default;';
             img.id = 'mainMedia';
             
             // Agregar al contenedor antes del overlay

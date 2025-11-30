@@ -6,6 +6,9 @@
 /* Contenedor de media principal */
 .main-media-container {
     position: relative;
+    width: 100%;
+    height: 0;
+    padding-bottom: 75%; /* Aspect ratio 4:3 */
     overflow: hidden;
     border-radius: 12px;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
@@ -14,21 +17,72 @@
 
 .main-media-container img,
 .main-media-container video {
-    transition: transform 0.3s ease;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain !important;
     cursor: default !important;
-    object-fit: scale-down !important;
-    max-height: 400px !important;
-    width: 100% !important;
+    transition: transform 0.3s ease;
+}
+
+.main-media-container img {
     background-color: #f8f9fa;
 }
 
 .main-media-container video {
-    cursor: pointer;
     background-color: #000;
 }
 
+/* Controles de video siempre visibles */
+.main-media-container video {
+    cursor: pointer !important;
+}
+
+/* Forzar controles visibles en todos los navegadores */
+.main-media-container video::-webkit-media-controls {
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
 .main-media-container video::-webkit-media-controls-panel {
-    background-color: rgba(0, 0, 0, 0.8);
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+.main-media-container video::-webkit-media-controls-enclosure {
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+/* Específico para móviles - controles siempre visibles */
+@media (max-width: 768px) {
+    .main-media-container {
+        padding-bottom: 85%; /* Aspect ratio más cuadrado en tablet */
+    }
+    
+    .main-media-container video {
+        cursor: pointer !important;
+    }
+    
+    .main-media-container video::-webkit-media-controls {
+        opacity: 1 !important;
+        visibility: visible !important;
+        display: flex !important;
+    }
+    
+    .main-media-container video::-webkit-media-controls-panel {
+        opacity: 1 !important;
+        visibility: visible !important;
+        display: flex !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .main-media-container {
+        padding-bottom: 90%; /* Aspect ratio más cuadrado en móvil pequeño */
+    }
 }
 
 .main-media-container:hover img,
@@ -212,11 +266,7 @@
 @media (max-width: 768px) {
     .main-media-container {
         margin-bottom: 1rem;
-    }
-    
-    .main-media-container img,
-    .main-media-container video {
-        max-height: 300px;
+        padding-bottom: 85%; /* Aspect ratio más cuadrado en móvil */
     }
     
     .thumbnail-item {
@@ -240,9 +290,8 @@
 }
 
 @media (max-width: 480px) {
-    .main-media-container img,
-    .main-media-container video {
-        max-height: 250px;
+    .main-media-container {
+        padding-bottom: 90%; /* Aspect ratio casi cuadrado en móviles pequeños */
         border-radius: 8px;
     }
     
