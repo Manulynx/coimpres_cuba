@@ -27,7 +27,8 @@ SECRET_KEY = 'django-insecure-pixyx#k_-2kenzp2#5wt=y#46zi#ul@2nkykyoodk3v&d6%_7e
 DEBUG = True
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'lynXiyo.pythonanywhere.com','coimpre.pythonanywhere.com',
-                 'coimpres-cuba.onrender.com']
+                 'coimpres-cuba.onrender.com',
+                 'coimprescuba-production.up.railway.app']
 
 
 # Application definition
